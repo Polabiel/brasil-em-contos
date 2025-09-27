@@ -1,0 +1,43 @@
+name: Code Quality Check
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  check:
+    name: Lint, Type Check and Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma client
+        run: pnpm exec prisma generate
+
+      - name: Run check (lint + typecheck)
+        run: pnpm run check
+
+      - name: Run build
+        run: pnpm run build
+        env:
+          # Mock environment variables for build
+          DATABASE_URL: "postgresql://user:pass@localhost:5432/db"
+          NEXTAUTH_SECRET: "mock-secret-for-build-test"
+          NEXTAUTH_URL: "http://localhost:3000"
