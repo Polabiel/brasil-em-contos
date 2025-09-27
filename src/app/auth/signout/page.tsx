@@ -1,67 +1,100 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import SignOutButton from "./SignOutClient";
+import Sheet from "@mui/joy/Sheet";
+import Card from "@mui/joy/Card";
+import CardContent from "@mui/joy/CardContent";
+import Typography from "@mui/joy/Typography";
+import Stack from "@mui/joy/Stack";
+import Button from "@mui/joy/Button";
+import WarningIcon from "@mui/icons-material/Warning";
+import CircularProgress from "@mui/joy/CircularProgress";
+import Box from "@mui/joy/Box";
 
 function SignOutContent() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-      <div className="container flex flex-col items-center justify-center gap-8 px-4 py-16">
-        <div className="flex flex-col items-center gap-4">
-          <h1 className="text-4xl font-extrabold tracking-tight sm:text-[3rem]">
-            Brasil em <span className="text-[hsl(280,100%,70%)]">Contos</span>
-          </h1>
-          <p className="text-lg text-white/80">
-            Desconectar da sua conta
-          </p>
-        </div>
+    <Sheet
+      sx={{
+        minHeight: '100vh',
+        background: `linear-gradient(to bottom, var(--cv-gradientStart), var(--cv-backgroundDefault))`,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        p: 2
+      }}
+    >
+      <Box sx={{ width: '100%', maxWidth: 400 }}>
+        <Stack spacing={4} alignItems="center">
+          <Stack spacing={1} alignItems="center" textAlign="center">
+            <Typography level="h2" sx={{ color: 'var(--cv-textPrimary)' }}>
+              Brasil em <span style={{ color: 'var(--cv-accentHsl)' }}>Contos</span>
+            </Typography>
+            <Typography level="body-lg" sx={{ color: 'var(--cv-textMuted80)' }}>
+              Desconectar da sua conta
+            </Typography>
+          </Stack>
 
-        <div className="w-full max-w-md space-y-6">
-          <div className="rounded-xl bg-white/10 p-8 backdrop-blur-sm text-center">
-            <div className="mb-6">
-              <div className="mx-auto mb-4 h-16 w-16 rounded-full bg-yellow-500/20 flex items-center justify-center">
-                <svg className="h-8 w-8 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.268 18.5c-.77.833.192 2.5 1.732 2.5z" />
-                </svg>
-              </div>
-              <h2 className="text-2xl font-bold mb-2">Confirmar Saída</h2>
-              <p className="text-white/70">
-                Tem certeza que deseja sair da sua conta?
-              </p>
-            </div>
-            
-            <div className="space-y-3">
-              <SignOutButton className="block w-full rounded-lg bg-red-600 px-4 py-3 font-semibold text-white transition hover:bg-red-700" />
-              
-              <Link
-                href="/"
-                className="block w-full rounded-lg bg-white/10 px-4 py-3 font-semibold text-white transition hover:bg-white/20"
-              >
-                Cancelar
-              </Link>
-            </div>
-          </div>
+          <Card variant="outlined" sx={{ width: '100%' }}>
+            <CardContent>
+              <Stack spacing={3} alignItems="center" textAlign="center">
+                <Box
+                  sx={{
+                    width: 64,
+                    height: 64,
+                    borderRadius: '50%',
+                    bgcolor: 'warning.100',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                >
+                  <WarningIcon sx={{ fontSize: 32, color: 'warning.500' }} />
+                </Box>
+                
+                <Stack spacing={1}>
+                  <Typography level="title-lg">Confirmar Saída</Typography>
+                  <Typography level="body-md" color="neutral">
+                    Tem certeza que deseja sair da sua conta?
+                  </Typography>
+                </Stack>
+                
+                <Stack spacing={2} sx={{ width: '100%' }}>
+                  <SignOutButton />
+                  
+                  <Link href="/">
+                    <Button
+                      variant="outlined"
+                      color="neutral"
+                      sx={{ width: '100%' }}
+                    >
+                      Cancelar
+                    </Button>
+                  </Link>
+                </Stack>
+              </Stack>
+            </CardContent>
+          </Card>
 
-          <div className="text-center">
-            <Link
-              href="/"
-              className="text-sm text-white/60 hover:text-white/80 transition"
-            >
+          <Link href="/">
+            <Typography level="body-sm" sx={{ color: 'var(--cv-textMuted60)', '&:hover': { color: 'var(--cv-textMuted80)' } }}>
               ← Voltar ao início
-            </Link>
-          </div>
-        </div>
-      </div>
-    </main>
+            </Typography>
+          </Link>
+        </Stack>
+      </Box>
+    </Sheet>
   );
 }
 
 export default function SignOut() {
   return (
-    <Suspense fallback={
-      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
-      </main>
-    }>
+    <Suspense
+      fallback={
+        <Sheet sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <CircularProgress size="lg" />
+        </Sheet>
+      }
+    >
       <SignOutContent />
     </Suspense>
   );

@@ -1,114 +1,142 @@
 import Link from "next/link";
 import { Suspense } from "react";
-import { auth } from "@/server/auth";
+import Sheet from "@mui/joy/Sheet";
+import Card from "@mui/joy/Card";
+import CardContent from "@mui/joy/CardContent";
+import Typography from "@mui/joy/Typography";
+import Stack from "@mui/joy/Stack";
+import Button from "@mui/joy/Button";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import CircularProgress from "@mui/joy/CircularProgress";
+import Box from "@mui/joy/Box";
 
-type ErrorType = 
-  | 'Configuration'
-  | 'AccessDenied'
-  | 'Verification'
-  | 'Default';
-
-interface ErrorInfo {
-  title: string;
-  description: string;
-  action?: string;
+interface Props {
+  searchParams: Promise<{
+    error?: string;
+  }>;
 }
 
-const errorMessages: Record<ErrorType, ErrorInfo> = {
-  Configuration: {
-    title: 'Erro de Configuração',
-    description: 'Há um problema na configuração do servidor. Tente novamente mais tarde.',
-  },
-  AccessDenied: {
-    title: 'Acesso Negado',
-    description: 'Você não tem permissão para acessar este recurso.',
-    action: 'Entre com uma conta autorizada',
-  },
-  Verification: {
-    title: 'Falha na Verificação',
-    description: 'O link de verificação é inválido ou expirou.',
-    action: 'Solicite um novo link de verificação',
-  },
-  Default: {
-    title: 'Erro de Autenticação',
-    description: 'Ocorreu um erro durante o processo de autenticação.',
-  },
-};
+async function ErrorContent({ searchParams }: Props) {
+  const params = await searchParams;
+  const error = params.error;
+  
+  let errorMessage = "Ocorreu um erro durante a autenticação.";
+  let errorDetails = "Por favor, tente novamente.";
 
-async function AuthErrorContent({ searchParams }: { searchParams: { error?: string } }) {
-  const session = await auth();
-  const errorType = (searchParams.error as ErrorType) || 'Default';
-  const error = errorMessages[errorType] || errorMessages.Default;
+  switch (error) {
+    case "Configuration":
+      errorMessage = "Erro de Configuração";
+      errorDetails = "Houve um problema com a configuração do servidor.";
+      break;
+    case "AccessDenied":
+      errorMessage = "Acesso Negado";
+      errorDetails = "Você não tem permissão para acessar este recurso.";
+      break;
+    case "Verification":
+      errorMessage = "Falha na Verificação";
+      errorDetails = "O token de verificação é inválido ou expirou.";
+      break;
+    case "Default":
+    default:
+      errorMessage = "Erro de Autenticação";
+      errorDetails = "Não foi possível completar o processo de login.";
+      break;
+  }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-      <div className="container flex flex-col items-center justify-center gap-8 px-4 py-16">
-        <div className="flex flex-col items-center gap-4">
-          <h1 className="text-4xl font-extrabold tracking-tight sm:text-[3rem]">
-            Brasil em <span className="text-[hsl(280,100%,70%)]">Contos</span>
-          </h1>
-        </div>
+    <Sheet
+      sx={{
+        minHeight: '100vh',
+        background: `linear-gradient(to bottom, var(--cv-gradientStart), var(--cv-backgroundDefault))`,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        p: 2
+      }}
+    >
+      <Box sx={{ width: '100%', maxWidth: 400 }}>
+        <Stack spacing={4} alignItems="center">
+          <Stack spacing={1} alignItems="center" textAlign="center">
+            <Typography level="h2" sx={{ color: 'var(--cv-textPrimary)' }}>
+              Brasil em <span style={{ color: 'var(--cv-accentHsl)' }}>Contos</span>
+            </Typography>
+            <Typography level="body-lg" sx={{ color: 'var(--cv-textMuted80)' }}>
+              Erro na autenticação
+            </Typography>
+          </Stack>
 
-        <div className="w-full max-w-md space-y-6">
-          <div className="rounded-xl bg-white/10 p-8 backdrop-blur-sm text-center">
-            <div className="mb-6">
-              <div className="mx-auto mb-4 h-16 w-16 rounded-full bg-red-500/20 flex items-center justify-center">
-                <svg className="h-8 w-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <h2 className="text-2xl font-bold mb-2 text-red-400">{error.title}</h2>
-              <p className="text-white/70 mb-4">
-                {error.description}
-              </p>
-              {error.action && (
-                <p className="text-sm text-white/50">
-                  {error.action}
-                </p>
-              )}
-            </div>
-            
-            <div className="space-y-3">
-              <Link
-                href="/auth/signin"
-                className="block w-full rounded-lg bg-white/10 px-4 py-3 font-semibold text-white transition hover:bg-white/20"
-              >
-                Tentar Novamente
-              </Link>
-              
-              <Link
-                href="/"
-                className="block w-full rounded-lg bg-transparent px-4 py-3 font-semibold text-white/70 transition hover:text-white border border-white/20 hover:border-white/40"
-              >
-                Voltar ao Início
-              </Link>
-            </div>
-          </div>
+          <Card variant="outlined" sx={{ width: '100%' }}>
+            <CardContent>
+              <Stack spacing={3} alignItems="center" textAlign="center">
+                <Box
+                  sx={{
+                    width: 64,
+                    height: 64,
+                    borderRadius: '50%',
+                    bgcolor: 'danger.100',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                >
+                  <ErrorOutlineIcon sx={{ fontSize: 32, color: 'danger.500' }} />
+                </Box>
+                
+                <Stack spacing={1}>
+                  <Typography level="title-lg" color="danger">
+                    {errorMessage}
+                  </Typography>
+                  <Typography level="body-md" color="neutral">
+                    {errorDetails}
+                  </Typography>
+                </Stack>
+                
+                <Stack spacing={2} sx={{ width: '100%' }}>
+                  <Link href="/auth/signin">
+                    <Button
+                      variant="solid"
+                      color="primary"
+                      sx={{ width: '100%' }}
+                    >
+                      Tentar Novamente
+                    </Button>
+                  </Link>
+                  
+                  <Link href="/">
+                    <Button
+                      variant="outlined"
+                      color="neutral"
+                      sx={{ width: '100%' }}
+                    >
+                      Voltar ao Início
+                    </Button>
+                  </Link>
+                </Stack>
+              </Stack>
+            </CardContent>
+          </Card>
 
-          {errorType !== 'Default' && (
-            <div className="text-center">
-              <p className="text-xs text-white/40">
-                Código do erro: {errorType}
-              </p>
-              {session && (
-                <p className="text-xs text-white/40">Usuário: {session.user?.email}</p>
-              )}
-            </div>
-          )}
-        </div>
-      </div>
-    </main>
+          <Link href="/">
+            <Typography level="body-sm" sx={{ color: 'var(--cv-textMuted60)', '&:hover': { color: 'var(--cv-textMuted80)' } }}>
+              ← Voltar ao início
+            </Typography>
+          </Link>
+        </Stack>
+      </Box>
+    </Sheet>
   );
 }
 
-export default function AuthError({ searchParams }: { searchParams: { error?: string } }) {
+export default function AuthError(props: Props) {
   return (
-    <Suspense fallback={
-      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
-      </main>
-    }>
-      <AuthErrorContent searchParams={searchParams} />
+    <Suspense
+      fallback={
+        <Sheet sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <CircularProgress size="lg" />
+        </Sheet>
+      }
+    >
+      <ErrorContent {...props} />
     </Suspense>
   );
 }

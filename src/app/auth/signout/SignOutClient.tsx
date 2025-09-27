@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { signOut } from "next-auth/react";
+import Button from "@mui/joy/Button";
+import LogoutIcon from "@mui/icons-material/Logout";
 
-export default function SignOutButton({ className }: { className?: string }) {
+export default function SignOutButton() {
   const [loading, setLoading] = useState(false);
 
   async function handleSignOut() {
@@ -16,12 +18,15 @@ export default function SignOutButton({ className }: { className?: string }) {
   }
 
   return (
-    <button
+    <Button
       onClick={handleSignOut}
-      className={className}
-      aria-busy={loading}
+      variant="solid"
+      color="danger"
+      loading={loading}
+      startDecorator={!loading && <LogoutIcon />}
+      sx={{ width: '100%' }}
     >
       {loading ? "Saindo..." : "Sim, sair da conta"}
-    </button>
+    </Button>
   );
 }
