@@ -1,8 +1,12 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { type DefaultSession, type NextAuthConfig } from "next-auth";
+import { type DefaultSession, type NextAuthConfig, type User } from "next-auth";
+import EmailProvider from "next-auth/providers/email"
 import DiscordProvider from "next-auth/providers/discord";
+import CredentialsProvider from "next-auth/providers/credentials";
+import crypto from "crypto";
 
 import { db } from "@/server/db";
+import { env } from "@/env";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -33,6 +37,18 @@ declare module "next-auth" {
 export const authConfig = {
   providers: [
     DiscordProvider,
+    EmailProvider({
+      server: {
+        host: process.env.EMAIL_SERVER_HOST,
+        port: process.env.EMAIL_SERVER_PORT,
+        auth: {
+          user: process.env.EMAIL_SERVER_USER,
+          pass: process.env.EMAIL_SERVER_PASSWORD,
+        },
+      },
+      from: process.env.EMAIL_FROM,
+      maxAge: 24 * 60 * 60,
+    }),
     /**
      * ...add more providers here.
      *
