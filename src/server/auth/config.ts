@@ -4,7 +4,11 @@ import EmailProvider from "next-auth/providers/nodemailer"
 import DiscordProvider from "next-auth/providers/discord";
 
 import { db } from "@/server/db";
+import type { User as PrismaUser, $Enums } from "@prisma/client";
+
+type UserWithRole = PrismaUser & { role?: $Enums.UserRole };
 import { env } from "@/env";
+import { isUserLinkedToAdminDiscord, hasAdminDiscordIds } from "./admins";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -16,15 +20,9 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
-      // ...other properties
-      // role: UserRole;
+      role?: "USER" | "ADMIN";
     } & DefaultSession["user"];
   }
-
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
 }
 
 /**
@@ -61,17 +59,29 @@ export const authConfig = {
   pages: {
     signIn: '/auth/signin',
     signOut: '/auth/signout',
-    error: '/auth/error', // Error code passed in query string as ?error=
-    verifyRequest: '/auth/verify-request', // (used for check email message)
-    newUser: '/auth/new-user' // New users will be directed here on first sign in (leave the property out if not of interest)
+    error: '/auth/error',
+    verifyRequest: '/auth/verify-request',
+    newUser: '/auth/new-user'
   },
   callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
-    }),
+    session: async ({ session, user: nextAuthUser }) => {
+      const user = nextAuthUser as unknown as UserWithRole | null;
+
+      let role: $Enums.UserRole = user?.role ?? "USER";
+
+      if (role !== "ADMIN" && user?.id && hasAdminDiscordIds()) {
+        const linked = await isUserLinkedToAdminDiscord(user.id);
+        if (linked) role = "ADMIN";
+      }
+
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: user?.id ?? session.user?.id ?? "",
+          role,
+        },
+      };
+    },
   },
 } satisfies NextAuthConfig;
