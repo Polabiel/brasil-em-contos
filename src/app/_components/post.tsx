@@ -1,6 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import Card from "@mui/joy/Card";
+import CardContent from "@mui/joy/CardContent";
+import Typography from "@mui/joy/Typography";
+import Input from "@mui/joy/Input";
+import Button from "@mui/joy/Button";
+import Stack from "@mui/joy/Stack";
 
 import { api } from "@/trpc/react";
 
@@ -17,34 +23,48 @@ export function LatestPost() {
   });
 
   return (
-    <div className="w-full max-w-xs">
-      {latestPost ? (
-        <p className="truncate">Your most recent post: {latestPost.name}</p>
-      ) : (
-        <p>You have no posts yet.</p>
-      )}
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          createPost.mutate({ name });
-        }}
-        className="flex flex-col gap-2"
-      >
-        <input
-          type="text"
-          placeholder="Title"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="w-full rounded-full bg-white/10 px-4 py-2 text-white"
-        />
-        <button
-          type="submit"
-          className="rounded-full bg-white/10 px-10 py-3 font-semibold transition hover:bg-white/20"
-          disabled={createPost.isPending}
+    <Card variant="soft" sx={{ maxWidth: 400, width: '100%' }}>
+      <CardContent>
+        <Typography level="title-md" sx={{ mb: 2 }}>
+          Seus Posts
+        </Typography>
+        
+        {latestPost ? (
+          <Typography level="body-md" sx={{ mb: 3, color: 'text.secondary' }}>
+            Seu post mais recente: <strong>{latestPost.name}</strong>
+          </Typography>
+        ) : (
+          <Typography level="body-md" sx={{ mb: 3, color: 'text.secondary' }}>
+            Você ainda não tem posts.
+          </Typography>
+        )}
+        
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            createPost.mutate({ name });
+          }}
         >
-          {createPost.isPending ? "Submitting..." : "Submit"}
-        </button>
-      </form>
-    </div>
+          <Stack spacing={2}>
+            <Input
+              placeholder="Título do post"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              variant="outlined"
+              required
+            />
+            <Button
+              type="submit"
+              variant="solid"
+              color="primary"
+              loading={createPost.isPending}
+              disabled={createPost.isPending || !name.trim()}
+            >
+              {createPost.isPending ? "Enviando..." : "Criar Post"}
+            </Button>
+          </Stack>
+        </form>
+      </CardContent>
+    </Card>
   );
 }
