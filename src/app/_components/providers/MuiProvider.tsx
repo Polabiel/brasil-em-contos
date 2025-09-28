@@ -13,6 +13,8 @@ export default function MuiProvider({ children }: { children: ReactNode }) {
     (Object.entries(colorTokens) as [string, string][]).forEach(([key, value]) => {
       root.style.setProperty(`--cv-${key}`, value);
     });
+    root.style.setProperty('--cv-backgroundDefault', '#ffffff');
+    root.style.setProperty('--cv-backgroundPaper', '#ffffff');
   }, []);
 
   const joyTheme = extendTheme({
@@ -27,8 +29,8 @@ export default function MuiProvider({ children }: { children: ReactNode }) {
             plainColor: colorTokens.primaryMain,
           },
           background: {
-            body: colorTokens.backgroundDefault,
-            surface: colorTokens.backgroundPaper,
+            body: '#ffffff',
+            surface: '#ffffff',
           },
           neutral: {
             50: colorTokens.neutral50,
@@ -47,7 +49,7 @@ export default function MuiProvider({ children }: { children: ReactNode }) {
       success: { main: colorTokens.successMain },
       warning: { main: colorTokens.warningMain },
       error: { main: colorTokens.errorMain },
-      background: { default: colorTokens.backgroundDefault, paper: colorTokens.backgroundPaper },
+      background: { default: '#ffffff', paper: '#ffffff' },
     },
     typography: {
       fontFamily: "var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif",

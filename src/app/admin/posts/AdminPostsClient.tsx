@@ -17,6 +17,8 @@ type Post = {
   id: number;
   name: string;
   content: string | null;
+  description?: string | null;
+  image?: string | null;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -24,25 +26,27 @@ type Post = {
 export default function AdminPostsClient({ posts }: { posts: Post[] }) {
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [newPostName, setNewPostName] = useState("");
+  const [newPostImage, setNewPostImage] = useState("");
   const [creating, setCreating] = useState(false);
   const router = useRouter();
 
   async function handleCreatePost() {
     if (!newPostName.trim()) return;
-    
+
     setCreating(true);
     try {
       const res = await fetch('/api/admin/posts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: newPostName }),
+        body: JSON.stringify({ name: newPostName, image: newPostImage ?? undefined }),
       });
-      
+
       if (!res.ok) throw new Error('Failed to create');
-      
+
       const data = (await res.json()) as { post: { id: number } };
       setCreateModalOpen(false);
       setNewPostName("");
+      setNewPostImage("");
       router.push(`/admin/posts/${data.post.id}/edit`);
     } catch (err) {
       console.error(err);
@@ -54,14 +58,14 @@ export default function AdminPostsClient({ posts }: { posts: Post[] }) {
 
   async function handleDeletePost(id: number) {
     if (!confirm('Tem certeza que deseja deletar este post?')) return;
-    
+
     try {
       const res = await fetch(`/api/admin/posts/${id}`, {
         method: 'DELETE',
       });
-      
+
       if (!res.ok) throw new Error('Failed to delete');
-      
+
       router.refresh();
     } catch (err) {
       console.error(err);
@@ -147,6 +151,11 @@ export default function AdminPostsClient({ posts }: { posts: Post[] }) {
         <ModalDialog>
           <Typography level="title-lg" sx={{ mb: 2 }}>Criar Novo Post</Typography>
           <Stack spacing={2}>
+                <Input
+                  value={newPostImage}
+                  onChange={(e) => setNewPostImage((e.target as HTMLInputElement).value)}
+                  placeholder="URL da imagem (opcional)"
+                />
             <Input
               value={newPostName}
               onChange={(e) => setNewPostName((e.target as HTMLInputElement).value)}

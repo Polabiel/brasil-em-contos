@@ -7,11 +7,16 @@ import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 import { useRouter } from "next/navigation";
-import MDEditor from '@uiw/react-md-editor';
+import MDEditorWrapper from '@/app/_components/MDEditorWrapper';
 
-export default function EditPostClient({ id, initialName, initialContent }: { id: number; initialName: string; initialContent: string }) {
+export default function EditPostClient({ id, initialName, initialContent, initialDescription, initialImage }: { id: number; initialName: string; initialContent: string; initialDescription?: string; initialImage?: string }) {
   const [name, setName] = useState(initialName);
   const [content, setContent] = useState(initialContent);
+  const [description, setDescription] = useState(initialDescription ?? '');
+  const [image, setImage] = useState(initialImage ?? '');
+  const [imageBlobBase64, setImageBlobBase64] = useState<string | null>(null);
+  const [imageMime, setImageMime] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
   const [autoSaving, setAutoSaving] = useState(false);
   const router = useRouter();
@@ -19,27 +24,40 @@ export default function EditPostClient({ id, initialName, initialContent }: { id
   const handleAutoSave = useCallback(async () => {
     setAutoSaving(true);
     try {
-      await fetch(`/api/admin/posts/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, content }),
-      });
+      if (selectedFile) {
+        const form = new FormData();
+        form.append('name', name);
+        form.append('content', content);
+        form.append('description', description ?? '');
+        form.append('image', image ?? '');
+        form.append('imageFile', selectedFile);
+        await fetch(`/api/admin/posts/${id}`, {
+          method: 'PUT',
+          body: form,
+        });
+      } else {
+        await fetch(`/api/admin/posts/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, content, description, image, imageBlob: imageBlobBase64 ?? undefined, imageMime: imageMime ?? undefined }),
+        });
+      }
     } catch (err) {
       console.error('Auto-save failed:', err);
     } finally {
       setAutoSaving(false);
     }
-  }, [id, name, content]);
+  }, [id, name, content, description, image, imageBlobBase64, imageMime, selectedFile]);
 
   // Auto-save every 5 seconds when content changes
   useEffect(() => {
     const timer = setTimeout(() => {
-      if ((name !== initialName || content !== initialContent) && !saving) {
+      if ((name !== initialName || content !== initialContent || description !== (initialDescription ?? '') || image !== '' || imageBlobBase64) && !saving) {
         void handleAutoSave();
       }
     }, 5000);
     return () => clearTimeout(timer);
-  }, [name, content, initialName, initialContent, saving, handleAutoSave]);
+  }, [name, content, initialName, initialContent, saving, handleAutoSave, description, image, initialDescription, imageBlobBase64]);
 
   async function handleSave() {
     if (!name.trim()) {
@@ -48,13 +66,24 @@ export default function EditPostClient({ id, initialName, initialContent }: { id
     }
     setSaving(true);
     try {
-      const res = await fetch(`/api/admin/posts/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, content }),
-      });
+      let res: Response;
+      if (selectedFile) {
+        const form = new FormData();
+        form.append('name', name);
+        form.append('content', content);
+        form.append('description', description ?? '');
+        form.append('image', image ?? '');
+        form.append('imageFile', selectedFile);
+        res = await fetch(`/api/admin/posts/${id}`, { method: 'PUT', body: form });
+      } else {
+        res = await fetch(`/api/admin/posts/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, content, description, image, imageBlob: imageBlobBase64 ?? undefined, imageMime: imageMime ?? undefined }),
+        });
+      }
       if (!res.ok) throw new Error('Falha ao salvar');
-      router.push('/admin/posts');
+      router.back()
     } catch (err) {
       console.error(err);
       alert('Erro ao salvar');
@@ -91,16 +120,75 @@ export default function EditPostClient({ id, initialName, initialContent }: { id
           error={!name.trim()}
         />
 
+        <Input
+          value={description}
+          onChange={(e) => setDescription((e.target as HTMLInputElement).value)}
+          placeholder="Descrição curta (opcional)"
+          size="md"
+        />
+
+        <Input
+          value={image}
+          onChange={(e) => setImage((e.target as HTMLInputElement).value)}
+          placeholder="URL da imagem (opcional)"
+          size="md"
+        />
+
+        <Box>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={async (e) => {
+              const file = (e.target as HTMLInputElement).files?.[0];
+              if (!file) return;
+              setSelectedFile(file);
+              const reader = new FileReader();
+              reader.onload = () => {
+                const result = reader.result as string;
+                const maybeBase64 = result.split(',')[1] ?? null;
+                setImageBlobBase64(maybeBase64);
+                setImageMime(file.type);
+                // preview via data URL
+                setImage(result);
+              };
+              reader.readAsDataURL(file);
+            }}
+          />
+
+          {selectedFile && (
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mt: 2 }}>
+              {image ? (
+                // thumbnail
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={image} alt="preview" style={{ width: 96, height: 96, objectFit: 'cover', borderRadius: 8 }} />
+              ) : null}
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                <Typography level="body-md" sx={{ fontWeight: 600 }}>{selectedFile.name}</Typography>
+                <Typography level="body-sm" sx={{ color: 'var(--cv-textMuted80)' }}>{(selectedFile.size / 1024).toFixed(1)} KB</Typography>
+                <Box>
+                  <Button size="sm" variant="outlined" color="neutral" onClick={() => {
+                    setSelectedFile(null);
+                    setImageBlobBase64(null);
+                    setImageMime(null);
+                    setImage('');
+                  }}>
+                    Remover arquivo
+                  </Button>
+                </Box>
+              </Box>
+            </Box>
+          )}
+        </Box>
+
         <Box>
           <Typography level="body-lg" sx={{ fontWeight: 700, mb: 2 }}>
             Conteúdo (Markdown)
           </Typography>
-          <MDEditor
+          <MDEditorWrapper
             value={content}
             onChange={(val) => setContent(val ?? '')}
-            preview="edit"
+            preview={'edit'}
             height={600}
-            data-color-mode="light"
             visibleDragbar={false}
           />
         </Box>

@@ -32,7 +32,43 @@ declare module "next-auth" {
  */
 export const authConfig = {
   providers: [
-    DiscordProvider,
+    DiscordProvider({
+      clientId: env.AUTH_DISCORD_ID,
+      clientSecret: env.AUTH_DISCORD_SECRET,
+      profile(profile: unknown) {
+        const p = profile as Record<string, unknown>;
+
+        const avatar = typeof p.avatar === "string" ? p.avatar : null;
+        const decorationData = p.avatar_decoration_data as { asset?: unknown } | undefined;
+        const decorationAsset = decorationData && typeof decorationData.asset === "string" ? decorationData.asset : null;
+
+        const rawAvatarHash = typeof avatar === 'string' ? avatar : (typeof decorationAsset === 'string' ? decorationAsset : null);
+        const avatarHash = typeof rawAvatarHash === 'string' ? rawAvatarHash.replace(/^a_/, '') : null;
+
+        const idStr = (typeof p.id === 'string' || typeof p.id === 'number') ? String(p.id) : null;
+        const banner = typeof p.banner === 'string' ? p.banner : null;
+        const avatarUrl = avatarHash && idStr
+          ? `https://cdn.discordapp.com/avatars/${idStr}/${avatarHash}`
+          : (banner && idStr ? `https://cdn.discordapp.com/banners/${idStr}/${banner}.png?size=1024` : null);
+
+        const name = typeof p.global_name === 'string'
+          ? p.global_name
+          : (typeof p.display_name === 'string'
+            ? p.display_name
+            : (typeof p.username === 'string' && typeof p.discriminator === 'string'
+              ? `${p.username}#${p.discriminator}`
+              : (typeof p.username === 'string' ? p.username : null)));
+
+        const cleanName = typeof name === 'string' ? name.replace(/#\d+$/, '') : name;
+
+        return {
+          id: idStr ?? (typeof p.id === 'string' || typeof p.id === 'number' ? String(p.id) : ''),
+          name: cleanName,
+          email: typeof p.email === 'string' ? p.email : null,
+          image: avatarUrl,
+        };
+      },
+    }),
     EmailProvider({
       server: {
         host: env.EMAIL_SERVER_HOST,
@@ -63,11 +99,11 @@ export const authConfig = {
   ],
   adapter: PrismaAdapter(db),
   pages: {
-    signIn: '/auth/signin',
-    signOut: '/auth/signout',
-    error: '/auth/error',
-    verifyRequest: '/auth/verify-request',
-    newUser: '/auth/new-user'
+    signIn: "/auth/signin",
+    signOut: "/auth/signout",
+    error: "/auth/error",
+    verifyRequest: "/auth/verify-request",
+    newUser: "/auth/new-user",
   },
   // Ensure NEXTAUTH_URL is defined. In production (Vercel) set NEXTAUTH_URL=https://your-domain
   // Auth.js validates the host of incoming requests against NEXTAUTH_URL. If you see
