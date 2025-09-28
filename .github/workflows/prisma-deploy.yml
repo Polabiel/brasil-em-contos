@@ -1,0 +1,36 @@
+name: Apply Prisma Migrations on main
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install pnpm
+        run: npm i -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Setup DB URL
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: echo "Using DATABASE_URL from secrets"
+
+      - name: Run Prisma Migrate (deploy)
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: npx prisma migrate deploy --schema=./prisma/schema.prisma
