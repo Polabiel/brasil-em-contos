@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "next build",
+    "build": "pnpm run db:push && next build",
     "check": "next lint && tsc --noEmit",
     "validate": "next lint && tsc --noEmit && next build",
     "docker:up": "docker-compose up -d",
