@@ -12,7 +12,18 @@ import Stack from '@mui/joy/Stack';
 import Card from '@mui/joy/Card';
 import CardContent from '@mui/joy/CardContent';
 import Divider from '@mui/joy/Divider';
+import IconButton from '@mui/joy/IconButton';
+import Chip from '@mui/joy/Chip';
+import Avatar from '@mui/joy/Avatar';
+import CircularProgress from '@mui/joy/CircularProgress';
 import { useRouter } from 'next/navigation';
+import { Playfair_Display } from 'next/font/google';
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["400", "600"],
+  display: "swap",
+});
 
 // Tipos para as respostas da API
 type UserRespOk = { 
@@ -32,11 +43,13 @@ type UpdateResponse = {
 export default function ProfilePage() {
   // Estados do componente
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [name, setName] = useState('');
   const [image, setImage] = useState('');
   const [localPreview, setLocalPreview] = useState<string | null>(null);
   const [imageBlobBase64, setImageBlobBase64] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const router = useRouter();
@@ -78,6 +91,8 @@ export default function ProfilePage() {
   // Salva as alterações do perfil do usuário
   const handleSave = async () => {
     setError(null);
+    setSuccess(null);
+    setSaving(true);
     
     try {
       let response: Response;
@@ -124,6 +139,11 @@ export default function ProfilePage() {
         setSelectedFile(null);
         setSelectedFileName(null);
         setImage('/api/user/image?ts=' + Date.now());
+        setSuccess('✅ Perfil atualizado com sucesso!');
+        
+        // Clear success message after 3 seconds
+        setTimeout(() => setSuccess(null), 3000);
+        
         router.refresh();
       } else if ('error' in result && typeof result.error === 'string') {
         setError(result.error);
@@ -132,6 +152,8 @@ export default function ProfilePage() {
       }
     } catch {
       setError('Falha ao atualizar perfil');
+    } finally {
+      setSaving(false);
     }
   };
 
