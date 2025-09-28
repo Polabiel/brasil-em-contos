@@ -10,102 +10,317 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import CircularProgress from "@mui/joy/CircularProgress";
 import Box from "@mui/joy/Box";
 import Chip from "@mui/joy/Chip";
+import Divider from "@mui/joy/Divider";
+import { Playfair_Display } from "next/font/google";
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["400", "600", "700"],
+  display: "swap",
+});
 
 function NewUserContent() {
   return (
-    <Sheet
+    <Box
       sx={{
         minHeight: '100vh',
-        background: `linear-gradient(to bottom, var(--cv-gradientStart), var(--cv-backgroundDefault))`,
+        background: `linear-gradient(135deg, var(--cv-gradientStart) 0%, var(--cv-gradientMid) 50%, var(--cv-gradientEnd) 100%)`,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        p: 2
+        p: 2,
+        position: 'relative',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23228b22" fill-opacity="0.04"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
+        }
       }}
     >
-      <Box sx={{ width: '100%', maxWidth: 400 }}>
+      <Box sx={{ width: '100%', maxWidth: 520, position: 'relative', zIndex: 1 }}>
         <Stack spacing={4} alignItems="center">
-          <Stack spacing={1} alignItems="center" textAlign="center">
-            <Typography level="h2" sx={{ color: 'var(--cv-textPrimary)' }}>
-              Brasil em <Box component="span" sx={{ color: 'primary.500' }}>Contos</Box>
-            </Typography>
-            <Typography level="body-lg">
-              Bem-vindo(a) à plataforma!
-            </Typography>
+          
+          {/* Celebration Header */}
+          <Stack spacing={3} alignItems="center" textAlign="center">
+            <Box
+              sx={{
+                width: 100,
+                height: 100,
+                background: `linear-gradient(135deg, var(--cv-brazilGreen), var(--cv-brazilYellow))`,
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '3rem',
+                boxShadow: '0 12px 32px rgba(34,139,34,0.4)',
+                animation: 'bounce 2s ease-in-out infinite',
+                '@keyframes bounce': {
+                  '0%, 100%': { transform: 'translateY(0)' },
+                  '50%': { transform: 'translateY(-10px)' },
+                },
+              }}
+            >
+              🎉
+            </Box>
+            
+            <Stack spacing={1}>
+              <Typography
+                level="h1"
+                className={playfair.className}
+                sx={{
+                  fontSize: '2.2rem',
+                  fontWeight: 700,
+                  color: 'var(--cv-textPrimary)',
+                }}
+              >
+                Brasil em <Box component="span" sx={{ color: 'var(--cv-brazilGreen)' }}>Contos</Box>
+              </Typography>
+              
+              <Typography 
+                level="h2" 
+                sx={{ 
+                  fontSize: '1.4rem',
+                  fontWeight: 600,
+                  color: 'var(--cv-textPrimary)',
+                }}
+              >
+                Bem-vindo à Nossa Comunidade!
+              </Typography>
+              
+              <Typography level="body-lg" sx={{ color: 'var(--cv-textMuted80)', fontSize: '1.1rem' }}>
+                Sua jornada pela literatura brasileira começa aqui
+              </Typography>
+            </Stack>
           </Stack>
 
-          <Card variant="outlined" sx={{ width: '100%' }}>
-            <CardContent>
-              <Stack spacing={3} alignItems="center" textAlign="center">
-                <Box
-                  sx={{
-                    width: 64,
-                    height: 64,
-                    borderRadius: '50%',
-                    bgcolor: 'success.100',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}
-                >
-                  <PersonAddIcon sx={{ fontSize: 32, color: 'success.500' }} />
-                </Box>
+          <Card 
+            variant="outlined" 
+            sx={{ 
+              width: '100%',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
+              border: '1px solid var(--cv-neutral200)',
+              borderRadius: 16,
+              overflow: 'hidden',
+            }}
+          >
+            <CardContent sx={{ p: 4 }}>
+              <Stack spacing={4} alignItems="center">
                 
-                <Stack spacing={2} alignItems="center">
-                  <Stack spacing={1}>
-                    <Typography level="title-lg">
-                      Conta criada com sucesso! 🎉
-                    </Typography>
-                    <Typography level="body-md" color="neutral">
-                      Sua jornada pelas histórias brasileiras começa agora.
-                    </Typography>
-                  </Stack>
+                {/* Success Icon and Message */}
+                <Stack spacing={3} alignItems="center" textAlign="center">
+                  <Box
+                    sx={{
+                      width: 80,
+                      height: 80,
+                      borderRadius: '50%',
+                      bgcolor: 'var(--cv-brazilGreen)15',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      border: '3px solid var(--cv-brazilGreen)30',
+                    }}
+                  >
+                    <PersonAddIcon sx={{ fontSize: 40, color: 'var(--cv-brazilGreen)' }} />
+                  </Box>
                   
-                  <Chip variant="soft" color="success" size="sm">
-                    Novo usuário
-                  </Chip>
+                  <Stack spacing={2} alignItems="center">
+                    <Typography 
+                      level="h3" 
+                      sx={{ 
+                        fontWeight: 700,
+                        color: 'var(--cv-textPrimary)',
+                        fontSize: '1.4rem',
+                      }}
+                    >
+                      ✨ Conta Criada com Sucesso!
+                    </Typography>
+                    
+                    <Typography 
+                      level="body-lg" 
+                      sx={{ 
+                        color: 'var(--cv-textMuted80)',
+                        lineHeight: 1.6,
+                        maxWidth: 400,
+                      }}
+                    >
+                      Agora você faz parte de uma comunidade apaixonada pela rica literatura brasileira. 
+                      Prepare-se para descobrir histórias incríveis!
+                    </Typography>
+                    
+                    <Chip 
+                      variant="soft" 
+                      size="lg"
+                      sx={{
+                        bgcolor: 'var(--cv-brazilYellow)20',
+                        color: 'var(--cv-textPrimary)',
+                        fontWeight: 600,
+                        px: 3,
+                        py: 1,
+                      }}
+                    >
+                      🆕 Novo Leitor
+                    </Chip>
+                  </Stack>
                 </Stack>
                 
-                <Typography level="body-sm" color="neutral" textAlign="left" sx={{ width: '100%' }}>
-                  O que você pode fazer:
-                </Typography>
+                <Divider sx={{ width: '100%', my: 1 }} />
                 
-                <Stack spacing={1} sx={{ width: '100%' }}>
-                  <Typography level="body-sm" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    📚 Descobrir contos clássicos e contemporâneos
+                {/* What you can do */}
+                <Stack spacing={3} sx={{ width: '100%' }}>
+                  <Typography 
+                    level="title-md" 
+                    sx={{ 
+                      color: 'var(--cv-textPrimary)',
+                      fontWeight: 700,
+                      textAlign: 'center',
+                      fontSize: '1.2rem',
+                    }}
+                  >
+                    🌟 O que você pode fazer agora:
                   </Typography>
-                  <Typography level="body-sm" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    ✍️ Criar e compartilhar suas próprias histórias
-                  </Typography>
-                  <Typography level="body-sm" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    💬 Interagir com outros leitores e escritores
-                  </Typography>
+                  
+                  <Stack spacing={2.5}>
+                    {[
+                      { 
+                        icon: '📚', 
+                        title: 'Explorar Contos Clássicos', 
+                        desc: 'Descubra obras-primas de Machado de Assis, Clarice Lispector e outros grandes nomes' 
+                      },
+                      { 
+                        icon: '✍️', 
+                        title: 'Compartilhar Suas Histórias', 
+                        desc: 'Publique seus próprios contos e conecte-se com outros escritores brasileiros' 
+                      },
+                      { 
+                        icon: '💬', 
+                        title: 'Participar da Comunidade', 
+                        desc: 'Comente, avalie e discuta literatura com leitores de todo o Brasil' 
+                      },
+                      { 
+                        icon: '🎭', 
+                        title: 'Descobrir Novos Talentos', 
+                        desc: 'Conheça autores contemporâneos e suas perspectivas sobre o Brasil atual' 
+                      },
+                    ].map((feature, index) => (
+                      <Box key={index} sx={{ 
+                        display: 'flex', 
+                        alignItems: 'flex-start', 
+                        gap: 2.5,
+                        p: 2,
+                        borderRadius: 8,
+                        bgcolor: 'var(--cv-neutral50)',
+                        border: '1px solid var(--cv-neutral200)',
+                        transition: 'all 0.2s ease',
+                        '&:hover': {
+                          bgcolor: 'var(--cv-brazilGreen)05',
+                          borderColor: 'var(--cv-brazilGreen)30',
+                          transform: 'translateY(-2px)',
+                        }
+                      }}>
+                        <Box sx={{ fontSize: '1.8rem', flexShrink: 0 }}>
+                          {feature.icon}
+                        </Box>
+                        <Stack spacing={0.5}>
+                          <Typography 
+                            level="title-sm" 
+                            sx={{ 
+                              color: 'var(--cv-textPrimary)',
+                              fontWeight: 600,
+                            }}
+                          >
+                            {feature.title}
+                          </Typography>
+                          <Typography 
+                            level="body-sm" 
+                            sx={{ 
+                              color: 'var(--cv-textMuted80)',
+                              lineHeight: 1.5,
+                            }}
+                          >
+                            {feature.desc}
+                          </Typography>
+                        </Stack>
+                      </Box>
+                    ))}
+                  </Stack>
                 </Stack>
                 
-                <Stack spacing={2} sx={{ width: '100%' }}>
-                  <Link href="/">
+                {/* Call to Action */}
+                <Stack spacing={3} sx={{ width: '100%', pt: 2 }}>
+                  <Link href="/" style={{ textDecoration: 'none' }}>
                     <Button
                       variant="solid"
-                      color="primary"
-                      sx={{ width: '100%' }}
                       size="lg"
+                      sx={{
+                        width: '100%',
+                        bgcolor: 'var(--cv-brazilGreen)',
+                        color: 'white',
+                        py: 2,
+                        fontSize: '1.1rem',
+                        fontWeight: 600,
+                        borderRadius: 12,
+                        boxShadow: '0 6px 20px rgba(34,139,34,0.3)',
+                        transition: 'all 0.2s ease',
+                        '&:hover': {
+                          bgcolor: '#1e5f28',
+                          boxShadow: '0 8px 24px rgba(34,139,34,0.4)',
+                          transform: 'translateY(-2px)',
+                        },
+                      }}
                     >
-                      Começar Jornada
+                      <Box sx={{ fontSize: '1.2rem', mr: 1 }}>🚀</Box>
+                      Começar Minha Jornada Literária
                     </Button>
                   </Link>
+                  
+                  <Typography 
+                    level="body-sm" 
+                    sx={{ 
+                      color: 'var(--cv-textMuted60)',
+                      textAlign: 'center',
+                      fontStyle: 'italic',
+                    }}
+                  >
+                    "A leitura é uma conversa com os homens mais ilustres dos séculos passados." - René Descartes
+                  </Typography>
                 </Stack>
               </Stack>
             </CardContent>
           </Card>
 
-          <Link href="/">
-            <Typography level="body-sm" sx={{ color: 'var(--cv-textMuted60)', '&:hover': { color: 'var(--cv-textMuted80)' } }}>
-              ← Ir para página inicial
+          {/* Bottom Navigation */}
+          <Stack spacing={2} alignItems="center">
+            <Typography level="body-sm" sx={{ color: 'var(--cv-textMuted60)' }}>
+              Precisa de ajuda para começar?
             </Typography>
-          </Link>
+            
+            <Link href="/" style={{ textDecoration: 'none' }}>
+              <Typography 
+                level="body-sm" 
+                sx={{ 
+                  color: 'var(--cv-textMuted60)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1,
+                  transition: 'all 0.2s ease',
+                  '&:hover': { 
+                    color: 'var(--cv-brazilGreen)',
+                    transform: 'translateX(-2px)',
+                  }
+                }}
+              >
+                <i className="fas fa-home" style={{ fontSize: '0.8rem' }} />
+                Ir para página inicial
+              </Typography>
+            </Link>
+          </Stack>
         </Stack>
       </Box>
-    </Sheet>
+    </Box>
   );
 }
 
@@ -113,8 +328,24 @@ export default function NewUser() {
   return (
     <Suspense
       fallback={
-        <Sheet sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <CircularProgress size="lg" />
+        <Sheet sx={{ 
+          minHeight: '100vh', 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center',
+          background: `linear-gradient(135deg, var(--cv-gradientStart) 0%, var(--cv-gradientMid) 100%)`,
+        }}>
+          <Stack spacing={2} alignItems="center">
+            <CircularProgress 
+              size="lg" 
+              sx={{ 
+                '--CircularProgress-progressColor': 'var(--cv-brazilGreen)',
+              }}
+            />
+            <Typography level="body-md" sx={{ color: 'var(--cv-textMuted80)' }}>
+              Carregando...
+            </Typography>
+          </Stack>
         </Sheet>
       }
     >
