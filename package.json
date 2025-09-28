@@ -6,6 +6,7 @@
   "scripts": {
     "build": "next build",
     "check": "next lint && tsc --noEmit",
+    "validate": "next lint && tsc --noEmit && next build",
     "docker:up": "docker-compose up -d",
     "db:generate": "prisma migrate dev",
     "db:migrate": "prisma migrate deploy",

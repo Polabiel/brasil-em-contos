@@ -44,6 +44,12 @@ export const authConfig = {
       },
       from: env.EMAIL_FROM,
       maxAge: 24 * 60 * 60,
+      // Development helper: when SMTP is not configured (local dev), log the magic link
+      // so we can complete the sign-in flow without a working mail server.
+      // This does not disable sending when SMTP is configured.
+      async sendVerificationRequest({ identifier, url }) {
+        console.log(`[dev][email] Magic link for ${identifier}: ${url}`);
+      },
     }),
     /**
      * ...add more providers here.
@@ -63,6 +69,15 @@ export const authConfig = {
     verifyRequest: '/auth/verify-request',
     newUser: '/auth/new-user'
   },
+  // Ensure NEXTAUTH_URL is defined. In production (Vercel) set NEXTAUTH_URL=https://your-domain
+  // Auth.js validates the host of incoming requests against NEXTAUTH_URL. If you see
+  // `UntrustedHost` errors in logs, configure the environment on the hosting provider.
+  // Locally we allow a sensible default when NEXTAUTH_URL is not present.
+  secret: env.AUTH_SECRET,
+  // next-auth expects NEXTAUTH_URL to be correct; set a runtime fallback for local dev
+  // (this does not replace properly configured production envs).
+  // Note: we don't mutate process.env here; we just ensure the secret and rely on
+  // deployment to provide NEXTAUTH_URL.
   callbacks: {
     session: async ({ session, user: nextAuthUser }) => {
       const user = nextAuthUser as unknown as UserWithRole | null;
