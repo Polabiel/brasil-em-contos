@@ -12,6 +12,7 @@ import Divider from "@mui/joy/Divider";
 import CircularProgress from "@mui/joy/CircularProgress";
 import Box from "@mui/joy/Box";
 import { Playfair_Display } from "next/font/google";
+import Image from "next/image";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -37,7 +38,7 @@ const literaryQuotes = [
 async function SignInContent() {
   const session = await auth();
   const randomQuote = literaryQuotes[Math.floor(Math.random() * literaryQuotes.length)];
-  
+
   return (
     <Box
       sx={{
@@ -57,7 +58,7 @@ async function SignInContent() {
         }
       }}
     >
-      <Box sx={{ 
+      <Box sx={{
         display: 'grid',
         gridTemplateColumns: { xs: '1fr', lg: '1fr 1fr' },
         gap: { xs: 0, lg: 6 },
@@ -68,9 +69,9 @@ async function SignInContent() {
         position: 'relative',
         zIndex: 1,
       }}>
-        
+
         {/* Left Side - Branding & Quote */}
-        <Box sx={{ 
+        <Box sx={{
           display: { xs: 'none', lg: 'block' },
           pr: 4,
         }}>
@@ -81,16 +82,23 @@ async function SignInContent() {
                   sx={{
                     width: 80,
                     height: 80,
-                    background: `linear-gradient(135deg, var(--cv-brazilGreen), var(--cv-brazilYellow))`,
                     borderRadius: '50%',
+                    background: `linear-gradient(135deg, var(--cv-brazilGreen), var(--cv-brazilYellow))`,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    fontSize: '2.5rem',
                     boxShadow: '0 8px 24px rgba(34,139,34,0.3)',
+                    p: 1,
+                    objectFit: 'contain',
                   }}
                 >
-                  📚
+                  <Image
+                    alt="Logo svg"
+                    src={'/icon.svg'}
+                    width={80}
+                    height={80}
+                    style={{ filter: 'invert(1)' }}
+                  />
                 </Box>
                 <Stack>
                   <Typography
@@ -142,7 +150,7 @@ async function SignInContent() {
                   fontSize: '1.1rem',
                 }}
               >
-                Junte-se à nossa comunidade de leitores apaixonados pela literatura brasileira. 
+                Junte-se à nossa comunidade de leitores apaixonados pela literatura brasileira.
                 Explore contos clássicos e contemporâneos que capturam a essência da nossa cultura.
               </Typography>
             </Stack>
@@ -167,7 +175,7 @@ async function SignInContent() {
                     mb: 2,
                   }}
                 >
-                  "{randomQuote?.text}"
+                  “{randomQuote?.text}”
                 </Typography>
                 <Typography
                   level="body-sm"
@@ -181,34 +189,11 @@ async function SignInContent() {
                 </Typography>
               </CardContent>
             </Card>
-
-            {/* Features */}
-            <Stack spacing={2}>
-              {[
-                { icon: '📖', text: 'Contos Clássicos e Contemporâneos' },
-                { icon: '✍️', text: 'Compartilhe Suas Próprias Histórias' },
-                { icon: '🌟', text: 'Comunidade de Leitores Brasileiros' },
-                { icon: '🇧🇷', text: 'Celebrando Nossa Cultura' },
-              ].map((feature, index) => (
-                <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                  <Box sx={{ fontSize: '1.5rem' }}>{feature.icon}</Box>
-                  <Typography
-                    level="body-md"
-                    sx={{
-                      color: 'var(--cv-textMuted80)',
-                      fontWeight: 500,
-                    }}
-                  >
-                    {feature.text}
-                  </Typography>
-                </Box>
-              ))}
-            </Stack>
           </Stack>
         </Box>
 
         {/* Right Side - Sign In Form */}
-        <Box sx={{ 
+        <Box sx={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -216,11 +201,11 @@ async function SignInContent() {
         }}>
           <Box sx={{ width: '100%', maxWidth: 440 }}>
             <Stack spacing={4} alignItems="center">
-              
+
               {/* Mobile Header */}
-              <Stack 
-                spacing={1} 
-                alignItems="center" 
+              <Stack
+                spacing={1}
+                alignItems="center"
                 textAlign="center"
                 sx={{ display: { xs: 'flex', lg: 'none' } }}
               >
@@ -256,9 +241,9 @@ async function SignInContent() {
                 </Typography>
               </Stack>
 
-              <Card 
-                variant="outlined" 
-                sx={{ 
+              <Card
+                variant="outlined"
+                sx={{
                   width: '100%',
                   boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
                   border: '1px solid var(--cv-neutral200)',
@@ -269,9 +254,9 @@ async function SignInContent() {
                 <CardContent sx={{ p: { xs: 3, sm: 4 } }}>
                   <Stack spacing={3}>
                     <Stack spacing={1} textAlign="center">
-                      <Typography 
-                        level="h3" 
-                        sx={{ 
+                      <Typography
+                        level="h3"
+                        sx={{
                           fontWeight: 700,
                           color: 'var(--cv-textPrimary)',
                           fontSize: '1.4rem',
@@ -279,9 +264,9 @@ async function SignInContent() {
                       >
                         Bem-vindo de Volta
                       </Typography>
-                      <Typography 
-                        level="body-md" 
-                        sx={{ 
+                      <Typography
+                        level="body-md"
+                        sx={{
                           color: 'var(--cv-textMuted70)',
                           fontSize: '0.95rem',
                         }}
@@ -289,7 +274,7 @@ async function SignInContent() {
                         Entre na sua conta para continuar sua jornada literária
                       </Typography>
                     </Stack>
-                    
+
                     <Stack spacing={3}>
                       <SignInDiscordButton />
 
@@ -317,17 +302,17 @@ async function SignInContent() {
                     </Typography>
                   </Card>
                 )}
-                
+
                 <Link href="/" style={{ textDecoration: 'none' }}>
-                  <Typography 
-                    level="body-sm" 
-                    sx={{ 
+                  <Typography
+                    level="body-sm"
+                    sx={{
                       color: 'var(--cv-textMuted60)',
                       display: 'flex',
                       alignItems: 'center',
                       gap: 1,
                       transition: 'all 0.2s ease',
-                      '&:hover': { 
+                      '&:hover': {
                         color: 'var(--cv-brazilGreen)',
                         transform: 'translateX(-2px)',
                       }
@@ -350,17 +335,17 @@ export default function SignIn() {
   return (
     <Suspense
       fallback={
-        <Sheet sx={{ 
-          minHeight: '100vh', 
-          display: 'flex', 
-          alignItems: 'center', 
+        <Sheet sx={{
+          minHeight: '100vh',
+          display: 'flex',
+          alignItems: 'center',
           justifyContent: 'center',
           background: `linear-gradient(135deg, var(--cv-gradientStart) 0%, var(--cv-gradientMid) 100%)`,
         }}>
           <Stack spacing={2} alignItems="center">
-            <CircularProgress 
-              size="lg" 
-              sx={{ 
+            <CircularProgress
+              size="lg"
+              sx={{
                 '--CircularProgress-progressColor': 'var(--cv-brazilGreen)',
               }}
             />
