@@ -19,6 +19,43 @@ enum UserRole {
     ADMIN
 }
 
+enum BookTag {
+    // Movimentos Literários / Estilos de Época
+    TROVADORISMO
+    CLASSICISMO
+    BARROCO
+    ARCADISMO
+    ROMANTISMO
+    REALISMO // Já existe
+    NATURALISMO
+    PARNASIANISMO
+    SIMBOLISMO
+    PRE_MODERNISMO
+    MODERNISMO // Já existe
+    POS_MODERNISMO // Alternativa ao CONTEMPORANEO
+    CONTEMPORANEO // Já existe
+
+    // Gêneros e Subgêneros
+    FICCAO_CIENTIFICA
+    FANTASIA
+    HORROR
+    THRILLER
+    POLICIAL
+    DRAMA
+    COMEDIA
+    POESIA
+    CRONICA
+    LITERATURA_INFANTOJUVENIL
+
+    // Temas e Estilos Específicos
+    REGIONAL // Já existe
+    LITERATURA_FEMININA
+    BIOGRAFIA
+    MEMORIAS
+    AUTO_AJUDA
+    OUTROS // Já existe
+}
+
 model Post {
     id          Int      @id @default(autoincrement())
     name        String
@@ -27,6 +64,11 @@ model Post {
     image       String?
     imageBlob   Bytes?
     imageMime   String?
+    tag         BookTag?
+    featured    Boolean  @default(false)
+    // relation to Author: a post can have an author
+    author      Author?  @relation(fields: [authorId], references: [id])
+    authorId    Int?
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
 
@@ -34,6 +76,25 @@ model Post {
     createdById String
 
     @@index([name])
+    @@index([featured])
+}
+
+model Author {
+    id     Int     @id @default(autoincrement())
+    name   String
+    period String?
+    bio    String?
+
+    books Book[]
+    posts Post[]
+}
+
+model Book {
+    id       Int    @id @default(autoincrement())
+    title    String
+    year     Int?
+    author   Author @relation(fields: [authorId], references: [id])
+    authorId Int
 }
 
 // Necessary for Next auth
