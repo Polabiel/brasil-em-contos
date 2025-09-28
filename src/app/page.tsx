@@ -1,7 +1,8 @@
 import { db } from "@/server/db";
-import Slogan from "@/app/_components/layout/Slogan";
+import HeroSection from "@/app/_components/layout/HeroSection";
 import Sidebar from "@/app/_components/layout/Sidebar";
 import PostsGrid from "@/app/_components/layout/PostsGrid";
+import Box from "@mui/joy/Box";
 
 type DBPost = {
   id: string | number | bigint;
@@ -41,16 +42,40 @@ export default async function Home() {
 
   return (
     <>
-      <Slogan />
-      <main className="container mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-12 gap-8">
-        <section className="md:col-span-9">
-          <PostsGrid posts={posts} />
-        </section>
+      <HeroSection />
+      
+      <Box
+        component="main"
+        sx={{
+          bgcolor: 'var(--cv-backgroundDefault)',
+          py: { xs: 6, md: 8 },
+        }}
+      >
+        <Box
+          sx={{
+            maxWidth: '1200px',
+            mx: 'auto',
+            px: { xs: 2, sm: 3, md: 4 },
+          }}
+        >
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: { xs: '1fr', lg: '2fr 1fr' },
+              gap: { xs: 4, md: 6, lg: 8 },
+              alignItems: 'start',
+            }}
+          >
+            <Box component="section">
+              <PostsGrid posts={posts} />
+            </Box>
 
-        <aside className="md:col-span-3">
-          <Sidebar />
-        </aside>
-      </main>
+            <Box component="aside">
+              <Sidebar />
+            </Box>
+          </Box>
+        </Box>
+      </Box>
     </>
   );
 }

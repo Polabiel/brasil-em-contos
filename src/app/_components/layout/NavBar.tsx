@@ -8,8 +8,16 @@ import Box from "@mui/joy/Box";
 import Stack from "@mui/joy/Stack";
 import IconButton from "@mui/joy/IconButton";
 import Button from "@mui/joy/Button";
+import Typography from "@mui/joy/Typography";
 import LinkNext from 'next/link';
 import Divider from "@mui/joy/Divider";
+import { Playfair_Display } from "next/font/google";
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["400", "600"],
+  display: "swap",
+});
 
 export default function NavBar() {
   const [open, setOpen] = useState(false);
@@ -86,91 +94,277 @@ export default function NavBar() {
 
   return (
     <>
-      <Box component="nav" sx={{ py: 2, px: 10, position: 'relative' }}>
+      <Box 
+        component="nav" 
+        sx={{ 
+          py: 2, 
+          px: { xs: 2, md: 4 }, 
+          position: 'relative',
+          bgcolor: 'white',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+          borderBottom: '1px solid var(--cv-neutral200)',
+        }}
+      >
         <Stack direction="row" spacing={2} alignItems="center" sx={{ justifyContent: 'space-between', width: '100%' }}>
+          
+          {/* Logo and Brand */}
           <Box className="flex items-center gap-4">
-            <Link href="/" className="flex items-center">
+            <Link href="/" className="flex items-center gap-3">
               <Image
                 src="/icon.webp"
                 alt="Brasil em Contos"
-                width={40}
-                height={40}
+                width={44}
+                height={44}
                 className="cursor-pointer"
               />
+              <Stack spacing={0}>
+                <Typography 
+                  className={playfair.className}
+                  level="h4"
+                  sx={{ 
+                    fontWeight: 600,
+                    color: 'var(--cv-textPrimary)',
+                    fontSize: '1.4rem',
+                    lineHeight: 1,
+                    display: { xs: 'none', sm: 'block' }
+                  }}
+                >
+                  Brasil em <Box component="span" sx={{ color: 'var(--cv-brazilGreen)' }}>Contos</Box>
+                </Typography>
+                <Typography 
+                  level="body-xs" 
+                  sx={{ 
+                    color: 'var(--cv-textMuted70)',
+                    fontSize: '0.7rem',
+                    letterSpacing: '0.05em',
+                    display: { xs: 'none', sm: 'block' }
+                  }}
+                >
+                  LITERATURA BRASILEIRA
+                </Typography>
+              </Stack>
             </Link>
 
+            {/* Mobile menu button */}
             <IconButton
               ref={toggleRef}
-              variant="plain"
+              variant="soft"
               size="sm"
               aria-haspopup="true"
               aria-controls="mobile-nav"
               aria-expanded={open}
               aria-label={open ? 'Fechar menu' : 'Abrir menu'}
               onClick={() => setOpen(v => !v)}
-              className="md:hidden"
-              sx={{ display: { xs: 'inline-flex', md: 'none' } }}
+              sx={{ 
+                display: { xs: 'inline-flex', md: 'none' },
+                bgcolor: open ? 'var(--cv-brazilGreen)15' : 'var(--cv-neutral100)',
+                color: open ? 'var(--cv-brazilGreen)' : 'var(--cv-textMuted80)',
+                '&:hover': {
+                  bgcolor: 'var(--cv-brazilGreen)20',
+                  color: 'var(--cv-brazilGreen)'
+                }
+              }}
             >
               <i className={open ? 'fas fa-times' : 'fas fa-bars'} />
             </IconButton>
 
-            <Box className="hidden md:flex gap-6 text-sm" sx={{ display: { xs: 'none', md: 'flex' } }}>
-              <Link href="#">CONTATO</Link>
-              <Link href="#">EQUIPE</Link>
-              <Link href="#">POSTS IMPORTANTES</Link>
-            </Box>
+            {/* Desktop Navigation */}
+            <Stack 
+              direction="row" 
+              spacing={3} 
+              sx={{ 
+                display: { xs: 'none', md: 'flex' },
+                ml: 3
+              }}
+            >
+              <Link 
+                href="/contos" 
+                style={{ 
+                  textDecoration: 'none',
+                  padding: '8px 12px',
+                  borderRadius: '6px',
+                  transition: 'all 0.2s ease',
+                }}
+              >
+                <Typography 
+                  level="body-md"
+                  sx={{ 
+                    color: 'var(--cv-textMuted80)',
+                    fontWeight: 500,
+                    fontSize: '0.95rem',
+                    '&:hover': {
+                      color: 'var(--cv-brazilGreen)',
+                    }
+                  }}
+                >
+                  Contos
+                </Typography>
+              </Link>
+              
+              <Link 
+                href="/autores" 
+                style={{ textDecoration: 'none' }}
+              >
+                <Typography 
+                  level="body-md"
+                  sx={{ 
+                    color: 'var(--cv-textMuted80)',
+                    fontWeight: 500,
+                    fontSize: '0.95rem',
+                    '&:hover': {
+                      color: 'var(--cv-brazilGreen)',
+                    }
+                  }}
+                >
+                  Autores
+                </Typography>
+              </Link>
+
+              <Link 
+                href="/categorias" 
+                style={{ textDecoration: 'none' }}
+              >
+                <Typography 
+                  level="body-md"
+                  sx={{ 
+                    color: 'var(--cv-textMuted80)',
+                    fontWeight: 500,
+                    fontSize: '0.95rem',
+                    '&:hover': {
+                      color: 'var(--cv-brazilGreen)',
+                    }
+                  }}
+                >
+                  Categorias
+                </Typography>
+              </Link>
+
+              <Link 
+                href="/sobre" 
+                style={{ textDecoration: 'none' }}
+              >
+                <Typography 
+                  level="body-md"
+                  sx={{ 
+                    color: 'var(--cv-textMuted80)',
+                    fontWeight: 500,
+                    fontSize: '0.95rem',
+                    '&:hover': {
+                      color: 'var(--cv-brazilGreen)',
+                    }
+                  }}
+                >
+                  Sobre
+                </Typography>
+              </Link>
+            </Stack>
           </Box>
 
-          <Box className="flex gap-2">
-            {/* hide the top social icons on small screens, they'll be shown inside the mobile menu */}
-            <IconButton variant="plain" size="sm" aria-label="facebook" onClick={() => alert("Não foi criado ainda")} sx={{ display: { xs: 'none', md: 'inline-flex' } }}>
-              <i className="fab fa-facebook" />
-            </IconButton>
-            <IconButton variant="plain" size="sm" aria-label="twitter" onClick={() => alert("Não foi criado ainda")} sx={{ display: { xs: 'none', md: 'inline-flex' } }}>
-              <i className="fab fa-twitter" />
-            </IconButton>
-            <IconButton variant="plain" size="sm" aria-label="instagram" onClick={() => alert("Não foi criado ainda")} sx={{ display: { xs: 'none', md: 'inline-flex' } }}>
-              <i className="fab fa-instagram" />
-            </IconButton>
-
+          {/* Right side actions */}
+          <Stack direction="row" spacing={1.5} alignItems="center">
+            
+            {/* Admin buttons for desktop */}
             {session?.user?.role === 'ADMIN' && (
-              <div className="hidden md:flex items-center gap-2">
+              <Stack direction="row" spacing={1} sx={{ display: { xs: 'none', md: 'flex' } }}>
                 <LinkNext href="/admin/posts/create">
-                  <Button variant="solid" color="success" size="sm">Criar post</Button>
+                  <Button 
+                    variant="solid" 
+                    color="success" 
+                    size="sm"
+                    sx={{
+                      bgcolor: 'var(--cv-brazilGreen)',
+                      '&:hover': { bgcolor: '#1e5f28' }
+                    }}
+                  >
+                    <i className="fas fa-plus" style={{ marginRight: 6, fontSize: '0.8rem' }} />
+                    Criar
+                  </Button>
                 </LinkNext>
                 <LinkNext href="/admin/posts">
-                  <Button variant="outlined" color="warning" size="sm">Gerenciar posts</Button>
+                  <Button variant="outlined" color="warning" size="sm">
+                    <i className="fas fa-cog" style={{ marginRight: 6, fontSize: '0.8rem' }} />
+                    Gerenciar
+                  </Button>
                 </LinkNext>
-              </div>
+              </Stack>
             )}
 
+            {/* User Authentication */}
             {mounted ? (
               session ? (
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <Stack direction="row" spacing={1} alignItems="center">
                   <LinkNext href="/profile">
-                    <div style={{ width: 32, height: 32, position: 'relative', borderRadius: 9999, overflow: 'hidden', cursor: 'pointer' }} aria-label="Editar perfil">
-                      <Image src={avatarTs ? `/api/user/image?ts=${avatarTs}` : '/api/user/image'} alt={session.user?.name ?? 'Avatar'} width={32} height={32} style={{ objectFit: 'cover' }} unoptimized />
-                    </div>
+                    <Box 
+                      sx={{ 
+                        width: 36, 
+                        height: 36, 
+                        position: 'relative', 
+                        borderRadius: '50%', 
+                        overflow: 'hidden', 
+                        cursor: 'pointer',
+                        border: '2px solid var(--cv-brazilGreen)',
+                        transition: 'all 0.2s ease',
+                        '&:hover': {
+                          borderColor: 'var(--cv-brazilYellow)',
+                          transform: 'scale(1.05)',
+                        }
+                      }} 
+                      aria-label="Editar perfil"
+                    >
+                      <Image 
+                        src={avatarTs ? `/api/user/image?ts=${avatarTs}` : '/api/user/image'} 
+                        alt={session.user?.name ?? 'Avatar'} 
+                        width={32} 
+                        height={32} 
+                        style={{ objectFit: 'cover' }} 
+                        unoptimized 
+                      />
+                    </Box>
                   </LinkNext>
-                  <Button variant="outlined" size="sm" sx={{ ml: 1 }} onClick={() => signOut({ callbackUrl: '/' })}>
+                  
+                  <Button 
+                    variant="outlined" 
+                    size="sm" 
+                    sx={{ 
+                      borderColor: 'var(--cv-neutral300)',
+                      color: 'var(--cv-textMuted80)',
+                      '&:hover': {
+                        borderColor: 'var(--cv-brazilGreen)',
+                        color: 'var(--cv-brazilGreen)',
+                      }
+                    }}
+                    onClick={() => signOut({ callbackUrl: '/' })}
+                  >
+                    <i className="fas fa-sign-out-alt" style={{ marginRight: 6, fontSize: '0.8rem' }} />
                     Sair
                   </Button>
-                </div>
+                </Stack>
               ) : (
                 <Button
                   variant="solid"
-                  color="primary"
                   size="sm"
-                  sx={{ ml: 1 }}
+                  sx={{
+                    bgcolor: 'var(--cv-brazilGreen)',
+                    color: 'white',
+                    px: 3,
+                    fontWeight: 600,
+                    '&:hover': {
+                      bgcolor: '#1e5f28',
+                      transform: 'translateY(-1px)',
+                      boxShadow: '0 4px 8px rgba(34,139,34,0.3)',
+                    }
+                  }}
                   onClick={() => signIn(undefined, { callbackUrl: '/' })}
                 >
-                  Entrar / Cadastrar
+                  <i className="fas fa-user" style={{ marginRight: 6, fontSize: '0.8rem' }} />
+                  Entrar
                 </Button>
               )
             ) : null}
-          </Box>
+          </Stack>
         </Stack>
 
+        {/* Mobile Navigation Menu */}
         <Box
           id="mobile-nav"
           ref={menuRef}
@@ -183,15 +377,15 @@ export default function NavBar() {
             top: '100%',
             mt: 1,
             width: '100%',
-            background: 'var(--cv-backgroundPaper)',
-            borderTop: '1px solid var(--cv-neutral500)',
-            borderRadius: 0,
-            p: 2,
+            background: 'white',
+            border: '1px solid var(--cv-neutral200)',
+            borderRadius: 8,
+            p: 3,
             zIndex: 60,
-            boxShadow: 4,
+            boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
             transformOrigin: 'top center',
-            transition: 'transform 320ms cubic-bezier(.16,.84,.24,1), opacity 220ms ease',
-            transform: open ? 'translateY(0) scaleY(1)' : 'translateY(-14px) scaleY(0.985)',
+            transition: 'all 300ms cubic-bezier(.16,.84,.24,1)',
+            transform: open ? 'translateY(0) scaleY(1)' : 'translateY(-8px) scaleY(0.98)',
             opacity: open ? 1 : 0,
             pointerEvents: open ? 'auto' : 'none',
             display: { md: 'none' },
@@ -199,44 +393,105 @@ export default function NavBar() {
           onClick={() => setOpen(false)}
           aria-hidden={!open}
         >
-          <div className="flex flex-col gap-3 text-base" style={{ alignItems: 'center', width: '100%' }}>
-            {/** staggered items with fade+slide */}
-            <LinkNext href="#" role="menuitem" className="w-full">
-              <Button fullWidth variant="plain" sx={{ py: 1.5, transition: 'transform 260ms ease, opacity 220ms ease', transform: open ? 'translateY(0)' : 'translateY(-6px)', opacity: open ? 1 : 0 }}>CONTATO</Button>
-            </LinkNext>
-            <LinkNext href="#" role="menuitem" className="w-full">
-              <Button fullWidth variant="plain" sx={{ py: 1.5, transition: 'transform 300ms ease 40ms, opacity 260ms ease 40ms', transform: open ? 'translateY(0)' : 'translateY(-6px)', opacity: open ? 1 : 0 }}>EQUIPE</Button>
-            </LinkNext>
-            <LinkNext href="#" role="menuitem" className="w-full">
-              <Button fullWidth variant="plain" sx={{ py: 1.5, transition: 'transform 340ms ease 80ms, opacity 300ms ease 80ms', transform: open ? 'translateY(0)' : 'translateY(-6px)', opacity: open ? 1 : 0 }}>POSTS IMPORTANTES</Button>
-            </LinkNext>
+          <Stack spacing={2}>
+            {/* Navigation Links */}
+            <Stack spacing={1}>
+              {[
+                { label: 'Contos', href: '/contos', icon: 'fas fa-book' },
+                { label: 'Autores', href: '/autores', icon: 'fas fa-user-pen' },
+                { label: 'Categorias', href: '/categorias', icon: 'fas fa-tags' },
+                { label: 'Sobre', href: '/sobre', icon: 'fas fa-info-circle' },
+              ].map((link, index) => (
+                <LinkNext key={link.label} href={link.href} role="menuitem">
+                  <Button 
+                    fullWidth 
+                    variant="plain" 
+                    sx={{ 
+                      py: 1.5,
+                      justifyContent: 'flex-start',
+                      color: 'var(--cv-textMuted80)',
+                      '&:hover': {
+                        bgcolor: 'var(--cv-brazilGreen)10',
+                        color: 'var(--cv-brazilGreen)',
+                      }
+                    }}
+                  >
+                    <i className={link.icon} style={{ marginRight: 12, width: 16 }} />
+                    {link.label}
+                  </Button>
+                </LinkNext>
+              ))}
+            </Stack>
+
+            {/* Admin actions for mobile */}
             {session?.user?.role === 'ADMIN' && (
               <>
-                <LinkNext href="/admin/posts/create" role="menuitem" className="w-full">
-                  <Button fullWidth variant="solid" color="success" sx={{ py: 1.5, backgroundColor: 'var(--joy-palette-success-500)', color: '#fff', '&:hover': { backgroundColor: 'var(--joy-palette-success-600)' }, transition: 'transform 320ms ease 110ms, opacity 280ms ease 110ms', transform: open ? 'translateY(0)' : 'translateY(-6px)', opacity: open ? 1 : 0 }}>Criar post</Button>
-                </LinkNext>
-                <LinkNext href="/admin/posts" role="menuitem" className="w-full">
-                  <Button fullWidth variant="outlined" color="warning" sx={{ py: 1.5, borderColor: 'var(--joy-palette-warning-500)', color: 'var(--joy-palette-warning-700)', '&:hover': { borderColor: 'var(--joy-palette-warning-600)' }, transition: 'transform 360ms ease 140ms, opacity 320ms ease 140ms', transform: open ? 'translateY(0)' : 'translateY(-6px)', opacity: open ? 1 : 0 }}>Gerenciar posts</Button>
-                </LinkNext>
+                <Divider sx={{ my: 1 }} />
+                <Stack spacing={1}>
+                  <LinkNext href="/admin/posts/create" role="menuitem">
+                    <Button 
+                      fullWidth 
+                      variant="solid" 
+                      sx={{
+                        py: 1.5,
+                        bgcolor: 'var(--cv-brazilGreen)',
+                        '&:hover': { bgcolor: '#1e5f28' }
+                      }}
+                    >
+                      <i className="fas fa-plus" style={{ marginRight: 8 }} />
+                      Criar Post
+                    </Button>
+                  </LinkNext>
+                  <LinkNext href="/admin/posts" role="menuitem">
+                    <Button 
+                      fullWidth 
+                      variant="outlined" 
+                      color="warning" 
+                      sx={{ py: 1.5 }}
+                    >
+                      <i className="fas fa-cog" style={{ marginRight: 8 }} />
+                      Gerenciar Posts
+                    </Button>
+                  </LinkNext>
+                </Stack>
               </>
             )}
 
-            {/* social icons shown in the mobile menu for accessibility (bigger targets) */}
-            <div className="flex gap-2 mt-1" style={{ justifyContent: 'center' }}>
-              <IconButton variant="plain" aria-label="facebook" onClick={() => alert("Não foi criado ainda")} sx={{ width: 48, height: 48 }}>
-                <i className="fab fa-facebook" style={{ fontSize: 20 }} />
-              </IconButton>
-              <IconButton variant="plain" aria-label="twitter" onClick={() => alert("Não foi criado ainda")} sx={{ width: 48, height: 48 }}>
-                <i className="fab fa-twitter" style={{ fontSize: 20 }} />
-              </IconButton>
-              <IconButton variant="plain" aria-label="instagram" onClick={() => alert("Não foi criado ainda")} sx={{ width: 48, height: 48 }}>
-                <i className="fab fa-instagram" style={{ fontSize: 20 }} />
-              </IconButton>
-            </div>
-          </div>
+            <Divider sx={{ my: 1 }} />
+            
+            {/* Contact info */}
+            <Box sx={{ textAlign: 'center', py: 2 }}>
+              <Typography level="body-sm" sx={{ color: 'var(--cv-textMuted70)', mb: 2 }}>
+                Siga-nos nas redes sociais
+              </Typography>
+              <Stack direction="row" spacing={1} justifyContent="center">
+                {[
+                  { icon: 'fab fa-facebook-f', label: 'Facebook' },
+                  { icon: 'fab fa-twitter', label: 'Twitter' },
+                  { icon: 'fab fa-instagram', label: 'Instagram' },
+                ].map((social) => (
+                  <IconButton
+                    key={social.label}
+                    variant="soft"
+                    aria-label={social.label}
+                    sx={{
+                      bgcolor: 'var(--cv-neutral100)',
+                      color: 'var(--cv-textMuted70)',
+                      '&:hover': {
+                        bgcolor: 'var(--cv-brazilGreen)',
+                        color: 'white',
+                      }
+                    }}
+                    onClick={() => console.log(`${social.label} clicked`)}
+                  >
+                    <i className={social.icon} />
+                  </IconButton>
+                ))}
+              </Stack>
+            </Box>
+          </Stack>
         </Box>
       </Box>
-      <Divider component={Box} sx={{ height: 2, p: 0 }} />
     </>
   );
 }

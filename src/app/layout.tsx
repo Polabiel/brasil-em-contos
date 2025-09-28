@@ -7,6 +7,7 @@ import { tokensToCssVars, colorTokens } from "@/theme/colors";
 import { TRPCReactProvider } from "@/trpc/react";
 import MuiProvider from "@/app/_components/providers/MuiProvider";
 import NavBar from "@/app/_components/layout/NavBar";
+import Footer from "@/app/_components/layout/Footer";
 
 export const metadata: Metadata = {
   title: "Brasil em Contos",
@@ -38,6 +39,7 @@ export default function RootLayout({
           <TRPCReactProvider>
             <NavBar />
             {children}
+            <Footer />
           </TRPCReactProvider>
         </MuiProvider>
       </body>
