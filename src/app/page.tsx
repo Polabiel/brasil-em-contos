@@ -2,6 +2,7 @@ import { db } from "@/server/db";
 import HeroSection from "@/app/_components/layout/HeroSection";
 import Sidebar from "@/app/_components/layout/Sidebar";
 import PostsGrid from "@/app/_components/layout/PostsGrid";
+import HomeFooter from "@/app/_components/layout/HomeFooter";
 import Box from "@mui/joy/Box";
 
 type DBPost = {
@@ -76,6 +77,8 @@ export default async function Home() {
           </Box>
         </Box>
       </Box>
+
+      <HomeFooter />
     </>
   );
 }
