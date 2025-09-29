@@ -30,10 +30,14 @@ export default function NavBar() {
   useEffect(() => {
     setMounted(true);
     // set a timestamp only on the client to avoid hydration mismatch
-    setAvatarTs(Date.now());
+    if (typeof window !== 'undefined') {
+      setAvatarTs(Date.now());
+    }
   }, []);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     function onKey(e: KeyboardEvent) {
       if (e.key === 'Escape') setOpen(false);
     }
@@ -52,9 +56,11 @@ export default function NavBar() {
       document.removeEventListener('keydown', onKey);
       document.removeEventListener('click', onDocClick);
     };
-  }, []);
+  }, [open]);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     if (!open) {
       toggleRef.current?.focus();
       return;
@@ -109,6 +115,29 @@ export default function NavBar() {
           
           {/* Logo and Brand */}
           <Box className="flex items-center gap-4">
+            {/* Mobile menu button on the left near the logo */}
+            <IconButton
+              ref={toggleRef}
+              variant="soft"
+              size="sm"
+              aria-haspopup="true"
+              aria-controls="mobile-nav"
+              aria-expanded={open}
+              aria-label={open ? 'Fechar menu' : 'Abrir menu'}
+              onClick={() => setOpen(v => !v)}
+              sx={{ 
+                display: { xs: 'inline-flex', md: 'none' },
+                bgcolor: open ? 'var(--cv-brazilGreen)15' : 'transparent',
+                color: open ? 'var(--cv-brazilGreen)' : 'var(--cv-textMuted80)',
+                mr: 1,
+                '&:hover': {
+                  bgcolor: 'var(--cv-brazilGreen)10',
+                  color: 'var(--cv-brazilGreen)'
+                }
+              }}
+            >
+              <i className={open ? 'fas fa-times' : 'fas fa-bars'} />
+            </IconButton>
             <Link href="/" className="flex items-center gap-3">
               <Image
                 src="/icon.webp"
@@ -117,19 +146,33 @@ export default function NavBar() {
                 height={44}
                 className="cursor-pointer"
               />
-              <Stack spacing={0}>
+              <Stack spacing={0} sx={{ ml: { xs: 1, sm: 0 } }}>
+                {/* Desktop / tablet title */}
                 <Typography 
                   className={playfair.className}
                   level="h4"
                   sx={{ 
                     fontWeight: 600,
                     color: 'var(--cv-textPrimary)',
-                    fontSize: '1.4rem',
+                    fontSize: { xs: '0.95rem', sm: '1.4rem' },
                     lineHeight: 1,
                     display: { xs: 'none', sm: 'block' }
                   }}
                 >
                   Brasil em <Box component="span" sx={{ color: 'var(--cv-brazilGreen)' }}>Contos</Box>
+                </Typography>
+                {/* Compact title for very small screens (BeC) */}
+                <Typography
+                  level="body-sm"
+                  sx={{
+                    display: { xs: 'block', sm: 'none' },
+                    fontWeight: 800,
+                    fontSize: '1rem',
+                    color: 'var(--cv-textPrimary)',
+                    letterSpacing: '0.02em'
+                  }}
+                >
+                  Be<Box component="span" sx={{ color: 'var(--cv-brazilGreen)', ml: 0.3 }}>C</Box>
                 </Typography>
                 <Typography 
                   level="body-xs" 
@@ -144,124 +187,14 @@ export default function NavBar() {
                 </Typography>
               </Stack>
             </Link>
+            
 
-            {/* Mobile menu button */}
-            <IconButton
-              ref={toggleRef}
-              variant="soft"
-              size="sm"
-              aria-haspopup="true"
-              aria-controls="mobile-nav"
-              aria-expanded={open}
-              aria-label={open ? 'Fechar menu' : 'Abrir menu'}
-              onClick={() => setOpen(v => !v)}
-              sx={{ 
-                display: { xs: 'inline-flex', md: 'none' },
-                bgcolor: open ? 'var(--cv-brazilGreen)15' : 'var(--cv-neutral100)',
-                color: open ? 'var(--cv-brazilGreen)' : 'var(--cv-textMuted80)',
-                '&:hover': {
-                  bgcolor: 'var(--cv-brazilGreen)20',
-                  color: 'var(--cv-brazilGreen)'
-                }
-              }}
-            >
-              <i className={open ? 'fas fa-times' : 'fas fa-bars'} />
-            </IconButton>
-
-            {/* Desktop Navigation */}
-            <Stack 
-              direction="row" 
-              spacing={3} 
-              sx={{ 
-                display: { xs: 'none', md: 'flex' },
-                ml: 3
-              }}
-            >
-              <Link 
-                href="/contos" 
-                style={{ 
-                  textDecoration: 'none',
-                  padding: '8px 12px',
-                  borderRadius: '6px',
-                  transition: 'all 0.2s ease',
-                }}
-              >
-                <Typography 
-                  level="body-md"
-                  sx={{ 
-                    color: 'var(--cv-textMuted80)',
-                    fontWeight: 500,
-                    fontSize: '0.95rem',
-                    '&:hover': {
-                      color: 'var(--cv-brazilGreen)',
-                    }
-                  }}
-                >
-                  Contos
-                </Typography>
-              </Link>
-              
-              <Link 
-                href="/autores" 
-                style={{ textDecoration: 'none' }}
-              >
-                <Typography 
-                  level="body-md"
-                  sx={{ 
-                    color: 'var(--cv-textMuted80)',
-                    fontWeight: 500,
-                    fontSize: '0.95rem',
-                    '&:hover': {
-                      color: 'var(--cv-brazilGreen)',
-                    }
-                  }}
-                >
-                  Autores
-                </Typography>
-              </Link>
-
-              <Link 
-                href="/categorias" 
-                style={{ textDecoration: 'none' }}
-              >
-                <Typography 
-                  level="body-md"
-                  sx={{ 
-                    color: 'var(--cv-textMuted80)',
-                    fontWeight: 500,
-                    fontSize: '0.95rem',
-                    '&:hover': {
-                      color: 'var(--cv-brazilGreen)',
-                    }
-                  }}
-                >
-                  Categorias
-                </Typography>
-              </Link>
-
-              <Link 
-                href="/sobre" 
-                style={{ textDecoration: 'none' }}
-              >
-                <Typography 
-                  level="body-md"
-                  sx={{ 
-                    color: 'var(--cv-textMuted80)',
-                    fontWeight: 500,
-                    fontSize: '0.95rem',
-                    '&:hover': {
-                      color: 'var(--cv-brazilGreen)',
-                    }
-                  }}
-                >
-                  Sobre
-                </Typography>
-              </Link>
-            </Stack>
+            {/* left box intentionally contains only logo/brand */}
           </Box>
 
           {/* Right side actions */}
           <Stack direction="row" spacing={1.5} alignItems="center">
+            
             
             {/* Admin buttons for desktop */}
             {session?.user?.role === 'ADMIN' && (
@@ -363,7 +296,37 @@ export default function NavBar() {
             ) : null}
           </Stack>
         </Stack>
+          {/* Centered Desktop Navigation */}
+          <Stack 
+            direction="row" 
+            spacing={4} 
+            alignItems="center"
+            sx={{ display: { xs: 'none', md: 'flex' }, mx: 'auto' }}
+          >
+            <Link href="/contos" style={{ textDecoration: 'none' }}>
+              <Typography level="body-md" sx={{ color: 'var(--cv-textMuted80)', fontWeight: 500, fontSize: '0.95rem', px: 1 }}>
+                Contos
+              </Typography>
+            </Link>
 
+            <Link href="/autores" style={{ textDecoration: 'none' }}>
+              <Typography level="body-md" sx={{ color: 'var(--cv-textMuted80)', fontWeight: 500, fontSize: '0.95rem', px: 1 }}>
+                Autores
+              </Typography>
+            </Link>
+
+            <Link href="/categorias" style={{ textDecoration: 'none' }}>
+              <Typography level="body-md" sx={{ color: 'var(--cv-textMuted80)', fontWeight: 500, fontSize: '0.95rem', px: 1 }}>
+                Categorias
+              </Typography>
+            </Link>
+
+            <Link href="/sobre" style={{ textDecoration: 'none' }}>
+              <Typography level="body-md" sx={{ color: 'var(--cv-textMuted80)', fontWeight: 500, fontSize: '0.95rem', px: 1 }}>
+                Sobre
+              </Typography>
+            </Link>
+          </Stack>
         {/* Mobile Navigation Menu */}
         <Box
           id="mobile-nav"
@@ -401,7 +364,7 @@ export default function NavBar() {
                 { label: 'Autores', href: '/autores', icon: 'fas fa-user-pen' },
                 { label: 'Categorias', href: '/categorias', icon: 'fas fa-tags' },
                 { label: 'Sobre', href: '/sobre', icon: 'fas fa-info-circle' },
-              ].map((link, index) => (
+              ].map((link) => (
                 <LinkNext key={link.label} href={link.href} role="menuitem">
                   <Button 
                     fullWidth 
@@ -495,4 +458,3 @@ export default function NavBar() {
     </>
   );
 }
-

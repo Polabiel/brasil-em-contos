@@ -1,5 +1,6 @@
 "use client";
 
+import React from 'react';
 import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
 import Typography from "@mui/joy/Typography";
@@ -7,7 +8,24 @@ import Box from "@mui/joy/Box";
 import Stack from "@mui/joy/Stack";
 import Divider from "@mui/joy/Divider";
 import Button from "@mui/joy/Button";
-import Chip from "@mui/joy/Chip";
+import TagsList from "./TagsList";
+import { api } from '@/trpc/react';
+import type { RouterOutputs } from '@/trpc/react';
+import CircularProgress from '@mui/joy/CircularProgress';
+
+function TagsFetcher() {
+  const { data, isLoading, error } = api.post.tags.useQuery();
+
+  if (isLoading) return <Box sx={{ display: 'flex', justifyContent: 'center', py: 2 }}><CircularProgress size="sm" /></Box>;
+  if (error) return <Typography level="body-sm" sx={{ color: 'var(--cv-textMuted80)' }}>Erro ao carregar tags</Typography>;
+
+  const tags = (data ?? []).map((t: { tag: string; count: number }) => ({
+    label: String(t.tag).replaceAll('_', ' ').toLowerCase().replace(/(^\w|\s\w)/g, (m: string) => m.toUpperCase()),
+    color: (t.tag.includes('REALISMO') || t.tag.includes('REGIONAL') ? 'primary' : 'default') as 'default' | 'primary' | 'success' | 'warning' | 'danger' | undefined,
+  }));
+
+  return <TagsList tags={tags} />;
+}
 import { Playfair_Display } from "next/font/google";
 import Link from "next/link";
 
@@ -18,18 +36,11 @@ const playfair = Playfair_Display({
 });
 
 export default function Sidebar() {
-  const featuredAuthors = [
-    { name: "Machado de Assis", period: "1839-1908", works: "Dom Casmurro, O Alienista" },
-    { name: "Clarice Lispector", period: "1920-1977", works: "A Hora da Estrela" },
-    { name: "Guimarães Rosa", period: "1908-1967", works: "Grande Sertão: Veredas" },
-  ];
+  // fetch real authors via tRPC
+  const { data: authors = [], isLoading: authorsLoading, error: authorsError } = api.author.list.useQuery();
+  type AuthorItem = RouterOutputs['author']['list'][number];
 
-  const categories = [
-    { name: "Realismo", count: 24, color: "primary" },
-    { name: "Modernismo", count: 18, color: "success" },
-    { name: "Contemporâneo", count: 32, color: "warning" },
-    { name: "Regional", count: 15, color: "danger" },
-  ];
+  // categories removed: Tags card replaces Categories to keep Sidebar compact and data-driven
 
   const literaryFacts = [
     "O Brasil tem mais de 200 anos de literatura nacional rica e diversa",
@@ -113,64 +124,18 @@ export default function Sidebar() {
         </CardContent>
       </Card>
 
-      {/* Categories */}
+      {/* Book Tags (compact) - moved up to replace Categories */}
       <Card variant="outlined" sx={{ mb: 4 }}>
         <CardContent>
-          <Typography 
-            level="h4" 
-            sx={{ 
-              mb: 2, 
-              color: 'var(--cv-textPrimary)',
-              fontWeight: 600,
-              display: 'flex',
-              alignItems: 'center',
-              gap: 1
-            }}
-          >
-            <i className="fas fa-tags" style={{ color: 'var(--cv-brazilYellow)' }} />
-            Gêneros Literários
-          </Typography>
-          
-          <Stack spacing={1.5}>
-            {categories.map((cat, index) => (
-              <Stack 
-                key={cat.name} 
-                direction="row" 
-                justifyContent="space-between" 
-                alignItems="center"
-                sx={{
-                  py: 1,
-                  px: 1.5,
-                  borderRadius: 6,
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                  '&:hover': {
-                    bgcolor: 'var(--cv-neutral50)',
-                    transform: 'translateX(4px)',
-                  }
-                }}
-              >
-                <Typography level="body-md" sx={{ color: 'var(--cv-textMuted80)' }}>
-                  {cat.name}
-                </Typography>
-                <Chip 
-                  variant="soft" 
-                  size="sm"
-                  sx={{
-                    bgcolor: `var(--cv-${cat.color === 'primary' ? 'brazilGreen' : cat.color === 'success' ? 'successMain' : cat.color === 'warning' ? 'brazilYellow' : 'errorMain'})15`,
-                    color: `var(--cv-${cat.color === 'primary' ? 'brazilGreen' : cat.color === 'success' ? 'successMain' : cat.color === 'warning' ? 'textPrimary' : 'errorMain'})`,
-                    fontWeight: 600,
-                  }}
-                >
-                  {cat.count}
-                </Chip>
-              </Stack>
-            ))}
-          </Stack>
+          <Typography level="h4" sx={{ mb: 1, fontWeight: 600 }}>Tags</Typography>
+          <Box>
+            {/* Fetch tags from server via tRPC */}
+            <TagsFetcher />
+          </Box>
         </CardContent>
       </Card>
 
-      {/* Featured Authors */}
+      {/* Featured Authors (from DB) */}
       <Card variant="outlined" sx={{ mb: 4 }}>
         <CardContent>
           <Typography 
@@ -187,60 +152,74 @@ export default function Sidebar() {
             <i className="fas fa-star" style={{ color: 'var(--cv-brazilYellow)' }} />
             Grandes Nomes
           </Typography>
-          
-          <Stack spacing={2}>
-            {featuredAuthors.map((author, index) => (
-              <Box key={author.name}>
-                <Box
-                  sx={{
-                    p: 2,
-                    borderRadius: 8,
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease',
-                    border: '1px solid transparent',
-                    '&:hover': {
-                      bgcolor: 'var(--cv-neutral50)',
-                      borderColor: 'var(--cv-brazilGreen)',
-                      transform: 'translateY(-2px)',
-                    }
-                  }}
-                >
-                  <Typography 
-                    level="title-sm" 
-                    className={playfair.className}
-                    sx={{ 
-                      fontWeight: 600, 
-                      color: 'var(--cv-textPrimary)',
-                      mb: 0.5 
-                    }}
-                  >
-                    {author.name}
-                  </Typography>
-                  <Typography 
-                    level="body-xs" 
-                    sx={{ 
-                      color: 'var(--cv-textMuted60)', 
-                      mb: 0.5,
-                      fontSize: '0.75rem'
-                    }}
-                  >
-                    {author.period}
-                  </Typography>
-                  <Typography 
-                    level="body-sm" 
-                    sx={{ 
-                      color: 'var(--cv-textMuted70)',
-                      fontSize: '0.8rem',
-                      fontStyle: 'italic'
-                    }}
-                  >
-                    {author.works}
-                  </Typography>
-                </Box>
-                {index < featuredAuthors.length - 1 && <Divider sx={{ my: 1 }} />}
-              </Box>
-            ))}
-          </Stack>
+
+          {authorsLoading ? (
+            <Box sx={{ display: 'flex', justifyContent: 'center', py: 2 }}><CircularProgress size="sm" /></Box>
+          ) : authorsError ? (
+            <Typography level="body-sm" sx={{ color: 'var(--cv-textMuted80)' }}>Falha ao carregar autores</Typography>
+          ) : (
+            <Stack spacing={2}>
+              {authors.length === 0 ? (
+                <Typography level="body-sm" sx={{ color: 'var(--cv-textMuted80)' }}>Nenhum autor encontrado</Typography>
+              ) : (
+                authors.map((author: AuthorItem, index: number) => (
+                  <Box key={author.id}>
+                    <Box
+                      sx={{
+                        p: 2,
+                        borderRadius: 8,
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                        border: '1px solid transparent',
+                        '&:hover': {
+                          bgcolor: 'var(--cv-neutral50)',
+                          borderColor: 'var(--cv-brazilGreen)',
+                          transform: 'translateY(-2px)',
+                        }
+                      }}
+                    >
+                      <Typography 
+                        level="title-sm" 
+                        className={playfair.className}
+                        sx={{ 
+                          fontWeight: 600, 
+                          color: 'var(--cv-textPrimary)',
+                          mb: 0.5 
+                        }}
+                      >
+                        {author.name}
+                      </Typography>
+                      {author.period && (
+                        <Typography 
+                          level="body-xs" 
+                          sx={{ 
+                            color: 'var(--cv-textMuted60)', 
+                            mb: 0.5,
+                            fontSize: '0.75rem'
+                          }}
+                        >
+                          {author.period}
+                        </Typography>
+                      )}
+                      {author.books && author.books.length > 0 && (
+                        <Typography 
+                          level="body-sm" 
+                          sx={{ 
+                            color: 'var(--cv-textMuted70)',
+                            fontSize: '0.8rem',
+                            fontStyle: 'italic'
+                          }}
+                        >
+                          {author.books.slice(0,2).map((b) => b.title).join(', ')}
+                        </Typography>
+                      )}
+                    </Box>
+                    {index < authors.length - 1 && <Divider sx={{ my: 1 }} />}
+                  </Box>
+                ))
+              )}
+            </Stack>
+          )}
         </CardContent>
       </Card>
 
