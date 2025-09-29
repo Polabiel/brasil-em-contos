@@ -9,6 +9,7 @@ import Option from '@mui/joy/Option';
 import { api } from '@/trpc/react';
 import AuthorSelector from '@/app/_components/admin/AuthorSelector';
 import Button from '@mui/joy/Button';
+import UploadButton from '@/app/_components/ui/UploadButton';
 import Stack from '@mui/joy/Stack';
 import Typography from '@mui/joy/Typography';
 import { useRouter } from 'next/navigation';
@@ -97,9 +98,8 @@ export default function CreatePostClient() {
   <AuthorSelector value={authorId} onChange={setAuthorId} />
 
         <Box>
-          <input
-            type="file"
-            accept="image/*"
+          <UploadButton
+            buttonLabel="Enviar imagem"
             onChange={async (e) => {
               const file = (e.target as HTMLInputElement).files?.[0];
               if (!file) return;
@@ -117,6 +117,7 @@ export default function CreatePostClient() {
               reader.readAsDataURL(file);
             }}
           />
+
           {selectedFileName && (
             <Typography level="body-sm" sx={{ mt: 1 }}>{selectedFileName}</Typography>
           )}

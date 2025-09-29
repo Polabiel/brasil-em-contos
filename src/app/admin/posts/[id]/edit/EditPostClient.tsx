@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
+import UploadButton from '@/app/_components/ui/UploadButton';
 import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
@@ -156,9 +157,8 @@ export default function EditPostClient({ id, initialName, initialContent, initia
   <AuthorSelector value={authorId} onChange={setAuthorId} />
 
         <Box>
-          <input
-            type="file"
-            accept="image/*"
+          <UploadButton
+            buttonLabel="Trocar / Enviar imagem"
             onChange={async (e) => {
               const file = (e.target as HTMLInputElement).files?.[0];
               if (!file) return;
