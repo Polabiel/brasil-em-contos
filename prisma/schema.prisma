@@ -84,6 +84,11 @@ model Author {
     name   String
     period String?
     bio    String?
+    slug   String? @unique
+
+    image     String?
+    imageBlob Bytes?
+    imageMime String?
 
     books Book[]
     posts Post[]

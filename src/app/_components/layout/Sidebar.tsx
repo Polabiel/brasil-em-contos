@@ -38,6 +38,7 @@ const playfair = Playfair_Display({
 export default function Sidebar() {
   // fetch real authors via tRPC
   const { data: authors = [], isLoading: authorsLoading, error: authorsError } = api.author.list.useQuery();
+  const trpcCtx = api.useContext();
   type AuthorItem = RouterOutputs['author']['list'][number];
 
   // categories removed: Tags card replaces Categories to keep Sidebar compact and data-driven
@@ -51,10 +52,10 @@ export default function Sidebar() {
   return (
     <aside className="w-full space-y-4">
       {/* About Brazilian Literature */}
-      <Card 
-        variant="outlined" 
-        sx={{ 
-          mb: 4, 
+      <Card
+        variant="outlined"
+        sx={{
+          mb: 4,
           background: `linear-gradient(135deg, var(--cv-gradientStart) 0%, var(--cv-gradientMid) 100%)`,
           border: '2px solid var(--cv-brazilGreen)',
         }}
@@ -80,28 +81,28 @@ export default function Sidebar() {
               📖
             </Box>
           </Box>
-          
-          <Typography 
+
+          <Typography
             level="h4"
             className={playfair.className}
-            sx={{ 
-              fontWeight: 600, 
+            sx={{
+              fontWeight: 600,
               color: 'var(--cv-brazilGreen)',
-              mb: 1 
+              mb: 1
             }}
           >
             Literatura Brasileira
           </Typography>
-          
-          <Typography 
-            level="body-md" 
-            sx={{ 
-              color: 'var(--cv-textMuted80)', 
+
+          <Typography
+            level="body-md"
+            sx={{
+              color: 'var(--cv-textMuted80)',
               lineHeight: 1.6,
               mb: 3
             }}
           >
-            Explore a riqueza dos contos brasileiros, desde os clássicos até 
+            Explore a riqueza dos contos brasileiros, desde os clássicos até
             as vozes contemporâneas que moldam nossa identidade literária.
           </Typography>
 
@@ -127,7 +128,10 @@ export default function Sidebar() {
       {/* Book Tags (compact) - moved up to replace Categories */}
       <Card variant="outlined" sx={{ mb: 4 }}>
         <CardContent>
-          <Typography level="h4" sx={{ mb: 1, fontWeight: 600 }}>Tags</Typography>
+          <Typography level="h4" sx={{ mb: 1, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 1 }}>
+            <i className="fas fa-tags" style={{ color: 'var(--cv-brazilGreen)' }} />
+            Categorias
+          </Typography>
           <Box>
             {/* Fetch tags from server via tRPC */}
             <TagsFetcher />
@@ -138,10 +142,10 @@ export default function Sidebar() {
       {/* Featured Authors (from DB) */}
       <Card variant="outlined" sx={{ mb: 4 }}>
         <CardContent>
-          <Typography 
-            level="h4" 
-            sx={{ 
-              mb: 2, 
+          <Typography
+            level="h4"
+            sx={{
+              mb: 2,
               color: 'var(--cv-textPrimary)',
               fontWeight: 600,
               display: 'flex',
@@ -164,56 +168,74 @@ export default function Sidebar() {
               ) : (
                 authors.map((author: AuthorItem, index: number) => (
                   <Box key={author.id}>
-                    <Box
-                      sx={{
-                        p: 2,
-                        borderRadius: 8,
-                        cursor: 'pointer',
-                        transition: 'all 0.2s ease',
-                        border: '1px solid transparent',
-                        '&:hover': {
-                          bgcolor: 'var(--cv-neutral50)',
-                          borderColor: 'var(--cv-brazilGreen)',
-                          transform: 'translateY(-2px)',
-                        }
-                      }}
-                    >
-                      <Typography 
-                        level="title-sm" 
-                        className={playfair.className}
-                        sx={{ 
-                          fontWeight: 600, 
-                          color: 'var(--cv-textPrimary)',
-                          mb: 0.5 
+                    <Link href={`/authors/${author.slug ?? author.id}`} style={{ textDecoration: 'none' }}>
+                      <Box
+                        sx={{
+                          p: 2,
+                          borderRadius: 8,
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease',
+                          border: '1px solid transparent',
+                          '&:hover': {
+                            bgcolor: 'var(--cv-neutral50)',
+                            borderColor: 'var(--cv-brazilGreen)',
+                            transform: 'translateY(-2px)',
+                          }
                         }}
+                        onMouseEnter={() => {
+                          // prefetch author by slug if available
+                          // Ensure the prefetch function exists on the context (best-effort)
+                          try {
+                            // @ts-expect-error best-effort: call generated prefetch helper if present
+                            void trpcCtx.author.bySlug.prefetch({ slug: author.slug });
+                          } catch {
+                            // ignore if not available
+                          }
+                        }}
+                          onFocus={() => {
+                            try { if (author.slug) void trpcCtx.author.bySlug.prefetch({ slug: author.slug }); } catch {}
+                          }}
+                          onTouchStart={() => {
+                            try { if (author.slug) void trpcCtx.author.bySlug.prefetch({ slug: author.slug }); } catch {}
+                          }}
                       >
-                        {author.name}
-                      </Typography>
-                      {author.period && (
-                        <Typography 
-                          level="body-xs" 
-                          sx={{ 
-                            color: 'var(--cv-textMuted60)', 
-                            mb: 0.5,
-                            fontSize: '0.75rem'
+                        <Typography
+                          level="title-sm"
+                          className={playfair.className}
+                          sx={{
+                            fontWeight: 600,
+                            color: 'var(--cv-textPrimary)',
+                            mb: 0.5
                           }}
                         >
-                          {author.period}
+                          {author.name}
                         </Typography>
-                      )}
-                      {author.books && author.books.length > 0 && (
-                        <Typography 
-                          level="body-sm" 
-                          sx={{ 
-                            color: 'var(--cv-textMuted70)',
-                            fontSize: '0.8rem',
-                            fontStyle: 'italic'
-                          }}
-                        >
-                          {author.books.slice(0,2).map((b) => b.title).join(', ')}
-                        </Typography>
-                      )}
-                    </Box>
+                        {author.period && (
+                          <Typography
+                            level="body-xs"
+                            sx={{
+                              color: 'var(--cv-textMuted60)',
+                              mb: 0.5,
+                              fontSize: '0.75rem'
+                            }}
+                          >
+                            {author.period}
+                          </Typography>
+                        )}
+                        {author.books && author.books.length > 0 && (
+                          <Typography
+                            level="body-sm"
+                            sx={{
+                              color: 'var(--cv-textMuted70)',
+                              fontSize: '0.8rem',
+                              fontStyle: 'italic'
+                            }}
+                          >
+                            {author.books.slice(0, 2).map((b) => b.title).join(', ')}
+                          </Typography>
+                        )}
+                      </Box>
+                    </Link>
                     {index < authors.length - 1 && <Divider sx={{ my: 1 }} />}
                   </Box>
                 ))
@@ -224,20 +246,20 @@ export default function Sidebar() {
       </Card>
 
       {/* Literary Facts */}
-      <Card 
+      <Card
         variant="soft"
-        color="primary" 
-        sx={{ 
+        color="primary"
+        sx={{
           mb: 4,
           bgcolor: 'var(--cv-brazilGreen)08',
           border: '1px solid var(--cv-brazilGreen)20',
         }}
       >
         <CardContent>
-          <Typography 
-            level="h4" 
-            sx={{ 
-              mb: 2, 
+          <Typography
+            level="h4"
+            sx={{
+              mb: 2,
               color: 'var(--cv-brazilGreen)',
               fontWeight: 600,
               display: 'flex',
@@ -248,7 +270,7 @@ export default function Sidebar() {
             <i className="fas fa-lightbulb" />
             Curiosidades
           </Typography>
-          
+
           <Stack spacing={2}>
             {literaryFacts.map((fact, index) => (
               <Box
@@ -269,9 +291,9 @@ export default function Sidebar() {
                     mt: 0.75,
                   }}
                 />
-                <Typography 
-                  level="body-sm" 
-                  sx={{ 
+                <Typography
+                  level="body-sm"
+                  sx={{
                     color: 'var(--cv-textMuted80)',
                     lineHeight: 1.5
                   }}
@@ -285,9 +307,9 @@ export default function Sidebar() {
       </Card>
 
       {/* Newsletter/Follow */}
-      <Card 
-        variant="outlined" 
-        sx={{ 
+      <Card
+        variant="outlined"
+        sx={{
           background: `linear-gradient(135deg, var(--cv-brazilYellow)10, var(--cv-brazilGreen)10)`,
           border: '2px solid var(--cv-brazilYellow)',
         }}
@@ -296,22 +318,22 @@ export default function Sidebar() {
           <Box sx={{ mb: 2, fontSize: '1.5rem' }}>
             📚✨
           </Box>
-          
-          <Typography 
-            level="title-md" 
-            sx={{ 
-              fontWeight: 600, 
+
+          <Typography
+            level="title-md"
+            sx={{
+              fontWeight: 600,
               color: 'var(--cv-textPrimary)',
-              mb: 1 
+              mb: 1
             }}
           >
             Não perca nenhuma história!
           </Typography>
-          
-          <Typography 
-            level="body-sm" 
-            sx={{ 
-              color: 'var(--cv-textMuted80)', 
+
+          <Typography
+            level="body-sm"
+            sx={{
+              color: 'var(--cv-textMuted80)',
               mb: 2,
               lineHeight: 1.5
             }}
