@@ -10,6 +10,7 @@ import IconButton from "@mui/joy/IconButton";
 import Chip from "@mui/joy/Chip";
 import Input from "@mui/joy/Input";
 import { useRouter } from "next/navigation";
+import { api } from '@/trpc/react';
 import StandardModal from "@/app/_components/ui/StandardModal";
 
 type Post = {
@@ -29,25 +30,33 @@ export default function AdminPostsClient({ posts }: { posts: Post[] }) {
   const [newPostImage, setNewPostImage] = useState("");
   const [creating, setCreating] = useState(false);
   const router = useRouter();
+  const utils = api.useContext();
+  const createPostMutation = api.post.create.useMutation({
+    onSuccess: (data) => {
+      // navigate to edit page for created post
+      router.push(`/admin/posts/${data.id}/edit`);
+      void utils.post.adminList.invalidate();
+    }
+  });
+
+  const deletePostMutation = api.post.delete.useMutation({
+    onSuccess: () => void utils.post.adminList.invalidate(),
+  });
+
+  const updateFeaturedMutation = api.post.updateFeatured.useMutation({
+    onSuccess: () => void utils.post.adminList.invalidate(),
+  });
 
   async function handleCreatePost() {
     if (!newPostName.trim()) return;
 
+    if (!newPostName.trim()) return;
     setCreating(true);
     try {
-      const res = await fetch('/api/admin/posts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: newPostName, image: newPostImage ?? undefined }),
-      });
-
-      if (!res.ok) throw new Error('Failed to create');
-
-      const data = (await res.json()) as { post: { id: number } };
+      await createPostMutation.mutateAsync({ name: newPostName.trim(), image: newPostImage ?? null });
       setCreateModalOpen(false);
       setNewPostName("");
       setNewPostImage("");
-      router.push(`/admin/posts/${data.post.id}/edit`);
     } catch (err) {
       console.error(err);
       alert('Erro ao criar post');
@@ -60,13 +69,7 @@ export default function AdminPostsClient({ posts }: { posts: Post[] }) {
     if (!confirm('Tem certeza que deseja deletar este post?')) return;
 
     try {
-      const res = await fetch(`/api/admin/posts/${id}`, {
-        method: 'DELETE',
-      });
-
-      if (!res.ok) throw new Error('Failed to delete');
-
-      router.refresh();
+      await deletePostMutation.mutateAsync({ id });
     } catch (err) {
       console.error(err);
       alert('Erro ao deletar post');
@@ -75,15 +78,7 @@ export default function AdminPostsClient({ posts }: { posts: Post[] }) {
 
   async function handleToggleFeatured(id: number, currentFeatured: boolean) {
     try {
-      const res = await fetch(`/api/admin/posts/${id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ featured: !currentFeatured }),
-      });
-
-      if (!res.ok) throw new Error('Failed to toggle featured');
-
-      router.refresh();
+      await updateFeaturedMutation.mutateAsync({ id, featured: !currentFeatured });
     } catch (err) {
       console.error(err);
       alert('Erro ao alterar status de destaque');

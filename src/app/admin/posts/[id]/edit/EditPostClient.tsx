@@ -27,6 +27,10 @@ export default function EditPostClient({ id, initialName, initialContent, initia
   const [saving, setSaving] = useState(false);
   const [autoSaving, setAutoSaving] = useState(false);
   const router = useRouter();
+  const utils = api.useContext();
+  const updateMutation = api.post.update.useMutation({
+    onSuccess: () => void utils.post.adminList.invalidate(),
+  });
 
   const handleAutoSave = useCallback(async () => {
     setAutoSaving(true);
@@ -45,18 +49,14 @@ export default function EditPostClient({ id, initialName, initialContent, initia
           body: form,
         });
       } else {
-        await fetch(`/api/admin/posts/${id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, content, description, image, imageBlob: imageBlobBase64 ?? undefined, imageMime: imageMime ?? undefined, tag: tag ?? undefined, authorId: authorId ?? undefined }),
-        });
+  await updateMutation.mutateAsync({ id, name, content, description, image: image ?? undefined });
       }
     } catch (err) {
       console.error('Auto-save failed:', err);
     } finally {
       setAutoSaving(false);
     }
-  }, [id, name, content, description, image, imageBlobBase64, imageMime, selectedFile, tag, authorId]);
+  }, [id, name, content, description, image, selectedFile, tag, authorId, updateMutation]);
 
   // Auto-save every 5 seconds when content changes
   useEffect(() => {

@@ -27,6 +27,7 @@ export const postRouter = createTRPCRouter({
           image: input.image ?? null,
           createdBy: { connect: { id: ctx.session.user.id } },
         },
+        include: { createdBy: true, author: true },
       });
     }),
 
@@ -85,6 +86,35 @@ export const postRouter = createTRPCRouter({
           author: true,
         },
       });
+    }),
+
+  update: adminProcedure
+    .input(z.object({ id: z.number(), name: z.string().min(1).optional(), content: z.string().optional(), description: z.string().optional(), image: z.string().optional() }))
+    .mutation(async ({ ctx, input }) => {
+      const data: {
+        name?: string;
+        content?: string;
+        description?: string | null;
+        image?: string | null;
+      } = {};
+
+      if (typeof input.name === 'string') data.name = input.name;
+      if (typeof input.content === 'string') data.content = input.content;
+      if (typeof input.description === 'string') data.description = input.description ?? null;
+      if (typeof input.image === 'string') data.image = input.image ?? null;
+
+      return ctx.db.post.update({
+        where: { id: input.id },
+        data,
+        include: { createdBy: true, author: true },
+      });
+    }),
+
+  delete: adminProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.post.delete({ where: { id: input.id } });
+      return { ok: true };
     }),
 
   adminList: adminProcedure.query(async ({ ctx }) => {

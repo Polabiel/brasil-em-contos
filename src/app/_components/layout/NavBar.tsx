@@ -33,6 +33,16 @@ export default function NavBar() {
     if (typeof window !== 'undefined') {
       setAvatarTs(Date.now());
     }
+    // listen for profile updates to refresh avatar
+    function onAvatarUpdated() {
+      setAvatarTs(Date.now());
+    }
+    if (typeof window !== 'undefined') {
+      window.addEventListener('avatarUpdated', onAvatarUpdated);
+    }
+    return () => {
+      if (typeof window !== 'undefined') window.removeEventListener('avatarUpdated', onAvatarUpdated);
+    };
   }, []);
 
   useEffect(() => {

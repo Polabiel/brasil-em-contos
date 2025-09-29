@@ -14,12 +14,9 @@ import Stack from '@mui/joy/Stack';
 import Typography from '@mui/joy/Typography';
 import { useRouter } from 'next/navigation';
 
-
 export default function CreatePostClient() {
   const [name, setName] = useState('');
   const [image, setImage] = useState('');
-  const [imageBlobBase64, setImageBlobBase64] = useState<string | null>(null);
-  const [imageMime, setImageMime] = useState<string | null>(null);
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [description, setDescription] = useState('');
@@ -28,6 +25,14 @@ export default function CreatePostClient() {
   const [authorId, setAuthorId] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+
+  const utils = api.useContext();
+  const createMutation = api.post.create.useMutation({
+    onSuccess: () => {
+      void utils.post.adminList.invalidate();
+      router.back();
+    }
+  });
 
   async function handleCreate() {
     if (!name.trim()) return;
@@ -45,14 +50,12 @@ export default function CreatePostClient() {
         fd.append('imageFile', selectedFile, selectedFileName ?? selectedFile.name);
         res = await fetch('/api/admin/posts', { method: 'POST', body: fd });
       } else {
-        res = await fetch('/api/admin/posts', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, description: description ?? undefined, content: content ?? undefined, image: image ?? undefined, imageBlob: imageBlobBase64 ?? undefined, imageMime: imageMime ?? undefined, tag: tag ?? undefined, authorId: authorId ?? undefined }),
-        });
+        // Use tRPC mutation for JSON-only create (limited fields)
+        await createMutation.mutateAsync({ name, description: description ?? undefined, image: image ?? undefined });
+        res = new Response(null, { status: 200 });
       }
       if (!res.ok) throw new Error('failed');
-      await res.json();
+      await res.json().catch(() => null);
       router.back();
     } catch (err) {
       console.error(err);
@@ -95,7 +98,7 @@ export default function CreatePostClient() {
           ))}
         </Select>
 
-  <AuthorSelector value={authorId} onChange={setAuthorId} />
+        <AuthorSelector value={authorId} onChange={setAuthorId} />
 
         <Box>
           <UploadButton
@@ -108,9 +111,6 @@ export default function CreatePostClient() {
               const reader = new FileReader();
               reader.onload = () => {
                 const result = reader.result as string;
-                const maybeBase64 = result.split(',')[1] ?? null;
-                setImageBlobBase64(maybeBase64);
-                setImageMime(file.type);
                 // preview via data URL
                 setImage(result);
               };
