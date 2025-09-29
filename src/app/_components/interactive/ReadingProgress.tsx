@@ -21,6 +21,8 @@ export function ReadingProgress({ content, wordsPerMinute = 200 }: ReadingProgre
   const readingTimeMinutes = Math.ceil(wordCount / wordsPerMinute);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     const handleScroll = () => {
       const windowHeight = window.innerHeight;
       const documentHeight = document.documentElement.scrollHeight - windowHeight;
@@ -133,7 +135,7 @@ interface BookmarkButtonProps {
   initialBookmarked?: boolean;
 }
 
-export function BookmarkButton({ postId, initialBookmarked = false }: BookmarkButtonProps) {
+export function BookmarkButton({ postId: _postId, initialBookmarked = false }: BookmarkButtonProps) {
   const [isBookmarked, setIsBookmarked] = useState(initialBookmarked);
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -185,7 +187,7 @@ interface ShareButtonProps {
 export function ShareButton({ title, url }: ShareButtonProps) {
   const [showShareMenu, setShowShareMenu] = useState(false);
   
-  const shareUrl = url || (typeof window !== 'undefined' ? window.location.href : '');
+  const shareUrl = url ?? (typeof window !== 'undefined' ? window.location.href : '');
   const shareText = `Leia "${title}" em Brasil em Contos`;
 
   const handleShare = async (platform: string) => {
@@ -198,7 +200,7 @@ export function ShareButton({ title, url }: ShareButtonProps) {
       try {
         await navigator.share(shareData);
         return;
-      } catch (err) {
+      } catch {
         console.log('Native sharing failed, falling back to platform specific');
       }
     }
@@ -339,14 +341,16 @@ export function ShareButton({ title, url }: ShareButtonProps) {
   );
 }
 
-export function FloatingActionButtons({ postId, title, content }: { 
+export function FloatingActionButtons({ postId, title, _content }: { 
   postId: number | string;
   title: string;
-  content: string;
+  _content: string;
 }) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     const handleScroll = () => {
       setIsVisible(window.scrollY > 300);
     };
