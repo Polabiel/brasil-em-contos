@@ -6,7 +6,7 @@ export default async function AdminPostsPage() {
   await requireAdminForPage();
 
   const posts = await db.post.findMany({
-    select: { id: true, name: true, content: true, description: true, image: true, createdAt: true, updatedAt: true },
+    select: { id: true, name: true, content: true, description: true, image: true, createdAt: true, updatedAt: true, featured: true },
     orderBy: { updatedAt: 'desc' },
   });
 

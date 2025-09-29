@@ -8,10 +8,9 @@ import Stack from "@mui/joy/Stack";
 import Table from "@mui/joy/Table";
 import IconButton from "@mui/joy/IconButton";
 import Chip from "@mui/joy/Chip";
-import Modal from "@mui/joy/Modal";
-import ModalDialog from "@mui/joy/ModalDialog";
 import Input from "@mui/joy/Input";
 import { useRouter } from "next/navigation";
+import StandardModal from "@/app/_components/ui/StandardModal";
 
 type Post = {
   id: number;
@@ -21,6 +20,7 @@ type Post = {
   image?: string | null;
   createdAt: Date;
   updatedAt: Date;
+  featured: boolean;
 };
 
 export default function AdminPostsClient({ posts }: { posts: Post[] }) {
@@ -73,6 +73,23 @@ export default function AdminPostsClient({ posts }: { posts: Post[] }) {
     }
   }
 
+  async function handleToggleFeatured(id: number, currentFeatured: boolean) {
+    try {
+      const res = await fetch(`/api/admin/posts/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ featured: !currentFeatured }),
+      });
+
+      if (!res.ok) throw new Error('Failed to toggle featured');
+
+      router.refresh();
+    } catch (err) {
+      console.error(err);
+      alert('Erro ao alterar status de destaque');
+    }
+  }
+
   return (
     <Box sx={{ maxWidth: 1000, mx: 'auto', py: 6 }}>
       <Stack spacing={3}>
@@ -92,6 +109,7 @@ export default function AdminPostsClient({ posts }: { posts: Post[] }) {
             <tr>
               <th>Título</th>
               <th>Status</th>
+              <th>Destaque</th>
               <th>Criado em</th>
               <th>Atualizado em</th>
               <th>Ações</th>
@@ -109,6 +127,18 @@ export default function AdminPostsClient({ posts }: { posts: Post[] }) {
                   >
                     {post.content?.trim() ? 'Com conteúdo' : 'Sem conteúdo'}
                   </Chip>
+                </td>
+                <td>
+                  <IconButton
+                    size="sm"
+                    variant={post.featured ? "solid" : "outlined"}
+                    color={post.featured ? "warning" : "neutral"}
+                    onClick={() => handleToggleFeatured(post.id, post.featured)}
+                    aria-label={post.featured ? "Remover destaque" : "Destacar post"}
+                    title={post.featured ? "Remover destaque" : "Destacar post"}
+                  >
+                    <i className="fas fa-star" />
+                  </IconButton>
                 </td>
                 <td>{new Date(post.createdAt).toLocaleDateString('pt-BR')}</td>
                 <td>{new Date(post.updatedAt).toLocaleDateString('pt-BR')}</td>
@@ -147,42 +177,46 @@ export default function AdminPostsClient({ posts }: { posts: Post[] }) {
         )}
       </Stack>
 
-      <Modal open={createModalOpen} onClose={() => setCreateModalOpen(false)}>
-        <ModalDialog>
-          <Typography level="title-lg" sx={{ mb: 2 }}>Criar Novo Post</Typography>
-          <Stack spacing={2}>
-                <Input
-                  value={newPostImage}
-                  onChange={(e) => setNewPostImage((e.target as HTMLInputElement).value)}
-                  placeholder="URL da imagem (opcional)"
-                />
-            <Input
-              value={newPostName}
-              onChange={(e) => setNewPostName((e.target as HTMLInputElement).value)}
-              placeholder="Título do post"
-              onKeyPress={(e) => e.key === 'Enter' && handleCreatePost()}
-              autoFocus
-            />
-            <Box sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end' }}>
-              <Button 
-                variant="plain" 
-                onClick={() => setCreateModalOpen(false)}
-              >
-                Cancelar
-              </Button>
-              <Button 
-                variant="solid" 
-                color="primary"
-                loading={creating}
-                onClick={handleCreatePost}
-                disabled={!newPostName.trim()}
-              >
-                Criar e Editar
-              </Button>
-            </Box>
+      <StandardModal 
+        open={createModalOpen} 
+        onClose={() => setCreateModalOpen(false)}
+        title="Criar Novo Post"
+        size="md"
+      >
+        <Stack spacing={3}>
+          <Input
+            value={newPostName}
+            onChange={(e) => setNewPostName((e.target as HTMLInputElement).value)}
+            placeholder="Título do post"
+            onKeyPress={(e) => e.key === 'Enter' && handleCreatePost()}
+            autoFocus
+            size="lg"
+          />
+          <Input
+            value={newPostImage}
+            onChange={(e) => setNewPostImage((e.target as HTMLInputElement).value)}
+            placeholder="URL da imagem (opcional)"
+            size="lg"
+          />
+          <Stack direction="row" spacing={2} justifyContent="flex-end">
+            <Button 
+              variant="outlined" 
+              onClick={() => setCreateModalOpen(false)}
+            >
+              Cancelar
+            </Button>
+            <Button 
+              variant="solid" 
+              color="primary"
+              loading={creating}
+              onClick={handleCreatePost}
+              disabled={!newPostName.trim()}
+            >
+              Criar e Editar
+            </Button>
           </Stack>
-        </ModalDialog>
-      </Modal>
+        </Stack>
+      </StandardModal>
     </Box>
   );
 }

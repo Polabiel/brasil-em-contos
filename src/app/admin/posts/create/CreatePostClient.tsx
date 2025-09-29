@@ -4,6 +4,10 @@ import { useState } from 'react';
 import MDEditorWrapper from '@/app/_components/MDEditorWrapper';
 import Box from '@mui/joy/Box';
 import Input from '@mui/joy/Input';
+import Select from '@mui/joy/Select';
+import Option from '@mui/joy/Option';
+import { api } from '@/trpc/react';
+import AuthorSelector from '@/app/_components/admin/AuthorSelector';
 import Button from '@mui/joy/Button';
 import Stack from '@mui/joy/Stack';
 import Typography from '@mui/joy/Typography';
@@ -19,6 +23,8 @@ export default function CreatePostClient() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [description, setDescription] = useState('');
   const [content, setContent] = useState('');
+  const [tag, setTag] = useState<string | null>(null);
+  const [authorId, setAuthorId] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -30,6 +36,8 @@ export default function CreatePostClient() {
       if (selectedFile) {
         const fd = new FormData();
         fd.append('name', name);
+        if (authorId != null) fd.append('authorId', String(authorId));
+        if (tag) fd.append('tag', tag);
         fd.append('description', description || '');
         fd.append('content', content || '');
         fd.append('image', image || '');
@@ -39,12 +47,12 @@ export default function CreatePostClient() {
         res = await fetch('/api/admin/posts', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, description: description ?? undefined, content: content ?? undefined, image: image ?? undefined, imageBlob: imageBlobBase64 ?? undefined, imageMime: imageMime ?? undefined }),
+          body: JSON.stringify({ name, description: description ?? undefined, content: content ?? undefined, image: image ?? undefined, imageBlob: imageBlobBase64 ?? undefined, imageMime: imageMime ?? undefined, tag: tag ?? undefined, authorId: authorId ?? undefined }),
         });
       }
       if (!res.ok) throw new Error('failed');
-      const data = await res.json() as { post: { id: number } };
-      router.push(`/admin/posts/${data.post.id}/edit`);
+      await res.json();
+      router.back();
     } catch (err) {
       console.error(err);
       alert('Erro ao criar post');
@@ -74,6 +82,19 @@ export default function CreatePostClient() {
           value={image}
           onChange={(e) => setImage((e.target as HTMLInputElement).value)}
         />
+
+        <Select
+          placeholder="Tag do livro (opcional)"
+          value={tag}
+          onChange={(e) => setTag(e as string | null)}
+          size="md"
+        >
+          {(api.post.bookTags.useQuery().data ?? []).map((v) => (
+            <Option key={v} value={v}>{v.replaceAll('_', ' ').toLowerCase().replace(/(^\w|\s\w)/g, (m: string) => m.toUpperCase())}</Option>
+          ))}
+        </Select>
+
+  <AuthorSelector value={authorId} onChange={setAuthorId} />
 
         <Box>
           <input
@@ -110,7 +131,7 @@ export default function CreatePostClient() {
         <Box sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end' }}>
           <Button variant="plain" onClick={() => router.push('/admin/posts')}>Cancelar</Button>
           <Button variant="solid" color="primary" loading={loading} onClick={handleCreate} disabled={!name.trim()}>
-            Criar e editar
+            Criar
           </Button>
         </Box>
       </Stack>

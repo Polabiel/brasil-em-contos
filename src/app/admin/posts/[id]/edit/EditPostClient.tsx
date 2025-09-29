@@ -6,14 +6,20 @@ import Button from "@mui/joy/Button";
 import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
+import Select from '@mui/joy/Select';
+import Option from '@mui/joy/Option';
+import AuthorSelector from '@/app/_components/admin/AuthorSelector';
+import { api } from '@/trpc/react';
 import { useRouter } from "next/navigation";
 import MDEditorWrapper from '@/app/_components/MDEditorWrapper';
 
-export default function EditPostClient({ id, initialName, initialContent, initialDescription, initialImage }: { id: number; initialName: string; initialContent: string; initialDescription?: string; initialImage?: string }) {
+export default function EditPostClient({ id, initialName, initialContent, initialDescription, initialImage, initialTag, initialAuthorId }: { id: number; initialName: string; initialContent: string; initialDescription?: string; initialImage?: string; initialTag?: string | null; initialAuthorId?: number | null }) {
   const [name, setName] = useState(initialName);
   const [content, setContent] = useState(initialContent);
   const [description, setDescription] = useState(initialDescription ?? '');
   const [image, setImage] = useState(initialImage ?? '');
+  const [tag, setTag] = useState<string | null>(initialTag ?? null);
+  const [authorId, setAuthorId] = useState<number | null>(initialAuthorId ?? null);
   const [imageBlobBase64, setImageBlobBase64] = useState<string | null>(null);
   const [imageMime, setImageMime] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -27,6 +33,8 @@ export default function EditPostClient({ id, initialName, initialContent, initia
       if (selectedFile) {
         const form = new FormData();
         form.append('name', name);
+        if (tag) form.append('tag', tag);
+        if (authorId != null) form.append('authorId', String(authorId));
         form.append('content', content);
         form.append('description', description ?? '');
         form.append('image', image ?? '');
@@ -39,7 +47,7 @@ export default function EditPostClient({ id, initialName, initialContent, initia
         await fetch(`/api/admin/posts/${id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, content, description, image, imageBlob: imageBlobBase64 ?? undefined, imageMime: imageMime ?? undefined }),
+          body: JSON.stringify({ name, content, description, image, imageBlob: imageBlobBase64 ?? undefined, imageMime: imageMime ?? undefined, tag: tag ?? undefined, authorId: authorId ?? undefined }),
         });
       }
     } catch (err) {
@@ -47,7 +55,7 @@ export default function EditPostClient({ id, initialName, initialContent, initia
     } finally {
       setAutoSaving(false);
     }
-  }, [id, name, content, description, image, imageBlobBase64, imageMime, selectedFile]);
+  }, [id, name, content, description, image, imageBlobBase64, imageMime, selectedFile, tag, authorId]);
 
   // Auto-save every 5 seconds when content changes
   useEffect(() => {
@@ -57,7 +65,7 @@ export default function EditPostClient({ id, initialName, initialContent, initia
       }
     }, 5000);
     return () => clearTimeout(timer);
-  }, [name, content, initialName, initialContent, saving, handleAutoSave, description, image, initialDescription, imageBlobBase64]);
+  }, [name, content, initialName, initialContent, saving, handleAutoSave, description, image, initialDescription, imageBlobBase64, tag]);
 
   async function handleSave() {
     if (!name.trim()) {
@@ -133,6 +141,19 @@ export default function EditPostClient({ id, initialName, initialContent, initia
           placeholder="URL da imagem (opcional)"
           size="md"
         />
+
+        <Select
+          placeholder="Tag do livro (opcional)"
+          value={tag}
+          onChange={(e) => setTag(e as string | null)}
+          size="md"
+        >
+          {(api.post.bookTags.useQuery().data ?? []).map((v) => (
+            <Option key={v} value={v}>{v.replaceAll('_', ' ').toLowerCase().replace(/(^\w|\s\w)/g, (m: string) => m.toUpperCase())}</Option>
+          ))}
+        </Select>
+
+  <AuthorSelector value={authorId} onChange={setAuthorId} />
 
         <Box>
           <input
