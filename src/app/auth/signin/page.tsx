@@ -167,7 +167,7 @@ async function SignInContent() {
                     mb: 2,
                   }}
                 >
-                  "{randomQuote?.text}"
+                  &quot;{randomQuote?.text}&quot;
                 </Typography>
                 <Typography
                   level="body-sm"

@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { Suspense } from "react";
 import Sheet from "@mui/joy/Sheet";

@@ -285,7 +285,7 @@ function NewUserContent() {
                       fontStyle: 'italic',
                     }}
                   >
-                    "A leitura é uma conversa com os homens mais ilustres dos séculos passados." - René Descartes
+                    &quot;A leitura é uma conversa com os homens mais ilustres dos séculos passados.&quot; - René Descartes
                   </Typography>
                 </Stack>
               </Stack>
