@@ -7,10 +7,9 @@ import Option from '@mui/joy/Option';
 import Stack from '@mui/joy/Stack';
 import Input from '@mui/joy/Input';
 import Textarea from '@mui/joy/Textarea';
-import Box from '@mui/joy/Box';
-import Modal from '@mui/joy/Modal';
 import { api } from '@/trpc/react';
 import type { RouterOutputs } from '@/trpc/react';
+import StandardModal from '@/app/_components/ui/StandardModal';
 
 type AuthorItem = RouterOutputs['author']['list'][number];
 
@@ -64,22 +63,52 @@ export default function AuthorSelector({ value, onChange }: { value?: number | n
       </Select>
       <Button variant="outlined" color="primary" onClick={() => setOpen(true)}>Criar novo autor</Button>
 
-      <Modal open={open} onClose={() => setOpen(false)}>
-        <Box sx={{ p: 2, bg: 'background.surface', borderRadius: 2, minWidth: 420, boxShadow: 'rgba(0,0,0,0.12) 0px 8px 24px' }}>
-          <Stack spacing={2}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Box sx={{ fontWeight: 800, fontSize: '1rem' }}>Criar autor</Box>
-              <Button variant="plain" onClick={() => setOpen(false)}>Fechar</Button>
-            </Box>
-            <Input placeholder="Nome" value={name} onChange={(e) => setName(e.target.value)} slotProps={{ input: { ref: nameRef } }} />
-            <Input placeholder="Período (opcional)" value={period} onChange={(e) => setPeriod(e.target.value)} />
-            <Textarea placeholder="Bio (opcional)" value={bio} onChange={(e) => setBio((e.target as HTMLTextAreaElement).value)} minRows={3} />
-            <Box sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end' }}>
-              <Button variant="plain" onClick={() => setOpen(false)} disabled={isCreating}>Cancelar</Button>
-              <Button variant="solid" onClick={async () => {
+      <StandardModal 
+        open={open} 
+        onClose={() => setOpen(false)}
+        title="Criar Novo Autor"
+        size="md"
+      >
+        <Stack spacing={3}>
+          <Input 
+            placeholder="Nome do autor" 
+            value={name} 
+            onChange={(e) => setName(e.target.value)} 
+            slotProps={{ input: { ref: nameRef } }} 
+            size="lg"
+          />
+          <Input 
+            placeholder="Período literário (opcional)" 
+            value={period} 
+            onChange={(e) => setPeriod(e.target.value)} 
+            size="lg"
+          />
+          <Textarea 
+            placeholder="Biografia (opcional)" 
+            value={bio} 
+            onChange={(e) => setBio((e.target as HTMLTextAreaElement).value)} 
+            minRows={4}
+            size="lg"
+          />
+          <Stack direction="row" spacing={2} justifyContent="flex-end">
+            <Button 
+              variant="outlined" 
+              onClick={() => setOpen(false)} 
+              disabled={isCreating}
+              size="lg"
+            >
+              Cancelar
+            </Button>
+            <Button 
+              variant="solid" 
+              onClick={async () => {
                 if (!name.trim()) return;
                 try {
-                  const createdRaw: unknown = await create.mutateAsync({ name: name.trim(), period: period ? period.trim() : undefined, bio: bio ? bio.trim() : undefined });
+                  const createdRaw: unknown = await create.mutateAsync({ 
+                    name: name.trim(), 
+                    period: period ? period.trim() : undefined, 
+                    bio: bio ? bio.trim() : undefined 
+                  });
                   // extract id safely from unknown
                   let newId: number | null = null;
                   if (createdRaw && typeof createdRaw === 'object') {
@@ -99,13 +128,15 @@ export default function AuthorSelector({ value, onChange }: { value?: number | n
                   console.error(msg);
                   alert('Falha ao criar autor: ' + msg);
                 }
-              }} disabled={isCreating}>
-                {create.isPending ? 'Criando...' : 'Criar'}
-              </Button>
-            </Box>
+              }} 
+              disabled={isCreating || !name.trim()}
+              size="lg"
+            >
+              {create.isPending ? 'Criando...' : 'Criar Autor'}
+            </Button>
           </Stack>
-        </Box>
-      </Modal>
+        </Stack>
+      </StandardModal>
     </Stack>
   );
 }

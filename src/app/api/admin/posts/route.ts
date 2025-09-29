@@ -3,6 +3,9 @@ import { db } from "@/server/db";
 import requireAdminOrRedirect from "@/server/auth/requireAdmin";
 import { auth } from "@/server/auth";
 import { z } from "zod";
+import type { Prisma } from '@prisma/client';
+import { BookTagValues } from '@/lib/bookTags';
+import type { BookTag } from '@/lib/bookTags';
 
 export async function POST(req: NextRequest) {
   const res = await requireAdminOrRedirect();
@@ -15,6 +18,8 @@ export async function POST(req: NextRequest) {
 
   const bodySchema = z.object({
     name: z.string().min(1, "name required"),
+    tag: z.string().optional(),
+    authorId: z.number().optional(),
     description: z.string().optional(),
     content: z.string().optional(),
     image: z.string().optional(),
@@ -76,23 +81,36 @@ export async function POST(req: NextRequest) {
 
   // normalize into a safe shape
   const name = String(parsed.name);
+  const rawTag = (parsed as Record<string, unknown>).tag;
+  const rawAuthor = (parsed as Record<string, unknown>).authorId;
+  const authorId = typeof rawAuthor === 'string' || typeof rawAuthor === 'number' ? Number(rawAuthor) : null;
+  const tagValue = typeof rawTag === 'string' ? rawTag : null;
   const description: string | null = parsed.description == null ? null : String(parsed.description);
   const contentValue = parsed.content == null ? null : String(parsed.content);
   const imageStr: string | null = parsed.image == null ? null : String(parsed.image);
   const imageBlob: string | null = (parsed as Record<string, unknown>).imageBlob == null ? null : String((parsed as Record<string, unknown>).imageBlob);
   const imageMime: string | null = (parsed as Record<string, unknown>).imageMime == null ? null : String((parsed as Record<string, unknown>).imageMime);
 
-  const created = await db.post.create({
-    data: {
-      name,
-  content: contentValue ?? "",
-      description: description ?? null,
-  image: imageStr ?? null,
-  imageBlob: imageBlob ? Buffer.from(imageBlob, 'base64') : null,
-  imageMime: imageMime ?? null,
-      createdById: session.user.id,
-    },
-  }) as { id: number; name: string; description: string | null; image: string | null };
+  const createData: Prisma.PostUncheckedCreateInput = {
+    name,
+    content: contentValue ?? "",
+    description: description ?? null,
+    image: imageStr ?? null,
+    imageBlob: imageBlob ? Buffer.from(imageBlob, 'base64') : null,
+    imageMime: imageMime ?? null,
+    createdById: session.user.id,
+  };
+
+  if (authorId != null && !Number.isNaN(authorId)) {
+    (createData as Record<string, unknown>).authorId = Number(authorId);
+  }
+
+  if (tagValue != null && BookTagValues.includes(tagValue as BookTag)) {
+    // Prisma.PostUncheckedCreateInput accepts the enum literal type for tag
+    (createData as unknown as Record<string, unknown>).tag = tagValue as BookTag;
+  }
+
+  const created = await db.post.create({ data: createData }) as { id: number; name: string; description: string | null; image: string | null };
 
   const post = {
     id: created.id,
