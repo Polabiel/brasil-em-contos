@@ -109,7 +109,21 @@ export const authConfig = {
   // Auth.js validates the host of incoming requests against NEXTAUTH_URL. If you see
   // `UntrustedHost` errors in logs, configure the environment on the hosting provider.
   // Locally we allow a sensible default when NEXTAUTH_URL is not present.
-  secret: env.AUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET ?? env.AUTH_SECRET,
+  // Explicit cookies config to avoid collisions or parsing issues with default cookie names
+  // (some environments or proxies may alter cookie serialization). We set a custom name
+  // for the PKCE verifier cookie so NextAuth uses this explicit shape when writing/reading.
+  cookies: {
+    pkceCodeVerifier: {
+      name: "brasil_em_contos_pkce",
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
+      },
+    },
+  },
   // next-auth expects NEXTAUTH_URL to be correct; set a runtime fallback for local dev
   // (this does not replace properly configured production envs).
   // Note: we don't mutate process.env here; we just ensure the secret and rely on
