@@ -74,9 +74,6 @@ dependencies:
   styled-components:
     specifier: ^6.1.19
     version: 6.1.19(react-dom@19.1.1)(react@19.1.1)
-  styles:
-    specifier: link:@mui/joy/styles
-    version: link:@mui/joy/styles
   superjson:
     specifier: ^2.2.1
     version: 2.2.2
