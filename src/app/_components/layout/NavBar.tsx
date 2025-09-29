@@ -121,7 +121,7 @@ export default function NavBar() {
           borderBottom: '1px solid var(--cv-neutral200)',
         }}
       >
-        <Stack direction="row" spacing={2} alignItems="center" sx={{ justifyContent: 'space-between', width: '100%' }}>
+        <Stack direction="row" spacing={2} alignItems="center" sx={{ width: '100%' }}>
           
           {/* Logo and Brand */}
           <Box className="flex items-center gap-4">
@@ -197,9 +197,72 @@ export default function NavBar() {
                 </Typography>
               </Stack>
             </Link>
-            
+          </Box>
 
-            {/* left box intentionally contains only logo/brand */}
+          {/* Centered Desktop Navigation */}
+          <Box sx={{ display: { xs: 'none', md: 'block' }, flex: 1 }}>
+            <Stack 
+              direction="row" 
+              spacing={4} 
+              alignItems="center"
+              justifyContent="center"
+            >
+              <Link href="/contos" style={{ textDecoration: 'none' }}>
+                <Typography level="body-md" sx={{ 
+                  color: 'var(--cv-textMuted80)', 
+                  fontWeight: 500, 
+                  fontSize: '0.95rem', 
+                  px: 1,
+                  '&:hover': {
+                    color: 'var(--cv-brazilGreen)',
+                  }
+                }}>
+                  Contos
+                </Typography>
+              </Link>
+
+              <Link href="/autores" style={{ textDecoration: 'none' }}>
+                <Typography level="body-md" sx={{ 
+                  color: 'var(--cv-textMuted80)', 
+                  fontWeight: 500, 
+                  fontSize: '0.95rem', 
+                  px: 1,
+                  '&:hover': {
+                    color: 'var(--cv-brazilGreen)',
+                  }
+                }}>
+                  Autores
+                </Typography>
+              </Link>
+
+              <Link href="/categorias" style={{ textDecoration: 'none' }}>
+                <Typography level="body-md" sx={{ 
+                  color: 'var(--cv-textMuted80)', 
+                  fontWeight: 500, 
+                  fontSize: '0.95rem', 
+                  px: 1,
+                  '&:hover': {
+                    color: 'var(--cv-brazilGreen)',
+                  }
+                }}>
+                  Categorias
+                </Typography>
+              </Link>
+
+              <Link href="/sobre" style={{ textDecoration: 'none' }}>
+                <Typography level="body-md" sx={{ 
+                  color: 'var(--cv-textMuted80)', 
+                  fontWeight: 500, 
+                  fontSize: '0.95rem', 
+                  px: 1,
+                  '&:hover': {
+                    color: 'var(--cv-brazilGreen)',
+                  }
+                }}>
+                  Sobre
+                </Typography>
+              </Link>
+            </Stack>
           </Box>
 
           {/* Right side actions */}
@@ -306,37 +369,6 @@ export default function NavBar() {
             ) : null}
           </Stack>
         </Stack>
-          {/* Centered Desktop Navigation */}
-          <Stack 
-            direction="row" 
-            spacing={4} 
-            alignItems="center"
-            sx={{ display: { xs: 'none', md: 'flex' }, mx: 'auto' }}
-          >
-            <Link href="/contos" style={{ textDecoration: 'none' }}>
-              <Typography level="body-md" sx={{ color: 'var(--cv-textMuted80)', fontWeight: 500, fontSize: '0.95rem', px: 1 }}>
-                Contos
-              </Typography>
-            </Link>
-
-            <Link href="/autores" style={{ textDecoration: 'none' }}>
-              <Typography level="body-md" sx={{ color: 'var(--cv-textMuted80)', fontWeight: 500, fontSize: '0.95rem', px: 1 }}>
-                Autores
-              </Typography>
-            </Link>
-
-            <Link href="/categorias" style={{ textDecoration: 'none' }}>
-              <Typography level="body-md" sx={{ color: 'var(--cv-textMuted80)', fontWeight: 500, fontSize: '0.95rem', px: 1 }}>
-                Categorias
-              </Typography>
-            </Link>
-
-            <Link href="/sobre" style={{ textDecoration: 'none' }}>
-              <Typography level="body-md" sx={{ color: 'var(--cv-textMuted80)', fontWeight: 500, fontSize: '0.95rem', px: 1 }}>
-                Sobre
-              </Typography>
-            </Link>
-          </Stack>
         {/* Mobile Navigation Menu */}
         <Box
           id="mobile-nav"

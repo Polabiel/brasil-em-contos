@@ -1,6 +1,8 @@
 import Box from "@mui/joy/Box";
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
+import Card from "@mui/joy/Card";
+import CardContent from "@mui/joy/CardContent";
 import Footer from "@/app/_components/layout/Footer";
 
 export default function ContosPage() {
@@ -21,28 +23,49 @@ export default function ContosPage() {
             px: { xs: 2, sm: 3, md: 4 },
           }}
         >
-          <Stack spacing={4} alignItems="center" textAlign="center">
-            <Typography level="h1" sx={{ fontSize: { xs: '2rem', md: '3rem' }, fontWeight: 700 }}>
-              Contos Brasileiros
-            </Typography>
-            <Typography level="body-lg" sx={{ maxWidth: 600, color: 'var(--cv-textMuted80)' }}>
-              Explore nossa coleção de contos da literatura brasileira, desde os clássicos atemporais 
-              até as obras contemporâneas que definem nossa cultura.
-            </Typography>
-            <Box
-              sx={{
-                mt: 4,
-                p: 4,
-                bgcolor: 'var(--cv-neutral100)',
-                borderRadius: 2,
-                border: '1px solid var(--cv-neutral200)',
-              }}
-            >
-              <Typography level="body-md" sx={{ color: 'var(--cv-textMuted70)' }}>
-                📚 Esta página está em desenvolvimento. Em breve você encontrará aqui nossa 
-                biblioteca completa de contos brasileiros organizados por período, autor e tema.
+          <Stack spacing={6} alignItems="center" textAlign="center">
+            <Stack spacing={3}>
+              <Typography level="h1" sx={{ 
+                fontSize: { xs: '2rem', md: '3rem' }, 
+                fontWeight: 700,
+                color: 'var(--cv-textPrimary)'
+              }}>
+                Contos Brasileiros
               </Typography>
-            </Box>
+              <Typography level="body-lg" sx={{ 
+                maxWidth: 600, 
+                color: 'var(--cv-textMuted80)',
+                lineHeight: 1.6
+              }}>
+                Explore nossa coleção de contos da literatura brasileira, desde os clássicos atemporais 
+                até as obras contemporâneas que definem nossa cultura.
+              </Typography>
+            </Stack>
+
+            <Card variant="outlined" sx={{ width: '100%', maxWidth: 800 }}>
+              <CardContent sx={{ p: { xs: 3, md: 4 } }}>
+                <Stack spacing={3} alignItems="center">
+                  <Box sx={{ fontSize: '3rem' }}>📚</Box>
+                  <Typography level="h4" sx={{ color: 'var(--cv-brazilGreen)' }}>
+                    Em Desenvolvimento
+                  </Typography>
+                  <Typography level="body-md" sx={{ 
+                    color: 'var(--cv-textMuted70)',
+                    lineHeight: 1.7,
+                    textAlign: 'center'
+                  }}>
+                    Esta página está em desenvolvimento. Em breve você encontrará aqui nossa 
+                    biblioteca completa de contos brasileiros organizados por período, autor e tema.
+                  </Typography>
+                  <Typography level="body-sm" sx={{ 
+                    color: 'var(--cv-textMuted60)',
+                    fontStyle: 'italic'
+                  }}>
+                    ✨ Aguarde novidades em nossa próxima atualização!
+                  </Typography>
+                </Stack>
+              </CardContent>
+            </Card>
           </Stack>
         </Box>
       </Box>
