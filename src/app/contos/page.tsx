@@ -11,56 +11,73 @@ export default function ContosPage() {
       <Box
         component="main"
         sx={{
-          bgcolor: 'var(--cv-backgroundDefault)',
+          bgcolor: "var(--cv-backgroundDefault)",
           py: { xs: 6, md: 8 },
-          minHeight: '60vh',
+          minHeight: "60vh",
         }}
       >
         <Box
           sx={{
-            maxWidth: '1200px',
-            mx: 'auto',
+            maxWidth: "1200px",
+            mx: "auto",
             px: { xs: 2, sm: 3, md: 4 },
           }}
         >
           <Stack spacing={6} alignItems="center" textAlign="center">
             <Stack spacing={3}>
-              <Typography level="h1" sx={{ 
-                fontSize: { xs: '2rem', md: '3rem' }, 
-                fontWeight: 700,
-                color: 'var(--cv-textPrimary)'
-              }}>
+              <Typography
+                level="h1"
+                sx={{
+                  fontSize: { xs: "2rem", md: "3rem" },
+                  fontWeight: 700,
+                  color: "var(--cv-textPrimary)",
+                }}
+              >
                 Contos Brasileiros
               </Typography>
-              <Typography level="body-lg" sx={{ 
-                maxWidth: 600, 
-                color: 'var(--cv-textMuted80)',
-                lineHeight: 1.6
-              }}>
-                Explore nossa coleção de contos da literatura brasileira, desde os clássicos atemporais 
-                até as obras contemporâneas que definem nossa cultura.
+              <Typography
+                level="body-lg"
+                sx={{
+                  maxWidth: 600,
+                  color: "var(--cv-textMuted80)",
+                  lineHeight: 1.6,
+                }}
+              >
+                Explore nossa coleção de contos da literatura brasileira, desde
+                os clássicos atemporais até as obras contemporâneas que definem
+                nossa cultura.
               </Typography>
             </Stack>
 
-            <Card variant="outlined" sx={{ width: '100%', maxWidth: 800 }}>
+            <Card variant="outlined" sx={{ width: "100%", maxWidth: 800 }}>
               <CardContent sx={{ p: { xs: 3, md: 4 } }}>
                 <Stack spacing={3} alignItems="center">
-                  <Box sx={{ fontSize: '3rem' }}>📚</Box>
-                  <Typography level="h4" sx={{ color: 'var(--cv-brazilGreen)' }}>
+                  <Box sx={{ fontSize: "3rem" }}>📚</Box>
+                  <Typography
+                    level="h4"
+                    sx={{ color: "var(--cv-brazilGreen)" }}
+                  >
                     Em Desenvolvimento
                   </Typography>
-                  <Typography level="body-md" sx={{ 
-                    color: 'var(--cv-textMuted70)',
-                    lineHeight: 1.7,
-                    textAlign: 'center'
-                  }}>
-                    Esta página está em desenvolvimento. Em breve você encontrará aqui nossa 
-                    biblioteca completa de contos brasileiros organizados por período, autor e tema.
+                  <Typography
+                    level="body-md"
+                    sx={{
+                      color: "var(--cv-textMuted70)",
+                      lineHeight: 1.7,
+                      textAlign: "center",
+                    }}
+                  >
+                    Esta página está em desenvolvimento. Em breve você
+                    encontrará aqui nossa biblioteca completa de contos
+                    brasileiros organizados por período, autor e tema.
                   </Typography>
-                  <Typography level="body-sm" sx={{ 
-                    color: 'var(--cv-textMuted60)',
-                    fontStyle: 'italic'
-                  }}>
+                  <Typography
+                    level="body-sm"
+                    sx={{
+                      color: "var(--cv-textMuted60)",
+                      fontStyle: "italic",
+                    }}
+                  >
                     ✨ Aguarde novidades em nossa próxima atualização!
                   </Typography>
                 </Stack>
