@@ -20,28 +20,28 @@ export default function Footer() {
     {
       title: "Explorar",
       links: [
-        { label: "Contos Clássicos", href: "/classicos" },
-        { label: "Autores Brasileiros", href: "/autores" },
+        { label: "Contos", href: "/contos" },
+        { label: "Autores", href: "/autores" },
         { label: "Categorias", href: "/categorias" },
-        { label: "Novidades", href: "/novidades" },
+        { label: "Posts", href: "/posts" },
       ]
     },
     {
       title: "Comunidade",
       links: [
         { label: "Sobre Nós", href: "/sobre" },
-        { label: "Escrever Conosco", href: "/escrever" },
-        { label: "Blog", href: "/blog" },
-        { label: "Eventos", href: "/eventos" },
+        { label: "Perfil", href: "/profile" },
+        { label: "Contato", href: "/contato" },
+        { label: "Ajuda", href: "/ajuda" },
       ]
     },
     {
       title: "Recursos",
       links: [
-        { label: "Guia de Leitura", href: "/guia" },
-        { label: "Dicas de Escrita", href: "/escrita" },
+        { label: "Início", href: "/" },
+        { label: "Buscar", href: "/buscar" },
         { label: "FAQ", href: "/faq" },
-        { label: "Contato", href: "/contato" },
+        { label: "Suporte", href: "/suporte" },
       ]
     }
   ];
@@ -377,6 +377,18 @@ export default function Footer() {
           </Typography>
 
           <Stack direction="row" spacing={3}>
+            <Link href="https://github.com/polabiel/brasil-em-contos" style={{ textDecoration: 'none' }} target="_blank" rel="noopener noreferrer">
+              <Typography
+                level="body-sm"
+                sx={{
+                  color: 'rgba(255,255,255,0.6)',
+                  '&:hover': { color: 'var(--cv-brazilYellow)' }
+                }}
+              >
+                <i className="fab fa-github" style={{ marginRight: 4 }} />
+                Código-fonte
+              </Typography>
+            </Link>
             <Link href="/privacidade" style={{ textDecoration: 'none' }}>
               <Typography
                 level="body-sm"

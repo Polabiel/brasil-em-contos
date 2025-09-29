@@ -20,28 +20,28 @@ export default function HomeFooter() {
     {
       title: "Navegação",
       links: [
-        { label: "Procurando por Algo", href: "#" }, // Required link 1
-        { label: "Por Onde Comprar", href: "#" }, // Required link 2
-        { label: "Contos Recentes", href: "#" },
-        { label: "Autores em Destaque", href: "#" },
+        { label: "Contos", href: "/contos" },
+        { label: "Autores", href: "/autores" },
+        { label: "Categorias", href: "/categorias" },
+        { label: "Sobre", href: "/sobre" },
       ]
     },
     {
       title: "Comunidade",
       links: [
-        { label: "Sobre Nós", href: "#" },
-        { label: "Participe", href: "#" },
-        { label: "Blog", href: "#" },
-        { label: "Newsletter", href: "#" },
+        { label: "Início", href: "/" },
+        { label: "Perfil", href: "/profile" },
+        { label: "Contato", href: "/contato" },
+        { label: "Ajuda", href: "/ajuda" },
       ]
     },
     {
       title: "Suporte",
       links: [
-        { label: "Central de Ajuda", href: "#" },
-        { label: "Contato", href: "#" },
-        { label: "FAQ", href: "#" },
-        { label: "Políticas", href: "#" },
+        { label: "FAQ", href: "/faq" },
+        { label: "Suporte", href: "/suporte" },
+        { label: "Privacidade", href: "/privacidade" },
+        { label: "Termos", href: "/termos" },
       ]
     }
   ];
@@ -248,7 +248,19 @@ export default function HomeFooter() {
           </Typography>
 
           <Stack direction="row" spacing={3}>
-            <Link href="#" style={{ textDecoration: 'none' }}>
+            <Link href="https://github.com/polabiel/brasil-em-contos" style={{ textDecoration: 'none' }} target="_blank" rel="noopener noreferrer">
+              <Typography
+                level="body-sm"
+                sx={{
+                  color: 'rgba(255,255,255,0.6)',
+                  '&:hover': { color: 'var(--cv-brazilYellow)' }
+                }}
+              >
+                <i className="fab fa-github" style={{ marginRight: 4 }} />
+                Código-fonte
+              </Typography>
+            </Link>
+            <Link href="/privacidade" style={{ textDecoration: 'none' }}>
               <Typography
                 level="body-sm"
                 sx={{
@@ -259,7 +271,7 @@ export default function HomeFooter() {
                 Privacidade
               </Typography>
             </Link>
-            <Link href="#" style={{ textDecoration: 'none' }}>
+            <Link href="/termos" style={{ textDecoration: 'none' }}>
               <Typography
                 level="body-sm"
                 sx={{
@@ -270,7 +282,7 @@ export default function HomeFooter() {
                 Termos
               </Typography>
             </Link>
-            <Link href="#" style={{ textDecoration: 'none' }}>
+            <Link href="/acessibilidade" style={{ textDecoration: 'none' }}>
               <Typography
                 level="body-sm"
                 sx={{
