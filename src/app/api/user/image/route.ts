@@ -6,6 +6,7 @@ import type { User } from '@prisma/client';
 export async function GET(_req: Request) {
  const session = await auth();
  if (!session?.user?.id) return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+    if (_req.method !== 'GET') return NextResponse.json({ error: 'Method not allowed' }, { status: 405, headers: { Allow: 'GET' } });
  const user = await db.user.findUnique({ where: { id: session.user.id }, select: { image: true, imageBlob: true, imageMime: true } }) as (Pick<User, 'image' | 'imageBlob' | 'imageMime'> | null);
  if (!user) return NextResponse.json({ error: 'User not found' }, { status: 404 });
 
@@ -17,13 +18,15 @@ export async function GET(_req: Request) {
  if (typeof user.imageMime === 'string') mime = user.imageMime;
 
  if (imageUrl && !blob) {
-  return NextResponse.redirect(imageUrl);
+  const headers = new Headers({ 'Cache-Control': 'public, max-age=60' });
+  return NextResponse.redirect(imageUrl, { headers });
  }
 
  if (blob) {
   const headers = new Headers();
   if (typeof mime === 'string') headers.set('Content-Type', mime);
   else headers.set('Content-Type', 'application/octet-stream');
+  headers.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=30');
 
   let ab: ArrayBuffer;
   if (typeof (blob as Buffer).byteLength === 'number') {

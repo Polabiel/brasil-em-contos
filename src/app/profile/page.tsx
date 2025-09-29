@@ -14,6 +14,7 @@ import { useSession } from 'next-auth/react';
 import { api } from '@/trpc/react';
 import UploadButton from '@/app/_components/ui/UploadButton';
 import { useRouter } from 'next/navigation';
+import { useToast } from '@/app/_components/ui/ToastProvider';
 
 type UserPayload = { id: string; name: string | null; email: string | null; image: string | null };
 
@@ -34,6 +35,7 @@ export default function ProfilePage() {
       void utils.user.me.invalidate();
     },
   });
+  const toast = useToast();
 
   useEffect(() => {
     if (!me) return;
@@ -114,18 +116,18 @@ export default function ProfilePage() {
                       await utils.user.me.invalidate();
                       // notify NavBar to refresh avatar
                       window.dispatchEvent(new Event('avatarUpdated'));
-                      alert('Perfil atualizado com sucesso');
+                      toast.push('Perfil atualizado com sucesso', 'success');
                     } else {
                       // use tRPC for the JSON flow and wait for completion
                       await updateUser.mutateAsync({ name, image: imageUrl });
                       // ensure cache invalidated (mutation onSuccess already invalidates, but be explicit)
                       await utils.user.me.invalidate();
                       window.dispatchEvent(new Event('avatarUpdated'));
-                      alert('Perfil atualizado com sucesso');
+                      toast.push('Perfil atualizado com sucesso', 'success');
                     }
                   } catch (err) {
                     console.error(err);
-                    alert('Erro ao atualizar perfil');
+                    toast.push('Erro ao atualizar perfil', 'danger');
                   } finally {
                     setSaving(false);
                   }

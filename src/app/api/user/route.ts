@@ -12,6 +12,7 @@ export async function GET(_req: Request) {
 }
 
 export async function PATCH(req: Request) {
+  if (req.method !== 'PATCH') return NextResponse.json({ error: 'Method not allowed' }, { status: 405, headers: { Allow: 'PATCH' } });
   const session = await auth();
   if (!session?.user?.id) return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
   const contentType = req.headers.get('content-type') ?? '';

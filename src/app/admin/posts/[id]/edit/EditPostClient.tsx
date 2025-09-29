@@ -13,6 +13,7 @@ import AuthorSelector from '@/app/_components/admin/AuthorSelector';
 import { api } from '@/trpc/react';
 import { useRouter } from "next/navigation";
 import MDEditorWrapper from '@/app/_components/MDEditorWrapper';
+import { useToast } from '@/app/_components/ui/ToastProvider';
 
 export default function EditPostClient({ id, initialName, initialContent, initialDescription, initialImage, initialTag, initialAuthorId }: { id: number; initialName: string; initialContent: string; initialDescription?: string; initialImage?: string; initialTag?: string | null; initialAuthorId?: number | null }) {
   const [name, setName] = useState(initialName);
@@ -31,6 +32,7 @@ export default function EditPostClient({ id, initialName, initialContent, initia
   const updateMutation = api.post.update.useMutation({
     onSuccess: () => void utils.post.adminList.invalidate(),
   });
+  const toast = useToast();
 
   const handleAutoSave = useCallback(async () => {
     setAutoSaving(true);
@@ -70,7 +72,7 @@ export default function EditPostClient({ id, initialName, initialContent, initia
 
   async function handleSave() {
     if (!name.trim()) {
-      alert('Título é obrigatório');
+      toast.push('Título é obrigatório', 'warning');
       return;
     }
     setSaving(true);
@@ -95,7 +97,7 @@ export default function EditPostClient({ id, initialName, initialContent, initia
       router.back()
     } catch (err) {
       console.error(err);
-      alert('Erro ao salvar');
+      toast.push('Erro ao salvar', 'danger');
     } finally {
       setSaving(false);
     }

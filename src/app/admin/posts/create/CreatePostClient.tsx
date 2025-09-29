@@ -13,6 +13,7 @@ import UploadButton from '@/app/_components/ui/UploadButton';
 import Stack from '@mui/joy/Stack';
 import Typography from '@mui/joy/Typography';
 import { useRouter } from 'next/navigation';
+import { useToast } from '@/app/_components/ui/ToastProvider';
 
 export default function CreatePostClient() {
   const [name, setName] = useState('');
@@ -33,6 +34,7 @@ export default function CreatePostClient() {
       router.back();
     }
   });
+  const toast = useToast();
 
   async function handleCreate() {
     if (!name.trim()) return;
@@ -59,7 +61,7 @@ export default function CreatePostClient() {
       router.back();
     } catch (err) {
       console.error(err);
-      alert('Erro ao criar post');
+      toast.push('Erro ao criar post', 'danger');
     } finally {
       setLoading(false);
     }
