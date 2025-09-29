@@ -6,6 +6,7 @@ import {
   publicProcedure,
   adminProcedure,
 } from "@/server/api/trpc";
+import { BookTagValues } from '@/lib/bookTags';
 
 export const postRouter = createTRPCRouter({
   hello: publicProcedure
@@ -49,12 +50,67 @@ export const postRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const take = input?.take ?? 4;
       const posts = await ctx.db.post.findMany({
+        where: { featured: { not: true } }, // Exclude featured posts
         orderBy: { createdAt: "desc" },
         take,
         include: { createdBy: true },
       });
       return posts;
     }),
+
+  featured: publicProcedure.query(async ({ ctx }) => {
+    const posts = await ctx.db.post.findMany({
+      where: { featured: true },
+      orderBy: { createdAt: "desc" },
+      take: 2, // Maximum 2 featured posts
+      include: { 
+        createdBy: true,
+        author: true 
+      },
+    });
+    return posts;
+  }),
+
+  updateFeatured: adminProcedure
+    .input(z.object({ 
+      id: z.number(), 
+      featured: z.boolean() 
+    }))
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.post.update({
+        where: { id: input.id },
+        data: { featured: input.featured },
+        include: {
+          createdBy: true,
+          author: true,
+        },
+      });
+    }),
+
+  adminList: adminProcedure.query(async ({ ctx }) => {
+    const posts = await ctx.db.post.findMany({
+      orderBy: { createdAt: "desc" },
+      include: {
+        createdBy: true,
+        author: true,
+      },
+    });
+    return posts;
+  }),
+
+  // Return tags (enum) with counts from posts — use raw SQL to avoid Prisma client type syncing issues
+  tags: publicProcedure.query(async ({ ctx }) => {
+    const rows = await ctx.db.$queryRawUnsafe<Array<{ tag: string | null; count: number }>>(
+      `SELECT tag, COUNT(*)::int as count FROM "Post" WHERE tag IS NOT NULL GROUP BY tag ORDER BY count DESC;`,
+    );
+
+    return rows.map((r) => ({ tag: String(r.tag), count: Number(r.count) }));
+  }),
+
+  // return enum values for BookTag so frontend can populate selects
+  bookTags: publicProcedure.query(() => {
+    return BookTagValues;
+  }),
 
   getSecretMessage: protectedProcedure.query(() => {
     return "you can now see this secret message!";
