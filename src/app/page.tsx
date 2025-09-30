@@ -4,6 +4,7 @@ import PostsGrid from "@/app/_components/layout/PostsGrid";
 import { Suspense } from "react";
 import HomeFooter from "@/app/_components/layout/HomeFooter";
 import Box from "@mui/joy/Box";
+import GridSkeleton from "./_components/layout/GridSkeleton";
 
 export default async function Home() {
   return (
@@ -33,7 +34,7 @@ export default async function Home() {
             }}
           >
             <Box component="section">
-              <Suspense fallback={<div />}>
+                <Suspense fallback={<GridSkeleton />}>
                 <PostsGrid />
               </Suspense>
             </Box>
@@ -44,6 +45,7 @@ export default async function Home() {
           </Box>
         </Box>
       </Box>
+ 
 
       <HomeFooter />
     </>
