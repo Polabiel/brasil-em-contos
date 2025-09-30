@@ -23,17 +23,19 @@ export default function NavBar() {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [avatarTs, setAvatarTs] = useState<number | null>(null);
+  const [showNav, setShowNav] = useState(true);
   const menuRef = useRef<HTMLDivElement | null>(null);
   const toggleRef = useRef<HTMLButtonElement | null>(null);
   const { data: session } = useSession();
 
+  const lastScrollY = useRef(0);
+  const ticking = useRef(false);
+
   useEffect(() => {
     setMounted(true);
-    // set a timestamp only on the client to avoid hydration mismatch
     if (typeof window !== "undefined") {
       setAvatarTs(Date.now());
     }
-    // listen for profile updates to refresh avatar
     function onAvatarUpdated() {
       setAvatarTs(Date.now());
     }
@@ -71,6 +73,34 @@ export default function NavBar() {
       document.removeEventListener("click", onDocClick);
     };
   }, [open]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    function onScroll() {
+      const currentY = window.scrollY || window.pageYOffset;
+
+      if (!ticking.current) {
+        window.requestAnimationFrame(() => {
+          const delta = currentY - lastScrollY.current;
+
+          if (Math.abs(delta) > 10) {
+            if (delta > 0 && currentY > 80) {
+              setShowNav(false);
+            } else {
+              setShowNav(true);
+            }
+            lastScrollY.current = currentY;
+          }
+          ticking.current = false;
+        });
+        ticking.current = true;
+      }
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -121,21 +151,37 @@ export default function NavBar() {
         sx={{
           py: 2,
           px: { xs: 2, md: 4 },
-          position: "relative",
+          position: "sticky",
+          top: 0,
+          zIndex: 60,
           bgcolor: "white",
-          boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+          boxShadow: showNav ? "0 2px 8px rgba(0,0,0,0.08)" : "none",
           borderBottom: "1px solid var(--cv-neutral200)",
+          transform: showNav ? "translateY(0)" : "translateY(-110%)",
+          transition:
+            "transform 280ms cubic-bezier(.2,.8,.2,1), box-shadow 200ms",
         }}
       >
         <Stack
           direction="row"
           spacing={2}
           alignItems="center"
-          sx={{ justifyContent: "space-between", width: "100%" }}
+          sx={{
+            justifyContent: "space-between",
+            width: "100%",
+            position: "relative",
+          }}
         >
-          {/* Logo and Brand */}
-          <Box className="flex items-center gap-4">
-            {/* Mobile menu button on the left near the logo */}
+          {/* Left side - Desktop navigation + Mobile menu button */}
+          <Box
+            sx={{
+              flex: "1 1 0",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-start",
+            }}
+          >
+            {/* Mobile menu button */}
             <IconButton
               ref={toggleRef}
               variant="soft"
@@ -149,7 +195,7 @@ export default function NavBar() {
                 display: { xs: "inline-flex", md: "none" },
                 bgcolor: open ? "var(--cv-brazilGreen)15" : "transparent",
                 color: open ? "var(--cv-brazilGreen)" : "var(--cv-textMuted80)",
-                mr: 1,
+                mr: 2,
                 "&:hover": {
                   bgcolor: "var(--cv-brazilGreen)10",
                   color: "var(--cv-brazilGreen)",
@@ -158,6 +204,95 @@ export default function NavBar() {
             >
               <i className={open ? "fas fa-times" : "fas fa-bars"} />
             </IconButton>
+
+            {/* Desktop Navigation */}
+            <Stack
+              direction="row"
+              spacing={3}
+              alignItems="center"
+              sx={{ display: { xs: "none", md: "flex" } }}
+            >
+              <Link href="/contos" style={{ textDecoration: "none" }}>
+                <Typography
+                  level="body-md"
+                  sx={{
+                    color: "var(--cv-textMuted80)",
+                    fontWeight: 500,
+                    fontSize: "0.95rem",
+                    px: 1,
+                    "&:hover": {
+                      color: "var(--cv-brazilGreen)",
+                    },
+                  }}
+                >
+                  Contos
+                </Typography>
+              </Link>
+
+              <Link href="/autores" style={{ textDecoration: "none" }}>
+                <Typography
+                  level="body-md"
+                  sx={{
+                    color: "var(--cv-textMuted80)",
+                    fontWeight: 500,
+                    fontSize: "0.95rem",
+                    px: 1,
+                    "&:hover": {
+                      color: "var(--cv-brazilGreen)",
+                    },
+                  }}
+                >
+                  Autores
+                </Typography>
+              </Link>
+
+              <Link href="/categorias" style={{ textDecoration: "none" }}>
+                <Typography
+                  level="body-md"
+                  sx={{
+                    color: "var(--cv-textMuted80)",
+                    fontWeight: 500,
+                    fontSize: "0.95rem",
+                    px: 1,
+                    "&:hover": {
+                      color: "var(--cv-brazilGreen)",
+                    },
+                  }}
+                >
+                  Categorias
+                </Typography>
+              </Link>
+
+              <Link href="/sobre" style={{ textDecoration: "none" }}>
+                <Typography
+                  level="body-md"
+                  sx={{
+                    color: "var(--cv-textMuted80)",
+                    fontWeight: 500,
+                    fontSize: "0.95rem",
+                    px: 1,
+                    "&:hover": {
+                      color: "var(--cv-brazilGreen)",
+                    },
+                  }}
+                >
+                  Sobre
+                </Typography>
+              </Link>
+            </Stack>
+          </Box>
+
+          {/* Center - Logo and Brand */}
+          <Box
+            sx={{
+              flex: "0 0 auto",
+              display: "flex",
+              justifyContent: "center",
+              position: "absolute",
+              left: "50%",
+              transform: "translateX(-50%)",
+            }}
+          >
             <Link href="/" className="flex items-center gap-3">
               <Image
                 src="/icon.webp"
@@ -184,25 +319,6 @@ export default function NavBar() {
                     Contos
                   </Box>
                 </Typography>
-                {/* Compact title for very small screens (BeC) */}
-                <Typography
-                  level="body-sm"
-                  sx={{
-                    display: { xs: "block", sm: "none" },
-                    fontWeight: 800,
-                    fontSize: "1rem",
-                    color: "var(--cv-textPrimary)",
-                    letterSpacing: "0.02em",
-                  }}
-                >
-                  Be
-                  <Box
-                    component="span"
-                    sx={{ color: "var(--cv-brazilGreen)", ml: 0.3 }}
-                  >
-                    C
-                  </Box>
-                </Typography>
                 <Typography
                   level="body-xs"
                   sx={{
@@ -216,194 +332,138 @@ export default function NavBar() {
                 </Typography>
               </Stack>
             </Link>
-
-            {/* left box intentionally contains only logo/brand */}
           </Box>
 
           {/* Right side actions */}
-          <Stack direction="row" spacing={1.5} alignItems="center">
-            {/* Admin buttons for desktop */}
-            {session?.user?.role === "ADMIN" && (
-              <Stack
-                direction="row"
-                spacing={1}
-                sx={{ display: { xs: "none", md: "flex" } }}
-              >
-                <LinkNext href="/admin/posts/create">
+          <Box
+            sx={{
+              flex: "1 1 0",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-end",
+            }}
+          >
+            <Stack direction="row" spacing={1.5} alignItems="center">
+              {/* Admin buttons for desktop */}
+              {session?.user?.role === "ADMIN" && (
+                <Stack
+                  direction="row"
+                  spacing={1}
+                  sx={{ display: { xs: "none", md: "flex" } }}
+                >
+                  <LinkNext href="/admin/posts/create">
+                    <Button
+                      variant="solid"
+                      color="success"
+                      size="sm"
+                      sx={{
+                        bgcolor: "var(--cv-brazilGreen)",
+                        "&:hover": { bgcolor: "#1e5f28" },
+                      }}
+                    >
+                      <i
+                        className="fas fa-plus"
+                        style={{ marginRight: 6, fontSize: "0.8rem" }}
+                      />
+                      Criar
+                    </Button>
+                  </LinkNext>
+                  <LinkNext href="/admin/posts">
+                    <Button variant="outlined" color="warning" size="sm">
+                      <i
+                        className="fas fa-cog"
+                        style={{ marginRight: 6, fontSize: "0.8rem" }}
+                      />
+                      Gerenciar
+                    </Button>
+                  </LinkNext>
+                </Stack>
+              )}
+
+              {/* User Authentication */}
+              {mounted ? (
+                session ? (
+                  <Stack direction="row" spacing={1} alignItems="center">
+                    <LinkNext href="/profile">
+                      <Box
+                        sx={{
+                          width: 36,
+                          height: 36,
+                          position: "relative",
+                          borderRadius: "50%",
+                          overflow: "hidden",
+                          cursor: "pointer",
+                          border: "2px solid var(--cv-brazilGreen)",
+                          transition: "all 0.2s ease",
+                          "&:hover": {
+                            borderColor: "var(--cv-brazilYellow)",
+                            transform: "scale(1.05)",
+                          },
+                        }}
+                        aria-label="Editar perfil"
+                      >
+                        <Image
+                          src={
+                            avatarTs
+                              ? `/api/user/image?ts=${avatarTs}`
+                              : "/api/user/image"
+                          }
+                          alt={session.user?.name ?? "Avatar"}
+                          width={32}
+                          height={32}
+                          style={{ objectFit: "cover" }}
+                          unoptimized
+                        />
+                      </Box>
+                    </LinkNext>
+
+                    <Button
+                      variant="outlined"
+                      size="sm"
+                      sx={{
+                        borderColor: "var(--cv-neutral300)",
+                        color: "var(--cv-textMuted80)",
+                        "&:hover": {
+                          borderColor: "var(--cv-brazilGreen)",
+                          color: "var(--cv-brazilGreen)",
+                        },
+                      }}
+                      onClick={() => signOut({ callbackUrl: "/" })}
+                    >
+                      <i
+                        className="fas fa-sign-out-alt"
+                        style={{ marginRight: 6, fontSize: "0.8rem" }}
+                      />
+                      Sair
+                    </Button>
+                  </Stack>
+                ) : (
                   <Button
                     variant="solid"
-                    color="success"
                     size="sm"
                     sx={{
                       bgcolor: "var(--cv-brazilGreen)",
-                      "&:hover": { bgcolor: "#1e5f28" },
-                    }}
-                  >
-                    <i
-                      className="fas fa-plus"
-                      style={{ marginRight: 6, fontSize: "0.8rem" }}
-                    />
-                    Criar
-                  </Button>
-                </LinkNext>
-                <LinkNext href="/admin/posts">
-                  <Button variant="outlined" color="warning" size="sm">
-                    <i
-                      className="fas fa-cog"
-                      style={{ marginRight: 6, fontSize: "0.8rem" }}
-                    />
-                    Gerenciar
-                  </Button>
-                </LinkNext>
-              </Stack>
-            )}
-
-            {/* User Authentication */}
-            {mounted ? (
-              session ? (
-                <Stack direction="row" spacing={1} alignItems="center">
-                  <LinkNext href="/profile">
-                    <Box
-                      sx={{
-                        width: 36,
-                        height: 36,
-                        position: "relative",
-                        borderRadius: "50%",
-                        overflow: "hidden",
-                        cursor: "pointer",
-                        border: "2px solid var(--cv-brazilGreen)",
-                        transition: "all 0.2s ease",
-                        "&:hover": {
-                          borderColor: "var(--cv-brazilYellow)",
-                          transform: "scale(1.05)",
-                        },
-                      }}
-                      aria-label="Editar perfil"
-                    >
-                      <Image
-                        src={
-                          avatarTs
-                            ? `/api/user/image?ts=${avatarTs}`
-                            : "/api/user/image"
-                        }
-                        alt={session.user?.name ?? "Avatar"}
-                        width={32}
-                        height={32}
-                        style={{ objectFit: "cover" }}
-                        unoptimized
-                      />
-                    </Box>
-                  </LinkNext>
-
-                  <Button
-                    variant="outlined"
-                    size="sm"
-                    sx={{
-                      borderColor: "var(--cv-neutral300)",
-                      color: "var(--cv-textMuted80)",
+                      color: "white",
+                      px: 3,
+                      fontWeight: 600,
                       "&:hover": {
-                        borderColor: "var(--cv-brazilGreen)",
-                        color: "var(--cv-brazilGreen)",
+                        bgcolor: "#1e5f28",
+                        transform: "translateY(-1px)",
+                        boxShadow: "0 4px 8px rgba(34,139,34,0.3)",
                       },
                     }}
-                    onClick={() => signOut({ callbackUrl: "/" })}
+                    onClick={() => signIn(undefined, { callbackUrl: "/" })}
                   >
                     <i
-                      className="fas fa-sign-out-alt"
+                      className="fas fa-user"
                       style={{ marginRight: 6, fontSize: "0.8rem" }}
                     />
-                    Sair
+                    Entrar
                   </Button>
-                </Stack>
-              ) : (
-                <Button
-                  variant="solid"
-                  size="sm"
-                  sx={{
-                    bgcolor: "var(--cv-brazilGreen)",
-                    color: "white",
-                    px: 3,
-                    fontWeight: 600,
-                    "&:hover": {
-                      bgcolor: "#1e5f28",
-                      transform: "translateY(-1px)",
-                      boxShadow: "0 4px 8px rgba(34,139,34,0.3)",
-                    },
-                  }}
-                  onClick={() => signIn(undefined, { callbackUrl: "/" })}
-                >
-                  <i
-                    className="fas fa-user"
-                    style={{ marginRight: 6, fontSize: "0.8rem" }}
-                  />
-                  Entrar
-                </Button>
-              )
-            ) : null}
-          </Stack>
-        </Stack>
-        {/* Centered Desktop Navigation */}
-        <Stack
-          direction="row"
-          spacing={4}
-          alignItems="center"
-          sx={{ display: { xs: "none", md: "flex" }, mx: "auto" }}
-        >
-          <Link href="/contos" style={{ textDecoration: "none" }}>
-            <Typography
-              level="body-md"
-              sx={{
-                color: "var(--cv-textMuted80)",
-                fontWeight: 500,
-                fontSize: "0.95rem",
-                px: 1,
-              }}
-            >
-              Contos
-            </Typography>
-          </Link>
-
-          <Link href="/autores" style={{ textDecoration: "none" }}>
-            <Typography
-              level="body-md"
-              sx={{
-                color: "var(--cv-textMuted80)",
-                fontWeight: 500,
-                fontSize: "0.95rem",
-                px: 1,
-              }}
-            >
-              Autores
-            </Typography>
-          </Link>
-
-          <Link href="/categorias" style={{ textDecoration: "none" }}>
-            <Typography
-              level="body-md"
-              sx={{
-                color: "var(--cv-textMuted80)",
-                fontWeight: 500,
-                fontSize: "0.95rem",
-                px: 1,
-              }}
-            >
-              Categorias
-            </Typography>
-          </Link>
-
-          <Link href="/sobre" style={{ textDecoration: "none" }}>
-            <Typography
-              level="body-md"
-              sx={{
-                color: "var(--cv-textMuted80)",
-                fontWeight: 500,
-                fontSize: "0.95rem",
-                px: 1,
-              }}
-            >
-              Sobre
-            </Typography>
-          </Link>
+                )
+              ) : null}
+            </Stack>
+          </Box>
         </Stack>
         {/* Mobile Navigation Menu */}
         <Box

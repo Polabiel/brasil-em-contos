@@ -100,7 +100,7 @@ export default function Footer() {
           <Stack spacing={3}>
             <Stack direction="row" spacing={2} alignItems="center">
               <Image
-                src="/icon.webp"
+                src="/icon.png"
                 alt="Brasil em Contos"
                 width={48}
                 height={48}

@@ -60,7 +60,7 @@ export const postRouter = createTRPCRouter({
         where: { featured: { not: true } },
         orderBy: { createdAt: "desc" },
         take,
-        include: { createdBy: true },
+        include: { createdBy: true, author: true },
       });
       return posts;
     }),

@@ -93,12 +93,18 @@ export default function HomeFooter() {
           {/* Brand Section */}
           <Stack spacing={3}>
             <Stack direction="row" spacing={2} alignItems="center">
-              <Image
-                src="/icon.webp"
-                alt="Brasil em Contos"
-                width={48}
-                height={48}
-              />
+                <Box
+                sx={{
+                  filter: "invert(1)",
+                }}
+                >
+                <Image
+                  src="/icon.png"
+                  alt="Brasil em Contos"
+                  width={48}
+                  height={48}
+                />
+                </Box>
               <Typography
                 level="h3"
                 className={playfair.className}

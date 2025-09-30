@@ -7,7 +7,6 @@ import Typography from "@mui/joy/Typography";
 import Box from "@mui/joy/Box";
 import Stack from "@mui/joy/Stack";
 import Divider from "@mui/joy/Divider";
-import Button from "@mui/joy/Button";
 import TagsList from "./TagsList";
 import { api } from "@/trpc/react";
 import type { RouterOutputs } from "@/trpc/react";
@@ -69,84 +68,11 @@ export default function Sidebar() {
     "O Brasil tem mais de 200 anos de literatura nacional rica e diversa",
     "Machado de Assis é considerado o maior escritor brasileiro",
     "A literatura brasileira reflete nossa diversidade cultural única",
+    `O Brasil em Contos nasceu como um projeto de faculdade e continua ativo até hoje, ${new Date().getFullYear() - 2018} anos depois!`,
   ];
 
   return (
     <aside className="w-full space-y-4">
-      {/* About Brazilian Literature */}
-      <Card
-        variant="outlined"
-        sx={{
-          mb: 4,
-          background: `linear-gradient(135deg, var(--cv-gradientStart) 0%, var(--cv-gradientMid) 100%)`,
-          border: "2px solid var(--cv-brazilGreen)",
-        }}
-      >
-        <CardContent sx={{ textAlign: "center", py: 3 }}>
-          <Box sx={{ mb: 2 }}>
-            <Box
-              sx={{
-                width: 80,
-                height: 80,
-                borderRadius: "50%",
-                background: `linear-gradient(135deg, var(--cv-brazilGreen), var(--cv-brazilYellow))`,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                mx: "auto",
-                mb: 2,
-                fontSize: "2rem",
-                color: "white",
-                boxShadow: "0 8px 16px rgba(34,139,34,0.3)",
-              }}
-            >
-              📖
-            </Box>
-          </Box>
-
-          <Typography
-            level="h4"
-            className={playfair.className}
-            sx={{
-              fontWeight: 600,
-              color: "var(--cv-brazilGreen)",
-              mb: 1,
-            }}
-          >
-            Literatura Brasileira
-          </Typography>
-
-          <Typography
-            level="body-md"
-            sx={{
-              color: "var(--cv-textMuted80)",
-              lineHeight: 1.6,
-              mb: 3,
-            }}
-          >
-            Explore a riqueza dos contos brasileiros, desde os clássicos até as
-            vozes contemporâneas que moldam nossa identidade literária.
-          </Typography>
-
-          <Link href="/about" style={{ textDecoration: "none" }}>
-            <Button
-              variant="solid"
-              size="sm"
-              sx={{
-                bgcolor: "var(--cv-brazilGreen)",
-                color: "white",
-                "&:hover": {
-                  bgcolor: "#1e5f28",
-                  transform: "translateY(-1px)",
-                },
-              }}
-            >
-              Saiba Mais
-            </Button>
-          </Link>
-        </CardContent>
-      </Card>
-
       {/* Book Tags (compact) - moved up to replace Categories */}
       <Card variant="outlined" sx={{ mb: 4 }}>
         <CardContent>
@@ -233,7 +159,10 @@ export default function Sidebar() {
                         }}
                         onMouseEnter={() => {
                           try {
-                            if (author.slug) void trpcCtx.author.bySlug.prefetch({ slug: author.slug });
+                            if (author.slug)
+                              void trpcCtx.author.bySlug.prefetch({
+                                slug: author.slug,
+                              });
                           } catch {}
                         }}
                         onFocus={() => {
@@ -360,59 +289,6 @@ export default function Sidebar() {
               </Box>
             ))}
           </Stack>
-        </CardContent>
-      </Card>
-
-      {/* Newsletter/Follow */}
-      <Card
-        variant="outlined"
-        sx={{
-          background: `linear-gradient(135deg, var(--cv-brazilYellow)10, var(--cv-brazilGreen)10)`,
-          border: "2px solid var(--cv-brazilYellow)",
-        }}
-      >
-        <CardContent sx={{ textAlign: "center" }}>
-          <Box sx={{ mb: 2, fontSize: "1.5rem" }}>📚✨</Box>
-
-          <Typography
-            level="title-md"
-            sx={{
-              fontWeight: 600,
-              color: "var(--cv-textPrimary)",
-              mb: 1,
-            }}
-          >
-            Não perca nenhuma história!
-          </Typography>
-
-          <Typography
-            level="body-sm"
-            sx={{
-              color: "var(--cv-textMuted80)",
-              mb: 2,
-              lineHeight: 1.5,
-            }}
-          >
-            Acompanhe as últimas publicações e descubra novos contos
-          </Typography>
-
-          <Button
-            variant="solid"
-            size="sm"
-            fullWidth
-            sx={{
-              bgcolor: "var(--cv-brazilYellow)",
-              color: "var(--cv-textPrimary)",
-              fontWeight: 600,
-              "&:hover": {
-                bgcolor: "#e6c200",
-                transform: "translateY(-1px)",
-              },
-            }}
-          >
-            <i className="fas fa-bell" style={{ marginRight: 6 }} />
-            Seguir
-          </Button>
         </CardContent>
       </Card>
     </aside>
