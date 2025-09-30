@@ -155,13 +155,6 @@ export default function PostsGrid() {
                 Limpar filtro
               </Button>
             </Link>
-            <Button
-              size="sm"
-              variant="outlined"
-              onClick={() => router.push("/")}
-            >
-              Limpar filtro
-            </Button>
           </Box>
         ) : null}
       </Box>
