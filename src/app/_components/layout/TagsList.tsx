@@ -3,23 +3,33 @@
 import Chip from "@mui/joy/Chip";
 import Stack from "@mui/joy/Stack";
 import Box from "@mui/joy/Box";
+import Link from "next/link";
 
 type Tag = {
   label: string;
+  value?: string; // raw tag value
   color?: "primary" | "success" | "warning" | "danger" | "default";
 };
 
-export default function TagsList({ tags }: { tags: Tag[] }) {
+export default function TagsList({
+  tags,
+  onSelect,
+}: {
+  tags: Tag[];
+  onSelect?: (value: string) => void;
+}) {
   return (
     <Stack direction="row" spacing={1} sx={{ flexWrap: "wrap" }}>
-      {tags.map((t) => (
-        <Box key={t.label} sx={{ display: "inline-block" }}>
+      {tags.map((t) => {
+        const href = `/?tag=${encodeURIComponent(t.value ?? t.label)}`;
+        const chip = (
           <Chip
+            key={t.label}
             size="sm"
             variant="soft"
+            onClick={() => onSelect && t.value && onSelect(t.value)}
             sx={{
-              bgcolor: `var(--cv-${t.color === "primary" ? "brazilGreen" : t.color === "success" ? "successMain" : t.color === "warning" ? "brazilYellow" : t.color === "danger" ? "errorMain" : "neutral100"})06`,
-              color: `var(--cv-${t.color === "primary" ? "brazilGreen" : t.color === "success" ? "successMain" : t.color === "warning" ? "textPrimary" : "errorMain"})`,
+              cursor: onSelect ? "pointer" : undefined,
               fontWeight: 700,
               mr: 0.5,
               mb: 0.5,
@@ -27,8 +37,24 @@ export default function TagsList({ tags }: { tags: Tag[] }) {
           >
             {t.label}
           </Chip>
-        </Box>
-      ))}
+        );
+
+        return (
+          <Box key={t.label} sx={{ display: "inline-block" }}>
+            {onSelect ? (
+              chip
+            ) : (
+              <Link
+                href={href}
+                scroll={false}
+                style={{ textDecoration: "none" }}
+              >
+                {chip}
+              </Link>
+            )}
+          </Box>
+        );
+      })}
     </Stack>
   );
 }

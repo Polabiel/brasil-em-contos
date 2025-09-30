@@ -33,6 +33,7 @@ function TagsFetcher() {
       .replaceAll("_", " ")
       .toLowerCase()
       .replace(/(^\w|\s\w)/g, (m: string) => m.toUpperCase()),
+    value: String(t.tag),
     color: (t.tag.includes("REALISMO") || t.tag.includes("REGIONAL")
       ? "primary"
       : "default") as

@@ -6,7 +6,7 @@ import {
   publicProcedure,
   adminProcedure,
 } from "@/server/api/trpc";
-import { BookTagValues } from "@/lib/bookTags";
+import { BookTagValues, type BookTag } from "@/lib/bookTags";
 
 export const postRouter = createTRPCRouter({
   hello: publicProcedure
@@ -77,6 +77,21 @@ export const postRouter = createTRPCRouter({
     });
     return posts;
   }),
+
+  byTag: publicProcedure
+    .input(
+      z.object({ tag: z.string(), take: z.number().min(1).max(50).optional() }),
+    )
+    .query(async ({ ctx, input }) => {
+      const take = input.take ?? 12;
+      const posts = await ctx.db.post.findMany({
+        where: { tag: input.tag as unknown as BookTag },
+        orderBy: { createdAt: "desc" },
+        take,
+        include: { createdBy: true, author: true },
+      });
+      return posts;
+    }),
 
   updateFeatured: adminProcedure
     .input(

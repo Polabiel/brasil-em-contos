@@ -11,23 +11,36 @@ import Button from "@mui/joy/Button";
 import PostCardSkeleton from "./PostCardSkeleton";
 import Stack from "@mui/joy/Stack";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { api } from "@/trpc/react";
 import { BookTagValues } from "@/lib/bookTags";
+import { useSearchParams, useRouter } from "next/navigation";
 
 export default function PostsGrid() {
   const { data: session } = useSession();
+
+  const search = useSearchParams();
+  const tag = search?.get?.("tag") ?? undefined;
   const router = useRouter();
 
-  const { data: allPosts, isLoading } = api.post.recent.useQuery(
-    { take: 12 },
-    {
-      retry: false,
-      refetchOnWindowFocus: false,
-    },
+  const recentQueryOptions = {
+    retry: false,
+    refetchOnWindowFocus: false,
+  } as const;
+
+  // Always call the hooks in the same order — enable/disable them via options
+  const byTagQuery = api.post.byTag.useQuery(
+    { tag: tag ?? "", take: 12 },
+    { ...recentQueryOptions, enabled: Boolean(tag) },
   );
+
+  const recentQuery = api.post.recent.useQuery(
+    { take: 12 },
+    { ...recentQueryOptions, enabled: !tag },
+  );
+
+  const { data: allPosts, isLoading } = tag ? byTagQuery : recentQuery;
 
   // Fetch featured posts so we can prioritize them
   const { data: featuredPosts } = api.post.featured.useQuery(undefined, {
@@ -120,6 +133,37 @@ export default function PostsGrid() {
           Descubra contos que celebram a diversidade e riqueza da literatura
           brasileira
         </Typography>
+        {tag ? (
+          <Box
+            sx={{
+              mt: 2,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 2,
+            }}
+          >
+            <Chip size="sm" variant="soft" sx={{ fontWeight: 700 }}>
+              Filtrando por:{" "}
+              {String(tag)
+                .replaceAll("_", " ")
+                .toLowerCase()
+                .replace(/(^\w|\s\w)/g, (m: string) => m.toUpperCase())}
+            </Chip>
+            <Link href="/" scroll={false} style={{ textDecoration: "none" }}>
+              <Button size="sm" variant="outlined">
+                Limpar filtro
+              </Button>
+            </Link>
+            <Button
+              size="sm"
+              variant="outlined"
+              onClick={() => router.push("/")}
+            >
+              Limpar filtro
+            </Button>
+          </Box>
+        ) : null}
       </Box>
 
       {/* Empty State */}
