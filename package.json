@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "pnpm db:migrate deploy && next build",
+    "build": "pnpm db:push --acceptdataloss && next build",
     "check": "next lint && tsc --noEmit",
     "validate": "next lint && tsc --noEmit && next build",
     "docker:up": "docker-compose up -d",
