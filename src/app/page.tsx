@@ -1,6 +1,7 @@
 import HeroSection from "@/app/_components/layout/HeroSection";
 import Sidebar from "@/app/_components/layout/Sidebar";
 import PostsGrid from "@/app/_components/layout/PostsGrid";
+import { Suspense } from "react";
 import HomeFooter from "@/app/_components/layout/HomeFooter";
 import Box from "@mui/joy/Box";
 
@@ -32,7 +33,9 @@ export default async function Home() {
             }}
           >
             <Box component="section">
-              <PostsGrid />
+              <Suspense fallback={<div />}>
+                <PostsGrid />
+              </Suspense>
             </Box>
 
             <Box component="aside">
