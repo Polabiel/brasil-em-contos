@@ -1,25 +1,52 @@
-import { db } from '@/server/db';
+import { db } from "@/server/db";
 
 async function main() {
-  // simple seed using raw SQL to avoid depending on generated prisma client methods
-  await db.$executeRawUnsafe(`DELETE FROM "Book"`);
-  await db.$executeRawUnsafe(`DELETE FROM "Post"`);
-  await db.$executeRawUnsafe(`DELETE FROM "Author"`);
+  // use Prisma client methods for seeding
+  await db.book.deleteMany();
+  await db.post.deleteMany();
+  await db.author.deleteMany();
 
-  const r1 = await db.$queryRawUnsafe(`INSERT INTO "Author" (name, period, bio) VALUES ($1, $2, $3) RETURNING id`, 'Machado de Assis', 'Realismo', 'Escritor brasileiro, autor de Dom Casmurro e Memórias Póstumas de Brás Cubas.');
-  const id1 = Array.isArray(r1) && r1.length > 0 && typeof (r1[0] as Record<string, unknown>).id !== 'undefined' ? Number((r1[0] as Record<string, unknown>).id) : undefined;
-  const r2 = await db.$queryRawUnsafe(`INSERT INTO "Author" (name, period, bio) VALUES ($1, $2, $3) RETURNING id`, 'Clarice Lispector', 'Modernismo/Contemporâneo', 'Jornalista e escritora conhecida por sua prosa introspectiva.');
-  const id2 = Array.isArray(r2) && r2.length > 0 && typeof (r2[0] as Record<string, unknown>).id !== 'undefined' ? Number((r2[0] as Record<string, unknown>).id) : undefined;
+  const a1 = await db.author.create({
+    data: {
+      name: "Machado de Assis",
+      period: "Realismo",
+      bio: "Escritor brasileiro, autor de Dom Casmurro e Memórias Póstumas de Brás Cubas.",
+    },
+  });
+  const a2 = await db.author.create({
+    data: {
+      name: "Clarice Lispector",
+      period: "Modernismo/Contemporâneo",
+      bio: "Jornalista e escritora conhecida por sua prosa introspectiva.",
+    },
+  });
 
-  if (id1) {
-    await db.$executeRawUnsafe(`INSERT INTO "Book" (title, year, "authorId") VALUES ($1, $2, $3)`, 'Dom Casmurro', 1899, id1);
-    await db.$executeRawUnsafe(`INSERT INTO "Book" (title, year, "authorId") VALUES ($1, $2, $3)`, 'Memórias Póstumas de Brás Cubas', 1881, id1);
+  if (a1) {
+    await db.book.createMany({
+      data: [
+        { title: "Dom Casmurro", year: 1899, authorId: a1.id },
+        {
+          title: "Memórias Póstumas de Brás Cubas",
+          year: 1881,
+          authorId: a1.id,
+        },
+      ],
+    });
   }
-  if (id2) {
-    await db.$executeRawUnsafe(`INSERT INTO "Book" (title, year, "authorId") VALUES ($1, $2, $3)`, 'A Hora da Estrela', 1977, id2);
+  if (a2) {
+    await db.book.create({
+      data: { title: "A Hora da Estrela", year: 1977, authorId: a2.id },
+    });
   }
 
-  console.log('Seed completed');
+  console.log("Seed completed");
 }
 
-main().catch((e) => { console.error(e); process.exit(1); }).finally(() => { void db.$disconnect(); });
+main()
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(() => {
+    void db.$disconnect();
+  });

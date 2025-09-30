@@ -3,25 +3,43 @@ import { requireAdminForPage } from "@/server/auth/requireAdmin";
 import { db } from "@/server/db";
 import EditPostClient from "./EditPostClient";
 
-export default async function EditPage({ params }: { params: Promise<{ id: string }> }) {
- await requireAdminForPage();
+export default async function EditPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  await requireAdminForPage();
 
- const { id: idParam } = await params;
+  const { id: idParam } = await params;
 
- const id = Number(idParam);
+  const id = Number(idParam);
 
- if (Number.isNaN(id)) return notFound();
+  if (Number.isNaN(id)) return notFound();
 
- const post = await db.post.findUnique({ where: { id } });
+  const post = await db.post.findUnique({ where: { id } });
 
- if (!post) return notFound();
+  if (!post) return notFound();
 
- const initialName = String(post.name ?? "");
- const initialContent = String(post.content ?? "");
- const initialDescription = String(post.description ?? "");
- const initialImage = String(post.image ?? "");
- const initialTag = ((post as unknown) as { tag?: string })?.tag == null ? null : String(((post as unknown) as { tag?: string }).tag);
- const initialAuthorId = ((post as unknown) as { authorId?: number })?.authorId ?? null;
+  const initialName = String(post.name ?? "");
+  const initialContent = String(post.content ?? "");
+  const initialDescription = String(post.description ?? "");
+  const initialImage = String(post.image ?? "");
+  const initialTag =
+    (post as unknown as { tag?: string })?.tag == null
+      ? null
+      : String((post as unknown as { tag?: string }).tag);
+  const initialAuthorId =
+    (post as unknown as { authorId?: number })?.authorId ?? null;
 
- return <EditPostClient id={Number(post.id)} initialName={initialName} initialContent={initialContent} initialDescription={initialDescription} initialImage={initialImage} initialTag={initialTag} initialAuthorId={initialAuthorId} />;
+  return (
+    <EditPostClient
+      id={Number(post.id)}
+      initialName={initialName}
+      initialContent={initialContent}
+      initialDescription={initialDescription}
+      initialImage={initialImage}
+      initialTag={initialTag}
+      initialAuthorId={initialAuthorId}
+    />
+  );
 }

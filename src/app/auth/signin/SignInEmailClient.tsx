@@ -62,7 +62,7 @@ export default function SignInEmailClient() {
             {message}
           </Alert>
         )}
-        
+
         {error && (
           <Alert variant="soft" color="danger">
             {error}

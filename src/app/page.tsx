@@ -8,7 +8,7 @@ export default async function Home() {
   return (
     <>
       <HeroSection />
-      
+
       <Box
         component="main"
         sx={{

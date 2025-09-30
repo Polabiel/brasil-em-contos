@@ -23,24 +23,38 @@ export default function SignInDiscordButton() {
       variant="solid"
       loading={loading}
       sx={{
-        bgcolor: 'var(--cv-primaryMain)',
-        width: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+        bgcolor: "var(--cv-primaryMain)",
+        width: "100%",
+        display: "flex",
+        alignItems: "center",
+        
+        justifyContent: "center",
         gap: 1.5,
         py: 1.5,
         fontWeight: 600,
-        '&:hover': {
-          bgcolor: 'var(--cv-secondaryMain)'
-        }
+        "&:hover": {
+          bgcolor: "var(--cv-secondaryMain)",
+        },
       }}
-      startDecorator={!loading && (
-        <Box component="span" sx={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
-          <i className="fa-brands fa-discord" aria-hidden="true" style={{ fontSize: 20 }}></i>
-          <span className="sr-only">Discord</span>
-        </Box>
-      )}
+      startDecorator={
+        !loading && (
+          <Box
+            component="span"
+            sx={{
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <i
+              className="fa-brands fa-discord"
+              aria-hidden="true"
+              style={{ fontSize: 20 }}
+            ></i>
+            <span className="sr-only">Discord</span>
+          </Box>
+        )
+      }
     >
       {loading ? "Conectando..." : "Entrar com Discord"}
     </Button>

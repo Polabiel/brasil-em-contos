@@ -7,7 +7,7 @@ import { tokensToCssVars, colorTokens } from "@/theme/colors";
 import { TRPCReactProvider } from "@/trpc/react";
 import MuiProvider from "@/app/_components/providers/MuiProvider";
 import NavBar from "@/app/_components/layout/NavBar";
-import ToastProvider from '@/app/_components/ui/ToastProvider';
+import ToastProvider from "@/app/_components/ui/ToastProvider";
 
 export const metadata: Metadata = {
   title: "Brasil em Contos",
@@ -26,7 +26,11 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className={`${geist.variable}`}>
       <head>
-        <style dangerouslySetInnerHTML={{ __html: `:root{\n${tokensToCssVars(colorTokens)}\n}` }} />
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `:root{\n${tokensToCssVars(colorTokens)}\n}`,
+          }}
+        />
         <link
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"

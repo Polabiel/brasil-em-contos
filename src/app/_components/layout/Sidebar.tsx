@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React from "react";
 import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
 import Typography from "@mui/joy/Typography";
@@ -9,19 +9,40 @@ import Stack from "@mui/joy/Stack";
 import Divider from "@mui/joy/Divider";
 import Button from "@mui/joy/Button";
 import TagsList from "./TagsList";
-import { api } from '@/trpc/react';
-import type { RouterOutputs } from '@/trpc/react';
-import CircularProgress from '@mui/joy/CircularProgress';
+import { api } from "@/trpc/react";
+import type { RouterOutputs } from "@/trpc/react";
+import CircularProgress from "@mui/joy/CircularProgress";
 
 function TagsFetcher() {
   const { data, isLoading, error } = api.post.tags.useQuery();
 
-  if (isLoading) return <Box sx={{ display: 'flex', justifyContent: 'center', py: 2 }}><CircularProgress size="sm" /></Box>;
-  if (error) return <Typography level="body-sm" sx={{ color: 'var(--cv-textMuted80)' }}>Erro ao carregar tags</Typography>;
+  if (isLoading)
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", py: 2 }}>
+        <CircularProgress size="sm" />
+      </Box>
+    );
+  if (error)
+    return (
+      <Typography level="body-sm" sx={{ color: "var(--cv-textMuted80)" }}>
+        Erro ao carregar tags
+      </Typography>
+    );
 
   const tags = (data ?? []).map((t: { tag: string; count: number }) => ({
-    label: String(t.tag).replaceAll('_', ' ').toLowerCase().replace(/(^\w|\s\w)/g, (m: string) => m.toUpperCase()),
-    color: (t.tag.includes('REALISMO') || t.tag.includes('REGIONAL') ? 'primary' : 'default') as 'default' | 'primary' | 'success' | 'warning' | 'danger' | undefined,
+    label: String(t.tag)
+      .replaceAll("_", " ")
+      .toLowerCase()
+      .replace(/(^\w|\s\w)/g, (m: string) => m.toUpperCase()),
+    color: (t.tag.includes("REALISMO") || t.tag.includes("REGIONAL")
+      ? "primary"
+      : "default") as
+      | "default"
+      | "primary"
+      | "success"
+      | "warning"
+      | "danger"
+      | undefined,
   }));
 
   return <TagsList tags={tags} />;
@@ -36,17 +57,18 @@ const playfair = Playfair_Display({
 });
 
 export default function Sidebar() {
-  // fetch real authors via tRPC
-  const { data: authors = [], isLoading: authorsLoading, error: authorsError } = api.author.list.useQuery();
+  const {
+    data: authors = [],
+    isLoading: authorsLoading,
+    error: authorsError,
+  } = api.author.list.useQuery();
   const trpcCtx = api.useContext();
-  type AuthorItem = RouterOutputs['author']['list'][number];
-
-  // categories removed: Tags card replaces Categories to keep Sidebar compact and data-driven
+  type AuthorItem = RouterOutputs["author"]["list"][number];
 
   const literaryFacts = [
     "O Brasil tem mais de 200 anos de literatura nacional rica e diversa",
     "Machado de Assis é considerado o maior escritor brasileiro",
-    "A literatura brasileira reflete nossa diversidade cultural única"
+    "A literatura brasileira reflete nossa diversidade cultural única",
   ];
 
   return (
@@ -57,25 +79,25 @@ export default function Sidebar() {
         sx={{
           mb: 4,
           background: `linear-gradient(135deg, var(--cv-gradientStart) 0%, var(--cv-gradientMid) 100%)`,
-          border: '2px solid var(--cv-brazilGreen)',
+          border: "2px solid var(--cv-brazilGreen)",
         }}
       >
-        <CardContent sx={{ textAlign: 'center', py: 3 }}>
+        <CardContent sx={{ textAlign: "center", py: 3 }}>
           <Box sx={{ mb: 2 }}>
             <Box
               sx={{
                 width: 80,
                 height: 80,
-                borderRadius: '50%',
+                borderRadius: "50%",
                 background: `linear-gradient(135deg, var(--cv-brazilGreen), var(--cv-brazilYellow))`,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                mx: 'auto',
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                mx: "auto",
                 mb: 2,
-                fontSize: '2rem',
-                color: 'white',
-                boxShadow: '0 8px 16px rgba(34,139,34,0.3)',
+                fontSize: "2rem",
+                color: "white",
+                boxShadow: "0 8px 16px rgba(34,139,34,0.3)",
               }}
             >
               📖
@@ -87,8 +109,8 @@ export default function Sidebar() {
             className={playfair.className}
             sx={{
               fontWeight: 600,
-              color: 'var(--cv-brazilGreen)',
-              mb: 1
+              color: "var(--cv-brazilGreen)",
+              mb: 1,
             }}
           >
             Literatura Brasileira
@@ -97,25 +119,25 @@ export default function Sidebar() {
           <Typography
             level="body-md"
             sx={{
-              color: 'var(--cv-textMuted80)',
+              color: "var(--cv-textMuted80)",
               lineHeight: 1.6,
-              mb: 3
+              mb: 3,
             }}
           >
-            Explore a riqueza dos contos brasileiros, desde os clássicos até
-            as vozes contemporâneas que moldam nossa identidade literária.
+            Explore a riqueza dos contos brasileiros, desde os clássicos até as
+            vozes contemporâneas que moldam nossa identidade literária.
           </Typography>
 
-          <Link href="/about" style={{ textDecoration: 'none' }}>
+          <Link href="/about" style={{ textDecoration: "none" }}>
             <Button
               variant="solid"
               size="sm"
               sx={{
-                bgcolor: 'var(--cv-brazilGreen)',
-                color: 'white',
-                '&:hover': {
-                  bgcolor: '#1e5f28',
-                  transform: 'translateY(-1px)',
+                bgcolor: "var(--cv-brazilGreen)",
+                color: "white",
+                "&:hover": {
+                  bgcolor: "#1e5f28",
+                  transform: "translateY(-1px)",
                 },
               }}
             >
@@ -128,8 +150,20 @@ export default function Sidebar() {
       {/* Book Tags (compact) - moved up to replace Categories */}
       <Card variant="outlined" sx={{ mb: 4 }}>
         <CardContent>
-          <Typography level="h4" sx={{ mb: 1, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 1 }}>
-            <i className="fas fa-tags" style={{ color: 'var(--cv-brazilGreen)' }} />
+          <Typography
+            level="h4"
+            sx={{
+              mb: 1,
+              fontWeight: 600,
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+            }}
+          >
+            <i
+              className="fas fa-tags"
+              style={{ color: "var(--cv-brazilGreen)" }}
+            />
             Categorias
           </Typography>
           <Box>
@@ -146,66 +180,86 @@ export default function Sidebar() {
             level="h4"
             sx={{
               mb: 2,
-              color: 'var(--cv-textPrimary)',
+              color: "var(--cv-textPrimary)",
               fontWeight: 600,
-              display: 'flex',
-              alignItems: 'center',
-              gap: 1
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
             }}
           >
-            <i className="fas fa-star" style={{ color: 'var(--cv-brazilYellow)' }} />
+            <i
+              className="fas fa-star"
+              style={{ color: "var(--cv-brazilYellow)" }}
+            />
             Grandes Nomes
           </Typography>
 
           {authorsLoading ? (
-            <Box sx={{ display: 'flex', justifyContent: 'center', py: 2 }}><CircularProgress size="sm" /></Box>
+            <Box sx={{ display: "flex", justifyContent: "center", py: 2 }}>
+              <CircularProgress size="sm" />
+            </Box>
           ) : authorsError ? (
-            <Typography level="body-sm" sx={{ color: 'var(--cv-textMuted80)' }}>Falha ao carregar autores</Typography>
+            <Typography level="body-sm" sx={{ color: "var(--cv-textMuted80)" }}>
+              Falha ao carregar autores
+            </Typography>
           ) : (
             <Stack spacing={2}>
               {authors.length === 0 ? (
-                <Typography level="body-sm" sx={{ color: 'var(--cv-textMuted80)' }}>Nenhum autor encontrado</Typography>
+                <Typography
+                  level="body-sm"
+                  sx={{ color: "var(--cv-textMuted80)" }}
+                >
+                  Nenhum autor encontrado
+                </Typography>
               ) : (
                 authors.map((author: AuthorItem, index: number) => (
                   <Box key={author.id}>
-                    <Link href={`/authors/${author.slug ?? author.id}`} style={{ textDecoration: 'none' }}>
+                    <Link
+                      href={`/authors/${author.slug ?? String(author.id)}`}
+                      style={{ textDecoration: "none" }}
+                    >
                       <Box
                         sx={{
                           p: 2,
                           borderRadius: 8,
-                          cursor: 'pointer',
-                          transition: 'all 0.2s ease',
-                          border: '1px solid transparent',
-                          '&:hover': {
-                            bgcolor: 'var(--cv-neutral50)',
-                            borderColor: 'var(--cv-brazilGreen)',
-                            transform: 'translateY(-2px)',
-                          }
+                          cursor: "pointer",
+                          transition: "all 0.2s ease",
+                          border: "1px solid transparent",
+                          "&:hover": {
+                            bgcolor: "var(--cv-neutral50)",
+                            borderColor: "var(--cv-brazilGreen)",
+                            transform: "translateY(-2px)",
+                          },
                         }}
                         onMouseEnter={() => {
-                          // prefetch author by slug if available
-                          // Ensure the prefetch function exists on the context (best-effort)
                           try {
-                            // @ts-expect-error best-effort: call generated prefetch helper if present
-                            void trpcCtx.author.bySlug.prefetch({ slug: author.slug });
-                          } catch {
-                            // ignore if not available
-                          }
+                            if (author.slug) void trpcCtx.author.bySlug.prefetch({ slug: author.slug });
+                          } catch {}
                         }}
-                          onFocus={() => {
-                            try { if (author.slug) void trpcCtx.author.bySlug.prefetch({ slug: author.slug }); } catch {}
-                          }}
-                          onTouchStart={() => {
-                            try { if (author.slug) void trpcCtx.author.bySlug.prefetch({ slug: author.slug }); } catch {}
-                          }}
+                        onFocus={() => {
+                          try {
+                            if (author.slug)
+                              void trpcCtx.author.bySlug.prefetch({
+                                slug: author.slug,
+                              });
+                          } catch {}
+                        }}
+                        onTouchStart={() => {
+                          try {
+                            if (author.slug)
+                              void trpcCtx.author.bySlug.prefetch({
+                                slug: author.slug,
+                              });
+                          } catch {}
+                        }}
                       >
                         <Typography
                           level="title-sm"
                           className={playfair.className}
                           sx={{
                             fontWeight: 600,
-                            color: 'var(--cv-textPrimary)',
-                            mb: 0.5
+                            color: "var(--cv-textPrimary)",
+                            mb: 0.5,
                           }}
                         >
                           {author.name}
@@ -214,9 +268,9 @@ export default function Sidebar() {
                           <Typography
                             level="body-xs"
                             sx={{
-                              color: 'var(--cv-textMuted60)',
+                              color: "var(--cv-textMuted60)",
                               mb: 0.5,
-                              fontSize: '0.75rem'
+                              fontSize: "0.75rem",
                             }}
                           >
                             {author.period}
@@ -226,12 +280,15 @@ export default function Sidebar() {
                           <Typography
                             level="body-sm"
                             sx={{
-                              color: 'var(--cv-textMuted70)',
-                              fontSize: '0.8rem',
-                              fontStyle: 'italic'
+                              color: "var(--cv-textMuted70)",
+                              fontSize: "0.8rem",
+                              fontStyle: "italic",
                             }}
                           >
-                            {author.books.slice(0, 2).map((b) => b.title).join(', ')}
+                            {author.books
+                              .slice(0, 2)
+                              .map((b) => b.title)
+                              .join(", ")}
                           </Typography>
                         )}
                       </Box>
@@ -251,8 +308,8 @@ export default function Sidebar() {
         color="primary"
         sx={{
           mb: 4,
-          bgcolor: 'var(--cv-brazilGreen)08',
-          border: '1px solid var(--cv-brazilGreen)20',
+          bgcolor: "var(--cv-brazilGreen)08",
+          border: "1px solid var(--cv-brazilGreen)20",
         }}
       >
         <CardContent>
@@ -260,11 +317,11 @@ export default function Sidebar() {
             level="h4"
             sx={{
               mb: 2,
-              color: 'var(--cv-brazilGreen)',
+              color: "var(--cv-brazilGreen)",
               fontWeight: 600,
-              display: 'flex',
-              alignItems: 'center',
-              gap: 1
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
             }}
           >
             <i className="fas fa-lightbulb" />
@@ -276,8 +333,8 @@ export default function Sidebar() {
               <Box
                 key={index}
                 sx={{
-                  display: 'flex',
-                  alignItems: 'flex-start',
+                  display: "flex",
+                  alignItems: "flex-start",
                   gap: 2,
                 }}
               >
@@ -285,8 +342,8 @@ export default function Sidebar() {
                   sx={{
                     width: 8,
                     height: 8,
-                    borderRadius: '50%',
-                    bgcolor: 'var(--cv-brazilYellow)',
+                    borderRadius: "50%",
+                    bgcolor: "var(--cv-brazilYellow)",
                     flexShrink: 0,
                     mt: 0.75,
                   }}
@@ -294,8 +351,8 @@ export default function Sidebar() {
                 <Typography
                   level="body-sm"
                   sx={{
-                    color: 'var(--cv-textMuted80)',
-                    lineHeight: 1.5
+                    color: "var(--cv-textMuted80)",
+                    lineHeight: 1.5,
                   }}
                 >
                   {fact}
@@ -311,20 +368,18 @@ export default function Sidebar() {
         variant="outlined"
         sx={{
           background: `linear-gradient(135deg, var(--cv-brazilYellow)10, var(--cv-brazilGreen)10)`,
-          border: '2px solid var(--cv-brazilYellow)',
+          border: "2px solid var(--cv-brazilYellow)",
         }}
       >
-        <CardContent sx={{ textAlign: 'center' }}>
-          <Box sx={{ mb: 2, fontSize: '1.5rem' }}>
-            📚✨
-          </Box>
+        <CardContent sx={{ textAlign: "center" }}>
+          <Box sx={{ mb: 2, fontSize: "1.5rem" }}>📚✨</Box>
 
           <Typography
             level="title-md"
             sx={{
               fontWeight: 600,
-              color: 'var(--cv-textPrimary)',
-              mb: 1
+              color: "var(--cv-textPrimary)",
+              mb: 1,
             }}
           >
             Não perca nenhuma história!
@@ -333,9 +388,9 @@ export default function Sidebar() {
           <Typography
             level="body-sm"
             sx={{
-              color: 'var(--cv-textMuted80)',
+              color: "var(--cv-textMuted80)",
               mb: 2,
-              lineHeight: 1.5
+              lineHeight: 1.5,
             }}
           >
             Acompanhe as últimas publicações e descubra novos contos
@@ -346,12 +401,12 @@ export default function Sidebar() {
             size="sm"
             fullWidth
             sx={{
-              bgcolor: 'var(--cv-brazilYellow)',
-              color: 'var(--cv-textPrimary)',
+              bgcolor: "var(--cv-brazilYellow)",
+              color: "var(--cv-textPrimary)",
               fontWeight: 600,
-              '&:hover': {
-                bgcolor: '#e6c200',
-                transform: 'translateY(-1px)',
+              "&:hover": {
+                bgcolor: "#e6c200",
+                transform: "translateY(-1px)",
               },
             }}
           >

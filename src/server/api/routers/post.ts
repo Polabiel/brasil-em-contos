@@ -6,7 +6,7 @@ import {
   publicProcedure,
   adminProcedure,
 } from "@/server/api/trpc";
-import { BookTagValues } from '@/lib/bookTags';
+import { BookTagValues } from "@/lib/bookTags";
 
 export const postRouter = createTRPCRouter({
   hello: publicProcedure
@@ -18,7 +18,13 @@ export const postRouter = createTRPCRouter({
     }),
 
   create: adminProcedure
-    .input(z.object({ name: z.string().min(1), description: z.string().optional(), image: z.string().optional() }))
+    .input(
+      z.object({
+        name: z.string().min(1),
+        description: z.string().optional(),
+        image: z.string().optional(),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
       return ctx.db.post.create({
         data: {
@@ -46,12 +52,12 @@ export const postRouter = createTRPCRouter({
         .object({
           take: z.number().min(1).max(20).optional(),
         })
-        .optional()
+        .optional(),
     )
     .query(async ({ ctx, input }) => {
       const take = input?.take ?? 4;
       const posts = await ctx.db.post.findMany({
-        where: { featured: { not: true } }, // Exclude featured posts
+        where: { featured: { not: true } },
         orderBy: { createdAt: "desc" },
         take,
         include: { createdBy: true },
@@ -63,20 +69,22 @@ export const postRouter = createTRPCRouter({
     const posts = await ctx.db.post.findMany({
       where: { featured: true },
       orderBy: { createdAt: "desc" },
-      take: 2, // Maximum 2 featured posts
-      include: { 
+      take: 2,
+      include: {
         createdBy: true,
-        author: true 
+        author: true,
       },
     });
     return posts;
   }),
 
   updateFeatured: adminProcedure
-    .input(z.object({ 
-      id: z.number(), 
-      featured: z.boolean() 
-    }))
+    .input(
+      z.object({
+        id: z.number(),
+        featured: z.boolean(),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
       return ctx.db.post.update({
         where: { id: input.id },
@@ -89,7 +97,15 @@ export const postRouter = createTRPCRouter({
     }),
 
   update: adminProcedure
-    .input(z.object({ id: z.number(), name: z.string().min(1).optional(), content: z.string().optional(), description: z.string().optional(), image: z.string().optional() }))
+    .input(
+      z.object({
+        id: z.number(),
+        name: z.string().min(1).optional(),
+        content: z.string().optional(),
+        description: z.string().optional(),
+        image: z.string().optional(),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
       const data: {
         name?: string;
@@ -98,10 +114,11 @@ export const postRouter = createTRPCRouter({
         image?: string | null;
       } = {};
 
-      if (typeof input.name === 'string') data.name = input.name;
-      if (typeof input.content === 'string') data.content = input.content;
-      if (typeof input.description === 'string') data.description = input.description ?? null;
-      if (typeof input.image === 'string') data.image = input.image ?? null;
+      if (typeof input.name === "string") data.name = input.name;
+      if (typeof input.content === "string") data.content = input.content;
+      if (typeof input.description === "string")
+        data.description = input.description ?? null;
+      if (typeof input.image === "string") data.image = input.image ?? null;
 
       return ctx.db.post.update({
         where: { id: input.id },
@@ -128,16 +145,22 @@ export const postRouter = createTRPCRouter({
     return posts;
   }),
 
-  // Return tags (enum) with counts from posts — use raw SQL to avoid Prisma client type syncing issues
   tags: publicProcedure.query(async ({ ctx }) => {
-    const rows = await ctx.db.$queryRawUnsafe<Array<{ tag: string | null; count: number }>>(
-      `SELECT tag, COUNT(*)::int as count FROM "Post" WHERE tag IS NOT NULL GROUP BY tag ORDER BY count DESC;`,
-    );
+    const rows = await ctx.db.post.groupBy({
+      by: ["tag"],
+      where: { tag: { not: null } },
+      _count: { _all: true },
+    });
 
-    return rows.map((r) => ({ tag: String(r.tag), count: Number(r.count) }));
+    const sorted = rows
+      .slice()
+      .sort((a, b) => (b._count._all ?? 0) - (a._count._all ?? 0));
+    return sorted.map((r) => ({
+      tag: String(r.tag),
+      count: Number(r._count._all ?? 0),
+    }));
   }),
 
-  // return enum values for BookTag so frontend can populate selects
   bookTags: publicProcedure.query(() => {
     return BookTagValues;
   }),

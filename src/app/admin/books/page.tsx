@@ -1,46 +1,66 @@
 "use client";
 
-import React, { useState } from 'react';
-import { Box, Typography, Button, Stack, Table, Sheet, Chip, Input, Select, Option } from '@mui/joy';
-import { api } from '@/trpc/react';
-import type { RouterOutputs } from '@/trpc/react';
-import StandardModal from '@/app/_components/ui/StandardModal';
+import React, { useState } from "react";
+import {
+  Box,
+  Typography,
+  Button,
+  Stack,
+  Table,
+  Sheet,
+  Chip,
+  Input,
+  Select,
+  Option,
+} from "@mui/joy";
+import { api } from "@/trpc/react";
+import type { RouterOutputs } from "@/trpc/react";
+import StandardModal from "@/app/_components/ui/StandardModal";
 
-type Book = RouterOutputs['book']['list'][number];
+type Book = RouterOutputs["book"]["list"][number];
 
 export default function BooksAdminPage() {
   const { data: books = [], isLoading, refetch } = api.book.list.useQuery();
   const { data: authors = [] } = api.author.list.useQuery();
   const deleteMutation = api.book.delete.useMutation({
-    onSuccess: () => void refetch()
+    onSuccess: () => void refetch(),
   });
   const createMutation = api.book.create.useMutation({
     onSuccess: () => {
       void refetch();
       setShowCreateModal(false);
-      setCreateForm({ title: '', year: '', authorId: null });
-    }
+      setCreateForm({ title: "", year: "", authorId: 0 });
+    },
   });
   const updateMutation = api.book.update.useMutation({
     onSuccess: () => {
       void refetch();
       setShowEditModal(false);
-      setEditForm({ id: 0, title: '', year: '', authorId: null });
-    }
+      setEditForm({ id: 0, title: "", year: "", authorId: 0 });
+    },
   });
 
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [createForm, setCreateForm] = useState({ title: '', year: '', authorId: null as number | null });
-  const [editForm, setEditForm] = useState({ id: 0, title: '', year: '', authorId: null as number | null });
+  const [createForm, setCreateForm] = useState({
+    title: "",
+    year: "",
+    authorId: 0 as number,
+  });
+  const [editForm, setEditForm] = useState({
+    id: 0,
+    title: "",
+    year: "",
+    authorId: 0 as number,
+  });
 
   const handleDelete = async (id: number) => {
-    if (confirm('Tem certeza que deseja deletar este livro?')) {
+    if (confirm("Tem certeza que deseja deletar este livro?")) {
       try {
         await deleteMutation.mutateAsync({ id });
       } catch (err) {
-        const msg = err instanceof Error ? err.message : 'Erro desconhecido';
-        alert('Falha ao deletar livro: ' + msg);
+        const msg = err instanceof Error ? err.message : "Erro desconhecido";
+        alert("Falha ao deletar livro: " + msg);
       }
     }
   };
@@ -52,11 +72,11 @@ export default function BooksAdminPage() {
       await createMutation.mutateAsync({
         title: createForm.title.trim(),
         year: yearNum && !isNaN(yearNum) ? yearNum : undefined,
-        authorId: createForm.authorId ?? undefined
+        authorId: createForm.authorId,
       });
     } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Erro desconhecido';
-      alert('Falha ao criar livro: ' + msg);
+      const msg = err instanceof Error ? err.message : "Erro desconhecido";
+      alert("Falha ao criar livro: " + msg);
     }
   };
 
@@ -68,11 +88,11 @@ export default function BooksAdminPage() {
         id: editForm.id,
         title: editForm.title.trim(),
         year: yearNum && !isNaN(yearNum) ? yearNum : undefined,
-        authorId: editForm.authorId ?? undefined
+        authorId: editForm.authorId,
       });
     } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Erro desconhecido';
-      alert('Falha ao atualizar livro: ' + msg);
+      const msg = err instanceof Error ? err.message : "Erro desconhecido";
+      alert("Falha ao atualizar livro: " + msg);
     }
   };
 
@@ -80,8 +100,8 @@ export default function BooksAdminPage() {
     setEditForm({
       id: book.id,
       title: book.title,
-      year: book.year ? String(book.year) : '',
-      authorId: book.authorId
+      year: book.year ? String(book.year) : "",
+      authorId: book.authorId ?? 0,
     });
     setShowEditModal(true);
   };
@@ -96,14 +116,23 @@ export default function BooksAdminPage() {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        sx={{ mb: 3 }}
+      >
         <Typography level="h2">Gerenciar Livros</Typography>
-        <Button variant="solid" color="primary" onClick={() => setShowCreateModal(true)}>
+        <Button
+          variant="solid"
+          color="primary"
+          onClick={() => setShowCreateModal(true)}
+        >
           Criar Livro
         </Button>
       </Stack>
 
-      <Sheet variant="outlined" sx={{ borderRadius: 2, overflow: 'auto' }}>
+      <Sheet variant="outlined" sx={{ borderRadius: 2, overflow: "auto" }}>
         <Table hoverRow>
           <thead>
             <tr>
@@ -123,25 +152,33 @@ export default function BooksAdminPage() {
                 </td>
                 <td>
                   {book.year && (
-                    <Chip size="sm" variant="soft" color="neutral">{book.year}</Chip>
+                    <Chip size="sm" variant="soft" color="neutral">
+                      {book.year}
+                    </Chip>
                   )}
                 </td>
                 <td>
                   {book.authorName ? (
                     <Typography level="body-sm">{book.authorName}</Typography>
                   ) : (
-                    <Typography level="body-xs" color="neutral">Sem autor</Typography>
+                    <Typography level="body-xs" color="neutral">
+                      Sem autor
+                    </Typography>
                   )}
                 </td>
                 <td>
                   <Stack direction="row" spacing={1}>
-                    <Button size="sm" variant="outlined" onClick={() => openEditModal(book)}>
+                    <Button
+                      size="sm"
+                      variant="outlined"
+                      onClick={() => openEditModal(book)}
+                    >
                       Editar
                     </Button>
-                    <Button 
-                      size="sm" 
-                      variant="outlined" 
-                      color="danger" 
+                    <Button
+                      size="sm"
+                      variant="outlined"
+                      color="danger"
                       onClick={() => handleDelete(book.id)}
                       disabled={deleteMutation.isPending}
                     >
@@ -156,8 +193,8 @@ export default function BooksAdminPage() {
       </Sheet>
 
       {/* Create Modal */}
-      <StandardModal 
-        open={showCreateModal} 
+      <StandardModal
+        open={showCreateModal}
         onClose={() => setShowCreateModal(false)}
         title="Criar Novo Livro"
         size="lg"
@@ -166,22 +203,29 @@ export default function BooksAdminPage() {
           <Input
             placeholder="Título do livro"
             value={createForm.title}
-            onChange={(e) => setCreateForm(prev => ({ ...prev, title: e.target.value }))}
+            onChange={(e) =>
+              setCreateForm((prev) => ({ ...prev, title: e.target.value }))
+            }
             size="lg"
           />
           <Input
             placeholder="Ano de publicação (opcional)"
             type="number"
             value={createForm.year}
-            onChange={(e) => setCreateForm(prev => ({ ...prev, year: e.target.value }))}
+            onChange={(e) =>
+              setCreateForm((prev) => ({ ...prev, year: e.target.value }))
+            }
             size="lg"
           />
           <Select
             placeholder="Autor (opcional)"
-            value={createForm.authorId ?? 0}
+            value={createForm.authorId}
             onChange={(v) => {
-              const val = typeof v === 'number' ? v : Number(v);
-              setCreateForm(prev => ({ ...prev, authorId: val > 0 ? val : null }));
+              const val = typeof v === "number" ? v : Number(v);
+              setCreateForm((prev) => ({
+                ...prev,
+                authorId: val > 0 ? val : 0,
+              }));
             }}
             size="lg"
           >
@@ -193,26 +237,26 @@ export default function BooksAdminPage() {
             ))}
           </Select>
           <Stack direction="row" spacing={2} justifyContent="flex-end">
-            <Button 
-              variant="outlined" 
+            <Button
+              variant="outlined"
               onClick={() => setShowCreateModal(false)}
             >
               Cancelar
             </Button>
-            <Button 
-              variant="solid" 
+            <Button
+              variant="solid"
               onClick={handleCreate}
               disabled={createMutation.isPending || !createForm.title.trim()}
             >
-              {createMutation.isPending ? 'Criando...' : 'Criar Livro'}
+              {createMutation.isPending ? "Criando..." : "Criar Livro"}
             </Button>
           </Stack>
         </Stack>
       </StandardModal>
 
       {/* Edit Modal */}
-      <StandardModal 
-        open={showEditModal} 
+      <StandardModal
+        open={showEditModal}
         onClose={() => setShowEditModal(false)}
         title="Editar Livro"
         size="lg"
@@ -221,22 +265,29 @@ export default function BooksAdminPage() {
           <Input
             placeholder="Título do livro"
             value={editForm.title}
-            onChange={(e) => setEditForm(prev => ({ ...prev, title: e.target.value }))}
+            onChange={(e) =>
+              setEditForm((prev) => ({ ...prev, title: e.target.value }))
+            }
             size="lg"
           />
           <Input
             placeholder="Ano de publicação (opcional)"
             type="number"
             value={editForm.year}
-            onChange={(e) => setEditForm(prev => ({ ...prev, year: e.target.value }))}
+            onChange={(e) =>
+              setEditForm((prev) => ({ ...prev, year: e.target.value }))
+            }
             size="lg"
           />
           <Select
             placeholder="Autor (opcional)"
-            value={editForm.authorId ?? 0}
+            value={editForm.authorId}
             onChange={(v) => {
-              const val = typeof v === 'number' ? v : Number(v);
-              setEditForm(prev => ({ ...prev, authorId: val > 0 ? val : null }));
+              const val = typeof v === "number" ? v : Number(v);
+              setEditForm((prev) => ({
+                ...prev,
+                authorId: val > 0 ? val : 0,
+              }));
             }}
             size="lg"
           >
@@ -248,18 +299,15 @@ export default function BooksAdminPage() {
             ))}
           </Select>
           <Stack direction="row" spacing={2} justifyContent="flex-end">
-            <Button 
-              variant="outlined" 
-              onClick={() => setShowEditModal(false)}
-            >
+            <Button variant="outlined" onClick={() => setShowEditModal(false)}>
               Cancelar
             </Button>
-            <Button 
-              variant="solid" 
+            <Button
+              variant="solid"
               onClick={handleUpdate}
               disabled={updateMutation.isPending || !editForm.title.trim()}
             >
-              {updateMutation.isPending ? 'Salvando...' : 'Salvar Alterações'}
+              {updateMutation.isPending ? "Salvando..." : "Salvar Alterações"}
             </Button>
           </Stack>
         </Stack>

@@ -34,7 +34,10 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   const check = await ensureAdmin(session);
 
   if (!check.ok)
-    return NextResponse.json({ error: check.message }, { status: check.status });
+    return NextResponse.json(
+      { error: check.message },
+      { status: check.status },
+    );
 
   const body = (await req.json().catch(() => ({}))) as PromoteBody;
   const action = body.action ?? "promote";
@@ -44,10 +47,10 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
   if (body.email) {
     const u = await db.user.findUnique({ where: { email: body.email } });
-    
+
     if (u) targetUserId = u.id;
   }
-  
+
   if (body.providerAccountId) {
     const a = await db.account.findFirst({
       where: { provider: "discord", providerAccountId: body.providerAccountId },
@@ -64,5 +67,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     data: { role },
   });
 
-  return NextResponse.json({ ok: true, user: { id: updated.id, role: updated.role } });
+  return NextResponse.json({
+    ok: true,
+    user: { id: updated.id, role: updated.role },
+  });
 }

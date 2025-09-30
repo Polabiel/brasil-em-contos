@@ -10,7 +10,7 @@ import IconButton from "@mui/joy/IconButton";
 import Chip from "@mui/joy/Chip";
 import Input from "@mui/joy/Input";
 import { useRouter } from "next/navigation";
-import { api } from '@/trpc/react';
+import { api } from "@/trpc/react";
 import StandardModal from "@/app/_components/ui/StandardModal";
 
 type Post = {
@@ -36,7 +36,7 @@ export default function AdminPostsClient({ posts }: { posts: Post[] }) {
       // navigate to edit page for created post
       router.push(`/admin/posts/${data.id}/edit`);
       void utils.post.adminList.invalidate();
-    }
+    },
   });
 
   const deletePostMutation = api.post.delete.useMutation({
@@ -53,42 +53,54 @@ export default function AdminPostsClient({ posts }: { posts: Post[] }) {
     if (!newPostName.trim()) return;
     setCreating(true);
     try {
-      await createPostMutation.mutateAsync({ name: newPostName.trim(), image: newPostImage ?? null });
+      await createPostMutation.mutateAsync({
+        name: newPostName.trim(),
+        image: newPostImage ?? null,
+      });
       setCreateModalOpen(false);
       setNewPostName("");
       setNewPostImage("");
     } catch (err) {
       console.error(err);
-      alert('Erro ao criar post');
+      alert("Erro ao criar post");
     } finally {
       setCreating(false);
     }
   }
 
   async function handleDeletePost(id: number) {
-    if (!confirm('Tem certeza que deseja deletar este post?')) return;
+    if (!confirm("Tem certeza que deseja deletar este post?")) return;
 
     try {
       await deletePostMutation.mutateAsync({ id });
     } catch (err) {
       console.error(err);
-      alert('Erro ao deletar post');
+      alert("Erro ao deletar post");
     }
   }
 
   async function handleToggleFeatured(id: number, currentFeatured: boolean) {
     try {
-      await updateFeaturedMutation.mutateAsync({ id, featured: !currentFeatured });
+      await updateFeaturedMutation.mutateAsync({
+        id,
+        featured: !currentFeatured,
+      });
     } catch (err) {
       console.error(err);
-      alert('Erro ao alterar status de destaque');
+      alert("Erro ao alterar status de destaque");
     }
   }
 
   return (
-    <Box sx={{ maxWidth: 1000, mx: 'auto', py: 6 }}>
+    <Box sx={{ maxWidth: 1000, mx: "auto", py: 6 }}>
       <Stack spacing={3}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
           <Typography level="h4">Gerenciar Posts</Typography>
           <Button
             variant="solid"
@@ -115,12 +127,12 @@ export default function AdminPostsClient({ posts }: { posts: Post[] }) {
               <tr key={post.id}>
                 <td>{post.name}</td>
                 <td>
-                  <Chip 
-                    color={post.content?.trim() ? 'success' : 'warning'}
+                  <Chip
+                    color={post.content?.trim() ? "success" : "warning"}
                     variant="soft"
                     size="sm"
                   >
-                    {post.content?.trim() ? 'Com conteúdo' : 'Sem conteúdo'}
+                    {post.content?.trim() ? "Com conteúdo" : "Sem conteúdo"}
                   </Chip>
                 </td>
                 <td>
@@ -129,20 +141,24 @@ export default function AdminPostsClient({ posts }: { posts: Post[] }) {
                     variant={post.featured ? "solid" : "outlined"}
                     color={post.featured ? "warning" : "neutral"}
                     onClick={() => handleToggleFeatured(post.id, post.featured)}
-                    aria-label={post.featured ? "Remover destaque" : "Destacar post"}
+                    aria-label={
+                      post.featured ? "Remover destaque" : "Destacar post"
+                    }
                     title={post.featured ? "Remover destaque" : "Destacar post"}
                   >
                     <i className="fas fa-star" />
                   </IconButton>
                 </td>
-                <td>{new Date(post.createdAt).toLocaleDateString('pt-BR')}</td>
-                <td>{new Date(post.updatedAt).toLocaleDateString('pt-BR')}</td>
+                <td>{new Date(post.createdAt).toLocaleDateString("pt-BR")}</td>
+                <td>{new Date(post.updatedAt).toLocaleDateString("pt-BR")}</td>
                 <td>
                   <Stack direction="row" spacing={1}>
                     <IconButton
                       size="sm"
                       variant="outlined"
-                      onClick={() => router.push(`/admin/posts/${post.id}/edit`)}
+                      onClick={() =>
+                        router.push(`/admin/posts/${post.id}/edit`)
+                      }
                       aria-label={`Editar ${post.name}`}
                     >
                       <i className="fas fa-pen" />
@@ -162,18 +178,18 @@ export default function AdminPostsClient({ posts }: { posts: Post[] }) {
             ))}
           </tbody>
         </Table>
-        
+
         {posts.length === 0 && (
-          <Box sx={{ textAlign: 'center', py: 6 }}>
-            <Typography level="body-lg" sx={{ color: 'var(--cv-textMuted80)' }}>
+          <Box sx={{ textAlign: "center", py: 6 }}>
+            <Typography level="body-lg" sx={{ color: "var(--cv-textMuted80)" }}>
               Nenhum post encontrado. Crie seu primeiro post!
             </Typography>
           </Box>
         )}
       </Stack>
 
-      <StandardModal 
-        open={createModalOpen} 
+      <StandardModal
+        open={createModalOpen}
         onClose={() => setCreateModalOpen(false)}
         title="Criar Novo Post"
         size="md"
@@ -181,27 +197,31 @@ export default function AdminPostsClient({ posts }: { posts: Post[] }) {
         <Stack spacing={3}>
           <Input
             value={newPostName}
-            onChange={(e) => setNewPostName((e.target as HTMLInputElement).value)}
+            onChange={(e) =>
+              setNewPostName((e.target as HTMLInputElement).value)
+            }
             placeholder="Título do post"
-            onKeyPress={(e) => e.key === 'Enter' && handleCreatePost()}
+            onKeyPress={(e) => e.key === "Enter" && handleCreatePost()}
             autoFocus
             size="lg"
           />
           <Input
             value={newPostImage}
-            onChange={(e) => setNewPostImage((e.target as HTMLInputElement).value)}
+            onChange={(e) =>
+              setNewPostImage((e.target as HTMLInputElement).value)
+            }
             placeholder="URL da imagem (opcional)"
             size="lg"
           />
           <Stack direction="row" spacing={2} justifyContent="flex-end">
-            <Button 
-              variant="outlined" 
+            <Button
+              variant="outlined"
               onClick={() => setCreateModalOpen(false)}
             >
               Cancelar
             </Button>
-            <Button 
-              variant="solid" 
+            <Button
+              variant="solid"
               color="primary"
               loading={creating}
               onClick={handleCreatePost}

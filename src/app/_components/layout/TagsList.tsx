@@ -11,15 +11,15 @@ type Tag = {
 
 export default function TagsList({ tags }: { tags: Tag[] }) {
   return (
-    <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap' }}>
+    <Stack direction="row" spacing={1} sx={{ flexWrap: "wrap" }}>
       {tags.map((t) => (
-        <Box key={t.label} sx={{ display: 'inline-block' }}>
+        <Box key={t.label} sx={{ display: "inline-block" }}>
           <Chip
             size="sm"
             variant="soft"
             sx={{
-              bgcolor: `var(--cv-${t.color === 'primary' ? 'brazilGreen' : t.color === 'success' ? 'successMain' : t.color === 'warning' ? 'brazilYellow' : t.color === 'danger' ? 'errorMain' : 'neutral100'})06`,
-              color: `var(--cv-${t.color === 'primary' ? 'brazilGreen' : t.color === 'success' ? 'successMain' : t.color === 'warning' ? 'textPrimary' : 'errorMain'})`,
+              bgcolor: `var(--cv-${t.color === "primary" ? "brazilGreen" : t.color === "success" ? "successMain" : t.color === "warning" ? "brazilYellow" : t.color === "danger" ? "errorMain" : "neutral100"})06`,
+              color: `var(--cv-${t.color === "primary" ? "brazilGreen" : t.color === "success" ? "successMain" : t.color === "warning" ? "textPrimary" : "errorMain"})`,
               fontWeight: 700,
               mr: 0.5,
               mb: 0.5,
