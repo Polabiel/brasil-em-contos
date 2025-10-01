@@ -6,7 +6,7 @@ import {
   publicProcedure,
   adminProcedure,
 } from "@/server/api/trpc";
-import { BookTagValues, type BookTag } from "@/lib/bookTags";
+import { BookTag } from "@prisma/client";
 
 export const postRouter = createTRPCRouter({
   hello: publicProcedure
@@ -23,6 +23,8 @@ export const postRouter = createTRPCRouter({
         name: z.string().min(1),
         description: z.string().optional(),
         image: z.string().optional(),
+        tag: z.string().optional(),
+        authorId: z.number().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -31,7 +33,11 @@ export const postRouter = createTRPCRouter({
           name: input.name,
           description: input.description ?? null,
           image: input.image ?? null,
-          createdBy: { connect: { id: ctx.session.user.id } },
+          ...(typeof input.authorId === "number" ? { authorId: input.authorId } : {}),
+          ...(typeof input.tag === "string"
+            ? { tag: input.tag as unknown as BookTag }
+            : {}),
+          createdById: ctx.session.user.id,
         },
         include: { createdBy: true, author: true },
       });
@@ -119,6 +125,8 @@ export const postRouter = createTRPCRouter({
         content: z.string().optional(),
         description: z.string().optional(),
         image: z.string().optional(),
+        tag: z.string().optional(),
+        authorId: z.number().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -127,6 +135,8 @@ export const postRouter = createTRPCRouter({
         content?: string;
         description?: string | null;
         image?: string | null;
+        tag?: BookTag | null;
+        authorId?: number | null;
       } = {};
 
       if (typeof input.name === "string") data.name = input.name;
@@ -134,6 +144,8 @@ export const postRouter = createTRPCRouter({
       if (typeof input.description === "string")
         data.description = input.description ?? null;
       if (typeof input.image === "string") data.image = input.image ?? null;
+  if (typeof input.tag === "string") data.tag = input.tag as unknown as BookTag;
+  if (typeof input.authorId === "number") data.authorId = input.authorId;
 
       return ctx.db.post.update({
         where: { id: input.id },
@@ -177,7 +189,9 @@ export const postRouter = createTRPCRouter({
   }),
 
   bookTags: publicProcedure.query(() => {
-    return BookTagValues;
+    // BookTag is emitted by Prisma client as an object mapping keys to values
+    // Object.values(BookTag) will return the enum string values
+    return Object.values(BookTag) as string[];
   }),
 
   getSecretMessage: protectedProcedure.query(() => {

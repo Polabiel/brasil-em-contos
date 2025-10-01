@@ -22,6 +22,7 @@ type Post = {
   createdAt: Date;
   updatedAt: Date;
   featured: boolean;
+  tag?: string | null;
 };
 
 export default function AdminPostsClient({ posts }: { posts: Post[] }) {
@@ -115,6 +116,7 @@ export default function AdminPostsClient({ posts }: { posts: Post[] }) {
           <thead>
             <tr>
               <th>Título</th>
+              <th>Tag</th>
               <th>Status</th>
               <th>Destaque</th>
               <th>Criado em</th>
@@ -126,6 +128,20 @@ export default function AdminPostsClient({ posts }: { posts: Post[] }) {
             {posts.map((post) => (
               <tr key={post.id}>
                 <td>{post.name}</td>
+                <td>
+                  {post.tag ? (
+                    <Chip size="sm" variant="soft" sx={{ fontWeight: 700 }}>
+                      {String(post.tag)
+                        .replace(/_/g, " ")
+                        .toLowerCase()
+                        .replace(/\b\w/g, (l: string) => l.toUpperCase())}
+                    </Chip>
+                  ) : (
+                    <Chip size="sm" variant="outlined">
+                      Sem tag
+                    </Chip>
+                  )}
+                </td>
                 <td>
                   <Chip
                     color={post.content?.trim() ? "success" : "warning"}

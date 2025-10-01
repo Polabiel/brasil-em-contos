@@ -75,6 +75,8 @@ export default function EditPostClient({
           content,
           description,
           image: image ?? undefined,
+          tag: tag ?? undefined,
+          authorId: authorId ?? undefined,
         });
       }
     } catch (err) {
@@ -149,6 +151,8 @@ export default function EditPostClient({
           body: JSON.stringify({
             name,
             content,
+          tag: tag ?? undefined,
+          authorId: authorId ?? undefined,
             description,
             image,
             imageBlob: imageBlobBase64 ?? undefined,

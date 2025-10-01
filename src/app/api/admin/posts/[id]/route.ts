@@ -3,8 +3,7 @@ import { db } from "@/server/db";
 import requireAdminOrRedirect from "@/server/auth/requireAdmin";
 import { z } from "zod";
 import type { Prisma } from "@prisma/client";
-import { BookTagValues } from "@/lib/bookTags";
-import type { BookTag } from "@/lib/bookTags";
+import { BookTag } from "@prisma/client";
 
 export async function PUT(
   req: NextRequest,
@@ -129,9 +128,9 @@ export async function PUT(
     imageMime: imageMime ?? undefined,
   };
 
-  // attach tag only when validated
-  if (tagValue != null && BookTagValues.includes(tagValue as BookTag)) {
-    updatePayload.tag = tagValue as BookTag;
+  // attach tag only when validated against Prisma enum
+  if (tagValue != null && Object.values(BookTag).includes(tagValue as unknown as BookTag)) {
+    updatePayload.tag = tagValue as unknown as BookTag;
   }
 
   if (authorId != null && !Number.isNaN(authorId)) {

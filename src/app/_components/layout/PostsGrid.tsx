@@ -14,7 +14,6 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
 import { api } from "@/trpc/react";
-import { BookTagValues } from "@/lib/bookTags";
 import { useSearchParams, useRouter } from "next/navigation";
 
 export default function PostsGrid() {
@@ -48,6 +47,9 @@ export default function PostsGrid() {
     refetchOnWindowFocus: false,
   });
 
+  // Fetch available tag values from server (Prisma enum via tRPC)
+  const bookTagsQuery = api.post.bookTags.useQuery();
+
   const posts = allPosts ?? [];
 
   // Combine featured posts first (sorted alphabetically by name), then the rest
@@ -63,8 +65,8 @@ export default function PostsGrid() {
   // Final ordered list: featured first, then non-featured (both trimmed to requested take)
   const orderedPosts = [...featured, ...nonFeatured].slice(0, 12);
 
-  const categories = BookTagValues.map((tag) =>
-    tag
+  const categories = (bookTagsQuery.data ?? []).map((tag) =>
+    String(tag)
       .replace(/_/g, " ")
       .toLowerCase()
       .replace(/\b\w/g, (l) => l.toUpperCase()),

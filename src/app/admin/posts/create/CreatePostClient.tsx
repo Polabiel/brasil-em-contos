@@ -53,7 +53,13 @@ export default function CreatePostClient() {
         res = await fetch('/api/admin/posts', { method: 'POST', body: fd });
       } else {
         // Use tRPC mutation for JSON-only create (limited fields)
-        await createMutation.mutateAsync({ name, description: description ?? undefined, image: image ?? undefined });
+        await createMutation.mutateAsync({
+          name,
+          description: description ?? undefined,
+          image: image ?? undefined,
+          tag: tag ?? undefined,
+          authorId: authorId ?? undefined,
+        });
         res = new Response(null, { status: 200 });
       }
       if (!res.ok) throw new Error('failed');

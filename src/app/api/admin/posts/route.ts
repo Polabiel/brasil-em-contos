@@ -4,8 +4,7 @@ import requireAdminOrRedirect from "@/server/auth/requireAdmin";
 import { auth } from "@/server/auth";
 import { z } from "zod";
 import type { Prisma } from "@prisma/client";
-import { BookTagValues } from "@/lib/bookTags";
-import type { BookTag } from "@/lib/bookTags";
+import { BookTag } from "@prisma/client";
 
 export async function POST(req: NextRequest) {
   const res = await requireAdminOrRedirect();
@@ -131,10 +130,9 @@ export async function POST(req: NextRequest) {
     (createData as Record<string, unknown>).authorId = Number(authorId);
   }
 
-  if (tagValue != null && BookTagValues.includes(tagValue as BookTag)) {
+  if (tagValue != null && Object.values(BookTag).includes(tagValue as unknown as BookTag)) {
     // Prisma.PostUncheckedCreateInput accepts the enum literal type for tag
-    (createData as unknown as Record<string, unknown>).tag =
-      tagValue as BookTag;
+    (createData as unknown as Record<string, unknown>).tag = tagValue as unknown as BookTag;
   }
 
   const created = (await db.post.create({ data: createData })) as {
