@@ -72,8 +72,104 @@ export default function Sidebar() {
     `O Brasil em Contos nasceu como um projeto de faculdade e continua ativo até hoje, ${new Date().getFullYear() - 2018} anos depois!`,
   ];
 
+  const bloggers = [
+    {
+      id: "blog1",
+      name: "Bruna Stefany",
+      img: "/icon.png",
+      desc: "A garota mais linda do mundo.",
+    },
+    {
+      id: "blog2",
+      name: "Gabriel Oliveira",
+      img: "/icon.png",
+      desc: "o dev. 💻",
+    },
+  ];
+
   return (
     <aside className="w-full space-y-4">
+      {/* Blogueiras */}
+      <Card variant="outlined" sx={{ mb: 4 }}>
+        <CardContent>
+          <Typography
+            level="h4"
+            sx={{
+              mb: 2,
+              fontWeight: 600,
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+            }}
+          >
+            <i
+              className="fas fa-users"
+              style={{ color: "var(--cv-brazilGreen)" }}
+            />
+            Blogueiras
+          </Typography>
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
+              gap: 2,
+              alignItems: "start",
+            }}
+          >
+            {bloggers.map((b) => (
+              <Stack
+                key={b.id}
+                spacing={1}
+                alignItems="center"
+                sx={{ textAlign: "center", p: 1 }}
+              >
+                <Box
+                  sx={{
+                    borderRadius: "50%",
+                    overflow: "hidden",
+                    boxShadow: "0 6px 18px rgba(0,0,0,0.08)",
+                    width: 80,
+                    height: 80,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    position: "relative",
+                  }}
+                >
+                  <Box
+                    component="img"
+                    src={b.img}
+                    alt={b.name}
+                    sx={{
+                      objectFit: "cover",
+                      width: "100%",
+                      height: "100%",
+                    }}
+                  />
+                </Box>
+
+                <Typography
+                  level="body-md"
+                  sx={{ fontWeight: 700, fontSize: "0.9rem" }}
+                >
+                  {b.name}
+                </Typography>
+
+                <Typography
+                  level="body-sm"
+                  sx={{
+                    color: "var(--cv-textMuted70)",
+                    fontSize: "0.8rem",
+                  }}
+                >
+                  {b.desc}
+                </Typography>
+              </Stack>
+            ))}
+          </Box>
+        </CardContent>
+      </Card>
+
       {/* Book Tags (compact) - moved up to replace Categories */}
       <Card variant="outlined" sx={{ mb: 4 }}>
         <CardContent>

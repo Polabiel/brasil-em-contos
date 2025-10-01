@@ -5,15 +5,9 @@ import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 import Button from "@mui/joy/Button";
 import Container from "@mui/joy/Container";
-import Card from "@mui/joy/Card";
-import CardContent from "@mui/joy/CardContent";
-import Chip from "@mui/joy/Chip";
 import { Playfair_Display, Inter } from "next/font/google";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
-// api import removed - not used in this component
-// Image import removed - not used in this component
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -29,20 +23,6 @@ const inter = Inter({
 
 export default function HeroSection() {
   const { data: session } = useSession();
-  const bloggers = [
-    {
-      id: "blog1",
-      name: "Bruna Stefany",
-      img: "/icon.png",
-      desc: "A garota mais linda do mundo.",
-    },
-    {
-      id: "blog2",
-      name: "Gabriel Oliveira",
-      img: "/icon.png",
-      desc: "o dev. 💻",
-    },
-  ];
 
   return (
     <Box
@@ -232,105 +212,6 @@ export default function HeroSection() {
               )}
             </Stack>
           </Stack>
-
-          <Box
-            sx={{
-              flex: { xs: 1, md: "0 0 40%" },
-              display: "flex",
-              flexDirection: "column",
-              gap: { xs: 3, md: 3, lg: 4 },
-              maxWidth: { xs: "100%", md: "520px" },
-              mx: 0,
-            }}
-          >
-            <Card
-              sx={{
-                background: "rgba(255,255,255,0.95)",
-                backdropFilter: "blur(8px)",
-                borderRadius: 16,
-                border: "1px solid rgba(255,255,255,0.3)",
-                boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
-              }}
-            >
-              <CardContent sx={{ p: 3 }}>
-                <Stack spacing={2}>
-                  <Chip
-                    size="sm"
-                    variant="solid"
-                    sx={{
-                      alignSelf: "flex-start",
-                      bgcolor: "var(--cv-brazilGreen)",
-                      color: "white",
-                      fontWeight: 700,
-                      fontSize: "0.75rem",
-                    }}
-                  >
-                    Blogueiras
-                  </Chip>
-
-                  <Box
-                    sx={{
-                      display: "grid",
-                      gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
-                      gap: 2,
-                      alignItems: "start",
-                    }}
-                  >
-                    {bloggers.map((b) => (
-                      <Stack
-                        key={b.id}
-                        spacing={1}
-                        alignItems="center"
-                        sx={{ textAlign: "center", p: 1 }}
-                      >
-                        <Box
-                          sx={{
-                            borderRadius: "50%",
-                            overflow: "hidden",
-                            boxShadow: "0 6px 18px rgba(0,0,0,0.08)",
-                            width: 100,
-                            height: 100,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                          }}
-                        >
-                          <Image
-                            src={b.img}
-                            alt={b.name}
-                            width={100}
-                            height={100}
-                            style={{
-                              objectFit: "cover",
-                              width: "100%",
-                              height: "100%",
-                            }}
-                          />
-                        </Box>
-
-                        <Typography
-                          level="body-md"
-                          sx={{ fontWeight: 700, fontSize: "0.95rem" }}
-                        >
-                          {b.name}
-                        </Typography>
-
-                        <Typography
-                          level="body-sm"
-                          sx={{
-                            color: "var(--cv-textMuted70)",
-                            fontSize: "0.85rem",
-                          }}
-                        >
-                          {b.desc}
-                        </Typography>
-                      </Stack>
-                    ))}
-                  </Box>
-                </Stack>
-              </CardContent>
-            </Card>
-          </Box>
         </Stack>
       </Container>
     </Box>

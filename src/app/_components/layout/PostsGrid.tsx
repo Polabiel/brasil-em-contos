@@ -269,13 +269,15 @@ export default function PostsGrid() {
                     variant="outlined"
                     sx={{
                       position: "relative",
-                      height: isLarge ? 400 : 320,
+                      height: isLarge ? 480 : 420,
                       transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
                       cursor: "pointer",
                       overflow: "hidden",
                       background: "var(--cv-backgroundPaper)",
                       border: "1px solid var(--cv-neutral200)",
                       borderRadius: 12,
+                      display: "flex",
+                      flexDirection: "column",
                       "&:hover": {
                         transform: "translateY(-8px)",
                         boxShadow: "0 20px 40px rgba(0,0,0,0.12)",
@@ -322,10 +324,11 @@ export default function PostsGrid() {
                     <Box
                       sx={{
                         width: "100%",
-                        height: isLarge ? 200 : 160,
+                        height: isLarge ? 280 : 240,
                         position: "relative",
                         overflow: "hidden",
                         background: `linear-gradient(135deg, var(--cv-brazilGreen)20, var(--cv-brazilYellow)20)`,
+                        flexShrink: 0,
                       }}
                     >
                       {post.image ? (

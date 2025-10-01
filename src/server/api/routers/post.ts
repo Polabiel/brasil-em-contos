@@ -23,8 +23,8 @@ export const postRouter = createTRPCRouter({
         name: z.string().min(1),
         description: z.string().optional(),
         image: z.string().optional(),
-        tag: z.string().optional(),
-        authorId: z.number().optional(),
+        tag: z.string().nullable().optional(),
+        authorId: z.number().nullable().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -33,10 +33,8 @@ export const postRouter = createTRPCRouter({
           name: input.name,
           description: input.description ?? null,
           image: input.image ?? null,
-          ...(typeof input.authorId === "number" ? { authorId: input.authorId } : {}),
-          ...(typeof input.tag === "string"
-            ? { tag: input.tag as unknown as BookTag }
-            : {}),
+          ...(input.authorId ? { authorId: input.authorId } : {}),
+          ...(input.tag ? { tag: input.tag as BookTag } : {}),
           createdById: ctx.session.user.id,
         },
         include: { createdBy: true, author: true },
@@ -125,8 +123,8 @@ export const postRouter = createTRPCRouter({
         content: z.string().optional(),
         description: z.string().optional(),
         image: z.string().optional(),
-        tag: z.string().optional(),
-        authorId: z.number().optional(),
+        tag: z.string().nullable().optional(),
+        authorId: z.number().nullable().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -144,8 +142,12 @@ export const postRouter = createTRPCRouter({
       if (typeof input.description === "string")
         data.description = input.description ?? null;
       if (typeof input.image === "string") data.image = input.image ?? null;
-  if (typeof input.tag === "string") data.tag = input.tag as unknown as BookTag;
-  if (typeof input.authorId === "number") data.authorId = input.authorId;
+      if (input.tag !== undefined) {
+        data.tag = input.tag ? (input.tag as BookTag) : null;
+      }
+      if (input.authorId !== undefined) {
+        data.authorId = input.authorId;
+      }
 
       return ctx.db.post.update({
         where: { id: input.id },
