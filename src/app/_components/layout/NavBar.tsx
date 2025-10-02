@@ -155,11 +155,22 @@ export default function NavBar() {
           top: 0,
           zIndex: 60,
           bgcolor: "white",
-          boxShadow: showNav ? "0 2px 8px rgba(0,0,0,0.08)" : "none",
-          borderBottom: "1px solid var(--cv-neutral200)",
+          boxShadow: showNav 
+            ? "0 4px 16px rgba(34,139,34,0.08)" 
+            : "none",
+          borderBottom: showNav 
+            ? "2px solid transparent"
+            : "1px solid var(--cv-neutral200)",
+          borderImage: showNav 
+            ? "linear-gradient(90deg, var(--cv-brazilGreen), var(--cv-brazilYellow), var(--cv-brazilBlue)) 1"
+            : "none",
           transform: showNav ? "translateY(0)" : "translateY(-110%)",
           transition:
-            "transform 280ms cubic-bezier(.2,.8,.2,1), box-shadow 200ms",
+            "all 350ms cubic-bezier(.2,.8,.2,1)",
+          backdropFilter: "blur(10px)",
+          background: showNav 
+            ? "linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.95) 100%)"
+            : "white",
         }}
       >
         <Stack
@@ -217,11 +228,32 @@ export default function NavBar() {
                   level="body-md"
                   sx={{
                     color: "var(--cv-textMuted80)",
-                    fontWeight: 500,
+                    fontWeight: 600,
                     fontSize: "0.95rem",
-                    px: 1,
+                    px: 2,
+                    py: 1,
+                    borderRadius: 2,
+                    position: "relative",
+                    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                    "&::after": {
+                      content: '""',
+                      position: "absolute",
+                      bottom: 0,
+                      left: "50%",
+                      transform: "translateX(-50%) scaleX(0)",
+                      width: "80%",
+                      height: "3px",
+                      bgcolor: "var(--cv-brazilGreen)",
+                      borderRadius: "2px",
+                      transition: "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                    },
                     "&:hover": {
                       color: "var(--cv-brazilGreen)",
+                      bgcolor: "var(--cv-brazilGreen)08",
+                      transform: "translateY(-2px)",
+                      "&::after": {
+                        transform: "translateX(-50%) scaleX(1)",
+                      },
                     },
                   }}
                 >
@@ -234,32 +266,36 @@ export default function NavBar() {
                   level="body-md"
                   sx={{
                     color: "var(--cv-textMuted80)",
-                    fontWeight: 500,
+                    fontWeight: 600,
                     fontSize: "0.95rem",
-                    px: 1,
+                    px: 2,
+                    py: 1,
+                    borderRadius: 2,
+                    position: "relative",
+                    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                    "&::after": {
+                      content: '""',
+                      position: "absolute",
+                      bottom: 0,
+                      left: "50%",
+                      transform: "translateX(-50%) scaleX(0)",
+                      width: "80%",
+                      height: "3px",
+                      bgcolor: "var(--cv-brazilYellow)",
+                      borderRadius: "2px",
+                      transition: "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                    },
                     "&:hover": {
-                      color: "var(--cv-brazilGreen)",
+                      color: "var(--cv-brazilYellow)",
+                      bgcolor: "var(--cv-brazilYellow)15",
+                      transform: "translateY(-2px)",
+                      "&::after": {
+                        transform: "translateX(-50%) scaleX(1)",
+                      },
                     },
                   }}
                 >
                   Autores
-                </Typography>
-              </Link>
-
-              <Link href="/categorias" style={{ textDecoration: "none" }}>
-                <Typography
-                  level="body-md"
-                  sx={{
-                    color: "var(--cv-textMuted80)",
-                    fontWeight: 500,
-                    fontSize: "0.95rem",
-                    px: 1,
-                    "&:hover": {
-                      color: "var(--cv-brazilGreen)",
-                    },
-                  }}
-                >
-                  Categorias
                 </Typography>
               </Link>
 
@@ -268,11 +304,32 @@ export default function NavBar() {
                   level="body-md"
                   sx={{
                     color: "var(--cv-textMuted80)",
-                    fontWeight: 500,
+                    fontWeight: 600,
                     fontSize: "0.95rem",
-                    px: 1,
+                    px: 2,
+                    py: 1,
+                    borderRadius: 2,
+                    position: "relative",
+                    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                    "&::after": {
+                      content: '""',
+                      position: "absolute",
+                      bottom: 0,
+                      left: "50%",
+                      transform: "translateX(-50%) scaleX(0)",
+                      width: "80%",
+                      height: "3px",
+                      bgcolor: "var(--cv-brazilBlue)",
+                      borderRadius: "2px",
+                      transition: "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                    },
                     "&:hover": {
-                      color: "var(--cv-brazilGreen)",
+                      color: "var(--cv-brazilBlue)",
+                      bgcolor: "var(--cv-brazilBlue)10",
+                      transform: "translateY(-2px)",
+                      "&::after": {
+                        transform: "translateX(-50%) scaleX(1)",
+                      },
                     },
                   }}
                 >
@@ -307,15 +364,27 @@ export default function NavBar() {
                   className={playfair.className}
                   level="h4"
                   sx={{
-                    fontWeight: 600,
-                    color: "var(--cv-textPrimary)",
+                    fontWeight: 700,
+                    background: "linear-gradient(135deg, var(--cv-brazilGreen) 0%, var(--cv-brazilYellow) 100%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
                     fontSize: { xs: "0.95rem", sm: "1.4rem" },
                     lineHeight: 1,
                     display: { xs: "none", sm: "block" },
+                    transition: "all 0.3s ease",
+                    "&:hover": {
+                      transform: "scale(1.02)",
+                    },
                   }}
                 >
                   Brasil em{" "}
-                  <Box component="span" sx={{ color: "var(--cv-brazilGreen)" }}>
+                  <Box component="span" sx={{ 
+                    background: "linear-gradient(135deg, var(--cv-brazilBlue) 0%, var(--cv-brazilGreen) 100%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  }}>
                     Contos
                   </Box>
                 </Typography>
@@ -358,7 +427,27 @@ export default function NavBar() {
                       size="sm"
                       sx={{
                         bgcolor: "var(--cv-brazilGreen)",
-                        "&:hover": { bgcolor: "#1e5f28" },
+                        position: "relative",
+                        overflow: "hidden",
+                        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                        "&::before": {
+                          content: '""',
+                          position: "absolute",
+                          top: 0,
+                          left: "-100%",
+                          width: "100%",
+                          height: "100%",
+                          background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)",
+                          transition: "left 0.5s ease",
+                        },
+                        "&:hover": { 
+                          bgcolor: "#1e5f28",
+                          transform: "translateY(-2px) scale(1.05)",
+                          boxShadow: "0 6px 20px rgba(34,139,34,0.4)",
+                          "&::before": {
+                            left: "100%",
+                          },
+                        },
                       }}
                     >
                       <i
@@ -369,7 +458,18 @@ export default function NavBar() {
                     </Button>
                   </LinkNext>
                   <LinkNext href="/admin/posts">
-                    <Button variant="outlined" color="warning" size="sm">
+                    <Button 
+                      variant="outlined" 
+                      color="warning" 
+                      size="sm"
+                      sx={{
+                        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                        "&:hover": {
+                          transform: "translateY(-2px) scale(1.05)",
+                          boxShadow: "0 6px 20px rgba(245,158,11,0.3)",
+                        },
+                      }}
+                    >
                       <i
                         className="fas fa-cog"
                         style={{ marginRight: 6, fontSize: "0.8rem" }}
@@ -502,11 +602,6 @@ export default function NavBar() {
               {[
                 { label: "Contos", href: "/contos", icon: "fas fa-book" },
                 { label: "Autores", href: "/autores", icon: "fas fa-user-pen" },
-                {
-                  label: "Categorias",
-                  href: "/categorias",
-                  icon: "fas fa-tags",
-                },
                 { label: "Sobre", href: "/sobre", icon: "fas fa-info-circle" },
               ].map((link) => (
                 <LinkNext key={link.label} href={link.href} role="menuitem">

@@ -20,40 +20,37 @@ enum UserRole {
 }
 
 enum BookTag {
-    // Movimentos Literários / Estilos de Época
-    TROVADORISMO
-    CLASSICISMO
-    BARROCO
-    ARCADISMO
-    ROMANTISMO
-    REALISMO // Já existe
-    NATURALISMO
-    PARNASIANISMO
-    SIMBOLISMO
-    PRE_MODERNISMO
-    MODERNISMO // Já existe
-    POS_MODERNISMO // Alternativa ao CONTEMPORANEO
-    CONTEMPORANEO // Já existe
+    // Gêneros Narrativos
+    ROMANCE
+    CONTO
+    // Gênero Lírico
+    POESIA
+    // Gênero Dramático
+    DRAMA
 
-    // Gêneros e Subgêneros
-    FICCAO_CIENTIFICA
-    FANTASIA
+    // Gêneros e Temas Específicos
+    FANTASIA // 4
+    MISTERIO
+    POLICIAL
+    FICCAO
+    NAO_FICCAO
+    BIOGRAFIA
+    AUTOAJUDA
+    CLASSICO
+    TERROR
+    SUSPENSE // 13
+
+    // Outros já existentes (mantidos para compatibilidade)
+    FICCAO_CIENTIFICA // 14
     HORROR
     THRILLER
-    POLICIAL
-    DRAMA
     COMEDIA
-    POESIA
     CRONICA
     LITERATURA_INFANTOJUVENIL
-
-    // Temas e Estilos Específicos
-    REGIONAL // Já existe
+    REGIONAL
     LITERATURA_FEMININA
-    BIOGRAFIA
-    MEMORIAS
-    AUTO_AJUDA
-    OUTROS // Já existe
+    MEMORIAS // 22
+    OUTROS
 }
 
 model Post {

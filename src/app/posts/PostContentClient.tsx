@@ -172,17 +172,15 @@ export default function PostContentClient({ content }: { content: string }) {
             background: "#e3f2fd !important",
           },
 
-          // Images - Fixed size and better presentation
+          // Images - can be positioned outside container with left/right alignment
           "& img": {
-            maxWidth: "600px !important",
-            width: "100%",
+            maxWidth: "100% !important",
+            width: "auto",
             height: "auto",
             borderRadius: "12px",
             marginBottom: "1.5rem",
             marginTop: "1rem",
             display: "block",
-            marginLeft: "auto",
-            marginRight: "auto",
             boxShadow: "0 4px 16px rgba(0,0,0,0.12)",
             transition: "transform 0.2s ease, box-shadow 0.2s ease",
             cursor: "pointer",
@@ -191,6 +189,33 @@ export default function PostContentClient({ content }: { content: string }) {
               transform: "scale(1.02)",
               boxShadow: "0 8px 24px rgba(0,0,0,0.18)",
             },
+          },
+
+          // Support for image alignment via title attribute
+          // e.g., ![alt](url "left") or ![alt](url "right") or ![alt](url "center")
+          '& img[title="left"]': {
+            float: "left",
+            marginRight: "1.5rem",
+            marginLeft: 0,
+            maxWidth: "400px !important",
+          },
+
+          '& img[title="right"]': {
+            float: "right",
+            marginLeft: "1.5rem",
+            marginRight: 0,
+            maxWidth: "400px !important",
+          },
+
+          '& img[title="center"], & img[title=""], & img:not([title])': {
+            marginLeft: "auto",
+            marginRight: "auto",
+            maxWidth: "700px !important",
+          },
+
+          '& img[title="full"]': {
+            maxWidth: "100% !important",
+            width: "100%",
           },
 
           // Horizontal rules

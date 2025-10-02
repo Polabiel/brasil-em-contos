@@ -88,6 +88,7 @@ export default async function PostPage({
       description: true,
       image: true,
       imageBlob: true,
+      tag: true,
       createdAt: true,
       createdBy: { select: { id: true, name: true, image: true } },
       author: {
@@ -119,20 +120,60 @@ export default async function PostPage({
       ? `/api/posts/${post.id}/image`
       : undefined;
 
+  const authorImageSrc = post.author?.image
+    ? String(post.author.image)
+    : post.author?.imageBlob
+      ? `/api/authors/${post.author.id}/image`
+      : undefined;
+
   return (
-    <Box sx={{ maxWidth: 1000, mx: "auto", py: 6 }}>
+    <Box
+      sx={{
+        position: "relative",
+        minHeight: "100vh",
+        "&::before": {
+          content: '""',
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background:
+            'url("data:image/svg+xml,%3Csvg width=\'80\' height=\'80\' viewBox=\'0 0 80 80\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%23228b22\' fill-opacity=\'0.03\'%3E%3Cpath d=\'M20 20 L25 15 L30 20 L25 25 Z M60 20 L65 15 L70 20 L65 25 Z M40 40 L45 35 L50 40 L45 45 Z\'/%3E%3Ccircle cx=\'15\' cy=\'40\' r=\'3\'/%3E%3Ccircle cx=\'65\' cy=\'60\' r=\'3\'/%3E%3Cpath d=\'M50 10 Q52 8, 54 10 T58 10\' stroke=\'%23ffd700\' stroke-opacity=\'0.04\' fill=\'none\'/%3E%3C/g%3E%3C/svg%3E")',
+          zIndex: 0,
+          pointerEvents: "none",
+        },
+      }}
+    >
+      <Box sx={{ maxWidth: 1400, mx: "auto", py: 6, px: { xs: 2, md: 4 }, position: "relative", zIndex: 1 }}>
       <Box
         sx={{
-          display: "grid",
-          gridTemplateColumns: "1fr 220px",
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
           gap: 4,
-          alignItems: "start",
+          alignItems: "flex-start",
         }}
       >
-        <Box>
+        {/* Left sidebar with book image and author info */}
+        <Box
+          sx={{
+            width: { xs: "100%", md: 280 },
+            flexShrink: 0,
+            position: { xs: "relative", md: "sticky" },
+            top: { xs: 0, md: 24 },
+          }}
+        >
           {imageSrc && (
             <Box
-              sx={{ width: "100%", height: 360, mb: 3, position: "relative" }}
+              sx={{
+                width: "100%",
+                aspectRatio: "3/4",
+                position: "relative",
+                mb: 3,
+                borderRadius: 2,
+                overflow: "hidden",
+                boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
+              }}
             >
               <Image
                 src={imageSrc}
@@ -143,6 +184,140 @@ export default async function PostPage({
               />
             </Box>
           )}
+
+          {/* Author of the book info */}
+          {post.author && (
+            <Box>
+              <Typography
+                level="body-sm"
+                sx={{ mb: 1, fontWeight: 700, color: "var(--cv-textMuted70)" }}
+              >
+                Autor do livro
+              </Typography>
+
+              {authorImageSrc && (
+                <Box
+                  sx={{
+                    width: "100%",
+                    aspectRatio: "1/1",
+                    position: "relative",
+                    mb: 2,
+                    borderRadius: "50%",
+                    overflow: "hidden",
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                  }}
+                >
+                  <Image
+                    src={authorImageSrc}
+                    alt={String(post.author.name ?? "")}
+                    fill
+                    style={{ objectFit: "cover" }}
+                    unoptimized
+                  />
+                </Box>
+              )}
+
+              <Typography level="title-md" sx={{ fontWeight: 700, mb: 0.5 }}>
+                {String(post.author.name ?? "")}
+              </Typography>
+
+              {post.author.period && (
+                <Typography
+                  level="body-sm"
+                  sx={{ color: "var(--cv-textMuted80)", mb: 1 }}
+                >
+                  {post.author.period}
+                </Typography>
+              )}
+
+              {/* Genre/Tag */}
+              {post.tag && (
+                <Box sx={{ mb: 2 }}>
+                  <Typography
+                    level="body-xs"
+                    sx={{
+                      color: "var(--cv-textMuted70)",
+                      fontWeight: 700,
+                      mb: 0.5,
+                    }}
+                  >
+                    Gênero
+                  </Typography>
+                  <Typography level="body-sm">
+                    {String(post.tag)
+                      .replaceAll("_", " ")
+                      .toLowerCase()
+                      .replace(/(^\w|\s\w)/g, (m: string) => m.toUpperCase())}
+                  </Typography>
+                </Box>
+              )}
+
+              {/* Social links placeholder */}
+              <Box sx={{ display: "flex", gap: 1, mt: 2 }}>
+                <Box
+                  sx={{
+                    width: 32,
+                    height: 32,
+                    borderRadius: "50%",
+                    bgcolor: "var(--cv-neutral100)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    cursor: "pointer",
+                    transition: "all 0.2s",
+                    "&:hover": {
+                      bgcolor: "var(--cv-brazilGreen)",
+                      color: "white",
+                    },
+                  }}
+                >
+                  <i className="fab fa-twitter" style={{ fontSize: "0.9rem" }} />
+                </Box>
+                <Box
+                  sx={{
+                    width: 32,
+                    height: 32,
+                    borderRadius: "50%",
+                    bgcolor: "var(--cv-neutral100)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    cursor: "pointer",
+                    transition: "all 0.2s",
+                    "&:hover": {
+                      bgcolor: "var(--cv-brazilGreen)",
+                      color: "white",
+                    },
+                  }}
+                >
+                  <i className="fab fa-facebook" style={{ fontSize: "0.9rem" }} />
+                </Box>
+                <Box
+                  sx={{
+                    width: 32,
+                    height: 32,
+                    borderRadius: "50%",
+                    bgcolor: "var(--cv-neutral100)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    cursor: "pointer",
+                    transition: "all 0.2s",
+                    "&:hover": {
+                      bgcolor: "var(--cv-brazilGreen)",
+                      color: "white",
+                    },
+                  }}
+                >
+                  <i className="fab fa-instagram" style={{ fontSize: "0.9rem" }} />
+                </Box>
+              </Box>
+            </Box>
+          )}
+        </Box>
+
+        {/* Main content area */}
+        <Box sx={{ flex: 1, minWidth: 0 }}>
           <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 1 }}>
             <Typography level="h3" sx={{ flexGrow: 1 }}>
               {post.name}
@@ -155,135 +330,26 @@ export default async function PostPage({
           >
             {date}
           </Typography>
-          <PostContentClient content={String(post.content ?? "")} />
+
+          {/* Post creator info */}
+          <Box sx={{ mb: 4, pb: 3, borderBottom: "1px solid var(--cv-neutral200)" }}>
+            <Typography level="body-sm" sx={{ mb: 1, fontWeight: 700 }}>
+              Publicado por
+            </Typography>
+            {(() => {
+              const creator = post.createdBy as
+                | { id: string; name?: string | null; image?: string | null }
+                | null;
+              return <AuthorProfile author={creator} />;
+            })()}
+          </Box>
+
+          {/* Content with justified text */}
+          <Box sx={{ "& .wmde-markdown p": { textAlign: "justify" } }}>
+            <PostContentClient content={String(post.content ?? "")} />
+          </Box>
         </Box>
-
-        <Box sx={{ borderLeft: "1px solid rgba(0,0,0,0.04)", pl: 3 }}>
-          <Typography level="body-md" sx={{ mb: 2, fontWeight: 700 }}>
-            Autor do post
-          </Typography>
-          {(() => {
-            const creator = post.createdBy as
-              | { id: string; name?: string | null; image?: string | null }
-              | null;
-            return <AuthorProfile author={creator} />;
-          })()}
-
-          {/* Author of the book (if different) */}
-          {post.author && (
-            <Box sx={{ mt: 4 }}>
-              <Typography level="body-md" sx={{ mb: 2, fontWeight: 700 }}>
-                Autor do livro
-              </Typography>
-
-              <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start" }}>
-                {post.author.image || post.author.imageBlob ? (
-                  <Box
-                    sx={{
-                      width: 72,
-                      height: 72,
-                      position: "relative",
-                      borderRadius: "50%",
-                      overflow: "hidden",
-                      flex: "0 0 auto",
-                    }}
-                  >
-                    <Image
-                      src={
-                        post.author.image ??
-                        `/api/authors/${post.author.id}/image`
-                      }
-                      alt={String(post.author.name ?? "")}
-                      fill
-                      style={{ objectFit: "cover" }}
-                      unoptimized
-                    />
-                  </Box>
-                ) : (
-                  <Box
-                    sx={{
-                      width: 72,
-                      height: 72,
-                      borderRadius: "50%",
-                      background: "var(--cv-neutral100)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      flex: "0 0 auto",
-                    }}
-                  >
-                    <span style={{ color: "var(--cv-neutral500)" }}>
-                      {String(post.author.name ?? "")
-                        .slice(0, 1)
-                        .toUpperCase()}
-                    </span>
-                  </Box>
-                )}
-
-                <Box>
-                  <Typography level="body-md" sx={{ fontWeight: 600 }}>
-                    {String(post.author.name ?? "")}
-                  </Typography>
-
-                  {post.author.period && (
-                    <Typography
-                      level="body-sm"
-                      sx={{ color: "var(--cv-textMuted80)" }}
-                    >
-                      {post.author.period}
-                    </Typography>
-                  )}
-
-                  {post.author.bio && (
-                    <Typography
-                      level="body-sm"
-                      sx={{ mt: 1, color: "var(--cv-textMuted80)" }}
-                    >
-                      {String(post.author.bio).slice(0, 240)}
-                      {String(post.author.bio).length > 240 ? "…" : ""}
-                    </Typography>
-                  )}
-
-                  {post.author.books &&
-                    post.author.books.length > 0 &&
-                    (() => {
-                      const books = post.author.books as {
-                        id: number;
-                        title: string;
-                        year?: number;
-                      }[];
-                      return (
-                        <Box sx={{ mt: 2 }}>
-                          <Typography
-                            level="body-xs"
-                            sx={{
-                              color: "var(--cv-textMuted70)",
-                              fontWeight: 700,
-                              mb: 1,
-                            }}
-                          >
-                            Obras
-                          </Typography>
-                          <Box component="ul" sx={{ pl: 2, m: 0 }}>
-                            {books.map((b) => (
-                              <Box
-                                component="li"
-                                key={b.id}
-                                sx={{ color: "var(--cv-textPrimary)" }}
-                              >
-                                {b.title}
-                                {b.year ? ` (${b.year})` : ""}
-                              </Box>
-                            ))}
-                          </Box>
-                        </Box>
-                      );
-                    })()}
-                </Box>
-              </Box>
-            </Box>
-          )}
-        </Box>
+      </Box>
       </Box>
     </Box>
   );

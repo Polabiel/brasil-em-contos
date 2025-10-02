@@ -22,7 +22,6 @@ export default function Footer() {
       links: [
         { label: "Contos Clássicos", href: "/classicos" },
         { label: "Autores Brasileiros", href: "/autores" },
-        { label: "Categorias", href: "/categorias" },
         { label: "Novidades", href: "/novidades" },
       ],
     },
@@ -99,23 +98,45 @@ export default function Footer() {
           {/* Brand Section */}
           <Stack spacing={3}>
             <Stack direction="row" spacing={2} alignItems="center">
-              <Image
-                src="/icon.png"
-                alt="Brasil em Contos"
-                width={48}
-                height={48}
-              />
+              <Box
+                sx={{
+                  position: "relative",
+                  transition: "transform 0.3s ease",
+                  "&:hover": {
+                    transform: "rotate(5deg) scale(1.1)",
+                  },
+                }}
+              >
+                <Image
+                  src="/icon.png"
+                  alt="Brasil em Contos"
+                  width={48}
+                  height={48}
+                />
+              </Box>
               <Typography
                 level="h3"
                 className={playfair.className}
                 sx={{
-                  fontWeight: 600,
-                  color: "white",
+                  fontWeight: 700,
+                  background: "linear-gradient(135deg, white 0%, var(--cv-brazilYellow) 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
                   fontSize: { xs: "1.5rem", md: "1.8rem" },
+                  transition: "all 0.3s ease",
+                  "&:hover": {
+                    transform: "scale(1.05)",
+                  },
                 }}
               >
                 Brasil em{" "}
-                <Box component="span" sx={{ color: "var(--cv-brazilYellow)" }}>
+                <Box component="span" sx={{ 
+                  background: "linear-gradient(135deg, var(--cv-brazilYellow) 0%, var(--cv-brazilGreen) 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}>
                   Contos
                 </Box>
               </Typography>
@@ -144,14 +165,34 @@ export default function Footer() {
                   borderRadius: "50%",
                   width: 40,
                   height: 40,
+                  position: "relative",
+                  overflow: "hidden",
+                  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                  "&::before": {
+                    content: '""',
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    width: 0,
+                    height: 0,
+                    borderRadius: "50%",
+                    background: "var(--cv-brazilBlue)",
+                    transform: "translate(-50%, -50%)",
+                    transition: "width 0.4s ease, height 0.4s ease",
+                  },
                   "&:hover": {
-                    bgcolor: "var(--cv-brazilYellow)",
-                    color: "var(--cv-textPrimary)",
-                    transform: "translateY(-2px)",
+                    bgcolor: "var(--cv-brazilBlue)",
+                    color: "white",
+                    transform: "translateY(-4px) scale(1.1)",
+                    boxShadow: "0 8px 20px rgba(0,57,166,0.4)",
+                    "&::before": {
+                      width: "100%",
+                      height: "100%",
+                    },
                   },
                 }}
               >
-                <i className="fab fa-facebook-f" />
+                <i className="fab fa-facebook-f" style={{ position: "relative", zIndex: 1 }} />
               </IconButton>
               <IconButton
                 variant="plain"
@@ -161,10 +202,12 @@ export default function Footer() {
                   borderRadius: "50%",
                   width: 40,
                   height: 40,
+                  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
                   "&:hover": {
-                    bgcolor: "var(--cv-brazilYellow)",
-                    color: "var(--cv-textPrimary)",
-                    transform: "translateY(-2px)",
+                    bgcolor: "#1DA1F2",
+                    color: "white",
+                    transform: "translateY(-4px) scale(1.1) rotate(5deg)",
+                    boxShadow: "0 8px 20px rgba(29,161,242,0.4)",
                   },
                 }}
               >
@@ -178,10 +221,12 @@ export default function Footer() {
                   borderRadius: "50%",
                   width: 40,
                   height: 40,
+                  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
                   "&:hover": {
-                    bgcolor: "var(--cv-brazilYellow)",
-                    color: "var(--cv-textPrimary)",
-                    transform: "translateY(-2px)",
+                    background: "linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)",
+                    color: "white",
+                    transform: "translateY(-4px) scale(1.1) rotate(-5deg)",
+                    boxShadow: "0 8px 20px rgba(225,48,108,0.4)",
                   },
                 }}
               >
@@ -195,10 +240,12 @@ export default function Footer() {
                   borderRadius: "50%",
                   width: 40,
                   height: 40,
+                  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
                   "&:hover": {
-                    bgcolor: "var(--cv-brazilYellow)",
-                    color: "var(--cv-textPrimary)",
-                    transform: "translateY(-2px)",
+                    bgcolor: "#FF0000",
+                    color: "white",
+                    transform: "translateY(-4px) scale(1.1)",
+                    boxShadow: "0 8px 20px rgba(255,0,0,0.4)",
                   },
                 }}
               >
@@ -212,10 +259,24 @@ export default function Footer() {
             <Stack key={section.title} spacing={2}>
               <Typography
                 level="title-md"
+                className={playfair.className}
                 sx={{
                   color: "var(--cv-brazilYellow)",
-                  fontWeight: 600,
+                  fontWeight: 700,
                   fontSize: "1.1rem",
+                  position: "relative",
+                  paddingBottom: "8px",
+                  marginBottom: "4px",
+                  "&::after": {
+                    content: '""',
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    width: "40px",
+                    height: "3px",
+                    background: "linear-gradient(90deg, var(--cv-brazilYellow), transparent)",
+                    borderRadius: "2px",
+                  },
                 }}
               >
                 {section.title}
@@ -232,10 +293,26 @@ export default function Footer() {
                       sx={{
                         color: "rgba(255,255,255,0.8)",
                         cursor: "pointer",
-                        transition: "all 0.2s ease",
+                        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        position: "relative",
+                        paddingLeft: "0px",
+                        "&::before": {
+                          content: '"→"',
+                          position: "absolute",
+                          left: "-20px",
+                          opacity: 0,
+                          transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                          color: "var(--cv-brazilYellow)",
+                        },
                         "&:hover": {
                           color: "var(--cv-brazilYellow)",
-                          transform: "translateX(4px)",
+                          paddingLeft: "20px",
+                          "&::before": {
+                            left: "0px",
+                            opacity: 1,
+                          },
                         },
                       }}
                     >
@@ -253,10 +330,32 @@ export default function Footer() {
           sx={{
             py: 3,
             px: 4,
-            borderRadius: 8,
-            bgcolor: "rgba(255,215,0,0.1)",
-            border: "1px solid rgba(255,215,0,0.2)",
+            borderRadius: 12,
+            bgcolor: "rgba(255,215,0,0.12)",
+            border: "2px solid rgba(255,215,0,0.25)",
             mb: 4,
+            position: "relative",
+            overflow: "hidden",
+            transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            "&::before": {
+              content: '""',
+              position: "absolute",
+              top: "-2px",
+              left: "-100%",
+              width: "100%",
+              height: "2px",
+              background: "linear-gradient(90deg, transparent, var(--cv-brazilYellow), transparent)",
+              animation: "shimmer 3s infinite",
+            },
+            "&:hover": {
+              transform: "translateY(-4px)",
+              boxShadow: "0 12px 32px rgba(255,215,0,0.2)",
+              bgcolor: "rgba(255,215,0,0.15)",
+            },
+            "@keyframes shimmer": {
+              "0%": { left: "-100%" },
+              "100%": { left: "200%" },
+            },
           }}
         >
           <Typography
