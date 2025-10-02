@@ -90,16 +90,47 @@ export default function Sidebar() {
   return (
     <aside className="w-full space-y-4">
       {/* Blogueiras */}
-      <Card variant="outlined" sx={{ mb: 4 }}>
+      <Card 
+        variant="outlined" 
+        sx={{ 
+          mb: 4,
+          transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+          border: "2px solid var(--cv-neutral200)",
+          borderRadius: 3,
+          position: "relative",
+          overflow: "hidden",
+          "&::before": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            height: "4px",
+            background: "linear-gradient(90deg, var(--cv-brazilGreen), var(--cv-brazilYellow))",
+            opacity: 0,
+            transition: "opacity 0.3s ease",
+          },
+          "&:hover": {
+            transform: "translateY(-4px)",
+            boxShadow: "0 12px 32px rgba(34,139,34,0.15)",
+            borderColor: "var(--cv-brazilGreen)",
+            "&::before": {
+              opacity: 1,
+            },
+          },
+        }}
+      >
         <CardContent>
           <Typography
             level="h4"
+            className={playfair.className}
             sx={{
               mb: 2,
-              fontWeight: 600,
+              fontWeight: 700,
               display: "flex",
               alignItems: "center",
               gap: 1,
+              color: "var(--cv-textPrimary)",
             }}
           >
             <i
@@ -121,19 +152,53 @@ export default function Sidebar() {
                 key={b.id}
                 spacing={1}
                 alignItems="center"
-                sx={{ textAlign: "center", p: 1 }}
+                sx={{ 
+                  textAlign: "center", 
+                  p: 1,
+                  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                  borderRadius: 2,
+                  "&:hover": {
+                    transform: "translateY(-6px) scale(1.05)",
+                    bgcolor: "var(--cv-neutral50)",
+                  },
+                }}
               >
                 <Box
                   sx={{
                     borderRadius: "50%",
                     overflow: "hidden",
-                    boxShadow: "0 6px 18px rgba(0,0,0,0.08)",
+                    boxShadow: "0 8px 24px rgba(34,139,34,0.15)",
                     width: 80,
                     height: 80,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                     position: "relative",
+                    border: "3px solid transparent",
+                    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                    "&::before": {
+                      content: '""',
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      borderRadius: "50%",
+                      padding: "3px",
+                      background: "linear-gradient(135deg, var(--cv-brazilGreen), var(--cv-brazilYellow))",
+                      WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                      WebkitMaskComposite: "xor",
+                      maskComposite: "exclude",
+                      opacity: 0,
+                      transition: "opacity 0.3s ease",
+                    },
+                    "&:hover": {
+                      transform: "scale(1.1) rotate(5deg)",
+                      boxShadow: "0 12px 32px rgba(34,139,34,0.3)",
+                      "&::before": {
+                        opacity: 1,
+                      },
+                    },
                   }}
                 >
                   <Box
@@ -170,41 +235,45 @@ export default function Sidebar() {
         </CardContent>
       </Card>
 
-      {/* Book Tags (compact) - moved up to replace Categories */}
-      <Card variant="outlined" sx={{ mb: 4 }}>
-        <CardContent>
-          <Typography
-            level="h4"
-            sx={{
-              mb: 1,
-              fontWeight: 600,
-              display: "flex",
-              alignItems: "center",
-              gap: 1,
-            }}
-          >
-            <i
-              className="fas fa-tags"
-              style={{ color: "var(--cv-brazilGreen)" }}
-            />
-            Categorias
-          </Typography>
-          <Box>
-            {/* Fetch tags from server via tRPC */}
-            <TagsFetcher />
-          </Box>
-        </CardContent>
-      </Card>
-
       {/* Featured Authors (from DB) */}
-      <Card variant="outlined" sx={{ mb: 4 }}>
+      <Card 
+        variant="outlined" 
+        sx={{ 
+          mb: 4,
+          transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+          border: "2px solid var(--cv-neutral200)",
+          borderRadius: 3,
+          position: "relative",
+          overflow: "hidden",
+          "&::before": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            height: "4px",
+            background: "linear-gradient(90deg, var(--cv-brazilYellow), var(--cv-brazilGreen))",
+            opacity: 0,
+            transition: "opacity 0.3s ease",
+          },
+          "&:hover": {
+            transform: "translateY(-4px)",
+            boxShadow: "0 12px 32px rgba(255,215,0,0.15)",
+            borderColor: "var(--cv-brazilYellow)",
+            "&::before": {
+              opacity: 1,
+            },
+          },
+        }}
+      >
         <CardContent>
           <Typography
             level="h4"
+            className={playfair.className}
             sx={{
               mb: 2,
               color: "var(--cv-textPrimary)",
-              fontWeight: 600,
+              fontWeight: 700,
               display: "flex",
               alignItems: "center",
               gap: 1,
@@ -246,12 +315,29 @@ export default function Sidebar() {
                           p: 2,
                           borderRadius: 8,
                           cursor: "pointer",
-                          transition: "all 0.2s ease",
-                          border: "1px solid transparent",
+                          transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                          border: "2px solid transparent",
+                          position: "relative",
+                          overflow: "hidden",
+                          "&::before": {
+                            content: '""',
+                            position: "absolute",
+                            left: 0,
+                            top: 0,
+                            bottom: 0,
+                            width: "4px",
+                            background: "linear-gradient(180deg, var(--cv-brazilGreen), var(--cv-brazilYellow))",
+                            transform: "scaleY(0)",
+                            transition: "transform 0.3s ease",
+                          },
                           "&:hover": {
                             bgcolor: "var(--cv-neutral50)",
                             borderColor: "var(--cv-brazilGreen)",
-                            transform: "translateY(-2px)",
+                            transform: "translateX(8px)",
+                            boxShadow: "0 4px 12px rgba(34,139,34,0.1)",
+                            "&::before": {
+                              transform: "scaleY(1)",
+                            },
                           },
                         }}
                         onMouseEnter={() => {
@@ -302,6 +388,18 @@ export default function Sidebar() {
                             {author.period}
                           </Typography>
                         )}
+                        {author.slug && (
+                          <Typography
+                            level="body-xs"
+                            sx={{
+                              color: "var(--cv-textMuted60)",
+                              mb: 0.5,
+                              fontSize: "0.75rem",
+                            }}
+                          >
+                            {author.slug}
+                          </Typography>
+                        )}
                         {author.books && author.books.length > 0 && (
                           <Typography
                             level="body-sm"
@@ -335,16 +433,41 @@ export default function Sidebar() {
         sx={{
           mb: 4,
           bgcolor: "var(--cv-brazilGreen)08",
-          border: "1px solid var(--cv-brazilGreen)20",
+          border: "2px solid var(--cv-brazilGreen)20",
+          borderRadius: 3,
+          position: "relative",
+          overflow: "hidden",
+          transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+          "&::before": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            height: "4px",
+            background: "linear-gradient(90deg, var(--cv-brazilGreen), var(--cv-brazilYellow), var(--cv-brazilBlue))",
+            opacity: 0,
+            transition: "opacity 0.3s ease",
+          },
+          "&:hover": {
+            transform: "translateY(-4px)",
+            boxShadow: "0 12px 32px rgba(34,139,34,0.2)",
+            bgcolor: "var(--cv-brazilGreen)12",
+            borderColor: "var(--cv-brazilGreen)40",
+            "&::before": {
+              opacity: 1,
+            },
+          },
         }}
       >
         <CardContent>
           <Typography
             level="h4"
+            className={playfair.className}
             sx={{
               mb: 2,
               color: "var(--cv-brazilGreen)",
-              fontWeight: 600,
+              fontWeight: 700,
               display: "flex",
               alignItems: "center",
               gap: 1,
@@ -362,6 +485,14 @@ export default function Sidebar() {
                   display: "flex",
                   alignItems: "flex-start",
                   gap: 2,
+                  transition: "all 0.3s ease",
+                  py: 0.5,
+                  px: 1,
+                  borderRadius: 2,
+                  "&:hover": {
+                    bgcolor: "var(--cv-brazilGreen)08",
+                    transform: "translateX(4px)",
+                  },
                 }}
               >
                 <Box
@@ -372,6 +503,17 @@ export default function Sidebar() {
                     bgcolor: "var(--cv-brazilYellow)",
                     flexShrink: 0,
                     mt: 0.75,
+                    transition: "all 0.3s ease",
+                    boxShadow: "0 0 0 0 var(--cv-brazilYellow)",
+                    animation: "pulse 2s infinite",
+                    "@keyframes pulse": {
+                      "0%, 100%": {
+                        boxShadow: "0 0 0 0 var(--cv-brazilYellow)40",
+                      },
+                      "50%": {
+                        boxShadow: "0 0 0 8px var(--cv-brazilYellow)00",
+                      },
+                    },
                   }}
                 />
                 <Typography

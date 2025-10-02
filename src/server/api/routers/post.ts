@@ -196,6 +196,17 @@ export const postRouter = createTRPCRouter({
     return Object.values(BookTag) as string[];
   }),
 
+  byAuthor: publicProcedure
+    .input(z.object({ authorId: z.number() }))
+    .query(async ({ ctx, input }) => {
+      const posts = await ctx.db.post.findMany({
+        where: { authorId: input.authorId },
+        orderBy: { createdAt: "desc" },
+        include: { createdBy: true, author: true },
+      });
+      return posts;
+    }),
+
   getSecretMessage: protectedProcedure.query(() => {
     return "you can now see this secret message!";
   }),

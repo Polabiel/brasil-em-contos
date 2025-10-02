@@ -1,7 +1,30 @@
-export const BookTagValues = [
-  'TROVADORISMO', 'CLASSICISMO', 'BARROCO', 'ARCADISMO', 'ROMANTISMO', 'REALISMO', 'NATURALISMO', 'PARNASIANISMO', 'SIMBOLISMO', 'PRE_MODERNISMO', 'MODERNISMO', 'POS_MODERNISMO', 'CONTEMPORANEO',
-  'DRAMA', 'COMEDIA', 'POESIA', 'CRONICA', 'LITERATURA_INFANTOJUVENIL',
-  'REGIONAL', 'LITERATURA_FEMININA', 'BIOGRAFIA', 'MEMORIAS', 'AUTO_AJUDA', 'OUTROS'
-] as const;
+import type { $Enums } from "@prisma/client";
 
-export type BookTag = (typeof BookTagValues)[number];
+export type BookTag = $Enums.BookTag;
+
+export const BookTagValues: BookTag[] = [
+  "ROMANCE",
+  "CONTO",
+  "POESIA",
+  "DRAMA",
+  "FANTASIA",
+  "MISTERIO",
+  "POLICIAL",
+  "FICCAO",
+  "NAO_FICCAO",
+  "BIOGRAFIA",
+  "AUTOAJUDA",
+  "CLASSICO",
+  "TERROR",
+  "SUSPENSE",
+  "FICCAO_CIENTIFICA",
+  "HORROR",
+  "THRILLER",
+  "COMEDIA",
+  "CRONICA",
+  "LITERATURA_INFANTOJUVENIL",
+  "REGIONAL",
+  "LITERATURA_FEMININA",
+  "MEMORIAS",
+  "OUTROS",
+];

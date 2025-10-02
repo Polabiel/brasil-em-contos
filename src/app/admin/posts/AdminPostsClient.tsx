@@ -112,63 +112,166 @@ export default function AdminPostsClient({ posts }: { posts: Post[] }) {
           </Button>
         </Box>
 
-        <Table>
-          <thead>
-            <tr>
-              <th>Título</th>
-              <th>Tag</th>
-              <th>Status</th>
-              <th>Destaque</th>
-              <th>Criado em</th>
-              <th>Atualizado em</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
+        {/* Desktop / large screens: table */}
+        <Box sx={{ display: { xs: "none", md: "block" } }}>
+          <Table>
+            <thead>
+              <tr>
+                <th>Título</th>
+                <th>Tag</th>
+                <th>Status</th>
+                <th>Destaque</th>
+                <th>Criado em</th>
+                <th>Atualizado em</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              {posts.map((post) => (
+                <tr key={post.id}>
+                  <td>{post.name}</td>
+                  <td>
+                    {post.tag ? (
+                      <Chip size="sm" variant="soft" sx={{ fontWeight: 700 }}>
+                        {String(post.tag)
+                          .replace(/_/g, " ")
+                          .toLowerCase()
+                          .replace(/\b\w/g, (l: string) => l.toUpperCase())}
+                      </Chip>
+                    ) : (
+                      <Chip size="sm" variant="outlined">
+                        Sem tag
+                      </Chip>
+                    )}
+                  </td>
+                  <td>
+                    <Chip
+                      color={post.content?.trim() ? "success" : "warning"}
+                      variant="soft"
+                      size="sm"
+                    >
+                      {post.content?.trim() ? "Com conteúdo" : "Sem conteúdo"}
+                    </Chip>
+                  </td>
+                  <td>
+                    <IconButton
+                      size="sm"
+                      variant={post.featured ? "solid" : "outlined"}
+                      color={post.featured ? "warning" : "neutral"}
+                      onClick={() =>
+                        handleToggleFeatured(post.id, post.featured)
+                      }
+                      aria-label={
+                        post.featured ? "Remover destaque" : "Destacar post"
+                      }
+                      title={
+                        post.featured ? "Remover destaque" : "Destacar post"
+                      }
+                    >
+                      <i className="fas fa-star" />
+                    </IconButton>
+                  </td>
+                  <td>
+                    {new Date(post.createdAt).toLocaleDateString("pt-BR")}
+                  </td>
+                  <td>
+                    {new Date(post.updatedAt).toLocaleDateString("pt-BR")}
+                  </td>
+                  <td>
+                    <Stack direction="row" spacing={1}>
+                      <IconButton
+                        size="sm"
+                        variant="outlined"
+                        onClick={() =>
+                          router.push(`/admin/posts/${post.id}/edit`)
+                        }
+                        aria-label={`Editar ${post.name}`}
+                      >
+                        <i className="fas fa-pen" />
+                      </IconButton>
+                      <IconButton
+                        size="sm"
+                        variant="outlined"
+                        color="danger"
+                        onClick={() => handleDeletePost(post.id)}
+                        aria-label={`Deletar ${post.name}`}
+                      >
+                        <i className="fas fa-trash" />
+                      </IconButton>
+                    </Stack>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </Box>
+
+        {/* Mobile / small screens: stacked cards */}
+        <Box sx={{ display: { xs: "block", md: "none" } }}>
+          <Stack spacing={2}>
             {posts.map((post) => (
-              <tr key={post.id}>
-                <td>{post.name}</td>
-                <td>
-                  {post.tag ? (
-                    <Chip size="sm" variant="soft" sx={{ fontWeight: 700 }}>
-                      {String(post.tag)
-                        .replace(/_/g, " ")
-                        .toLowerCase()
-                        .replace(/\b\w/g, (l: string) => l.toUpperCase())}
-                    </Chip>
-                  ) : (
-                    <Chip size="sm" variant="outlined">
-                      Sem tag
-                    </Chip>
-                  )}
-                </td>
-                <td>
-                  <Chip
-                    color={post.content?.trim() ? "success" : "warning"}
-                    variant="soft"
-                    size="sm"
+              <Box
+                key={post.id}
+                sx={{
+                  border: "1px solid var(--cv-border)",
+                  borderRadius: 2,
+                  p: 2,
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "flex-start",
+                    gap: 2,
+                  }}
+                >
+                  <Box sx={{ flex: 1 }}>
+                    <Typography level="body-md" sx={{ fontWeight: 700 }}>
+                      {post.name}
+                    </Typography>
+                    <Typography
+                      level="body-xs"
+                      sx={{ color: "var(--cv-textMuted80)", mt: 0.5 }}
+                    >
+                      {new Date(post.createdAt).toLocaleDateString("pt-BR")} •{" "}
+                      {new Date(post.updatedAt).toLocaleDateString("pt-BR")}
+                    </Typography>
+                    <Box
+                      sx={{
+                        mt: 1,
+                        display: "flex",
+                        gap: 1,
+                        alignItems: "center",
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      {post.tag ? (
+                        <Chip size="sm" variant="soft" sx={{ fontWeight: 700 }}>
+                          {String(post.tag)
+                            .replace(/_/g, " ")
+                            .toLowerCase()
+                            .replace(/\b\w/g, (l: string) => l.toUpperCase())}
+                        </Chip>
+                      ) : (
+                        <Chip size="sm" variant="outlined">
+                          Sem tag
+                        </Chip>
+                      )}
+
+                      <Chip
+                        color={post.content?.trim() ? "success" : "warning"}
+                        variant="soft"
+                        size="sm"
+                      >
+                        {post.content?.trim() ? "Com conteúdo" : "Sem conteúdo"}
+                      </Chip>
+                    </Box>
+                  </Box>
+
+                  <Box
+                    sx={{ display: "flex", flexDirection: "column", gap: 1 }}
                   >
-                    {post.content?.trim() ? "Com conteúdo" : "Sem conteúdo"}
-                  </Chip>
-                </td>
-                <td>
-                  <IconButton
-                    size="sm"
-                    variant={post.featured ? "solid" : "outlined"}
-                    color={post.featured ? "warning" : "neutral"}
-                    onClick={() => handleToggleFeatured(post.id, post.featured)}
-                    aria-label={
-                      post.featured ? "Remover destaque" : "Destacar post"
-                    }
-                    title={post.featured ? "Remover destaque" : "Destacar post"}
-                  >
-                    <i className="fas fa-star" />
-                  </IconButton>
-                </td>
-                <td>{new Date(post.createdAt).toLocaleDateString("pt-BR")}</td>
-                <td>{new Date(post.updatedAt).toLocaleDateString("pt-BR")}</td>
-                <td>
-                  <Stack direction="row" spacing={1}>
                     <IconButton
                       size="sm"
                       variant="outlined"
@@ -188,12 +291,25 @@ export default function AdminPostsClient({ posts }: { posts: Post[] }) {
                     >
                       <i className="fas fa-trash" />
                     </IconButton>
-                  </Stack>
-                </td>
-              </tr>
+                    <IconButton
+                      size="sm"
+                      variant={post.featured ? "solid" : "outlined"}
+                      color={post.featured ? "warning" : "neutral"}
+                      onClick={() =>
+                        handleToggleFeatured(post.id, post.featured)
+                      }
+                      aria-label={
+                        post.featured ? "Remover destaque" : "Destacar post"
+                      }
+                    >
+                      <i className="fas fa-star" />
+                    </IconButton>
+                  </Box>
+                </Box>
+              </Box>
             ))}
-          </tbody>
-        </Table>
+          </Stack>
+        </Box>
 
         {posts.length === 0 && (
           <Box sx={{ textAlign: "center", py: 6 }}>

@@ -16,6 +16,14 @@ import Image from "next/image";
 import { api } from "@/trpc/react";
 import { useSearchParams, useRouter } from "next/navigation";
 
+import { Playfair_Display } from "next/font/google";
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["400", "600", "700"],
+  display: "swap",
+});
+
 export default function PostsGrid() {
   const { data: session } = useSession();
 
@@ -72,9 +80,13 @@ export default function PostsGrid() {
       .replace(/\b\w/g, (l) => l.toUpperCase()),
   );
 
-  function getRandomCategory(index = 0) {
-    return categories[index % categories.length];
-  }
+  const formatTag = (tag?: string | null): string => {
+    if (!tag) return "Conto Brasileiro";
+    return String(tag)
+      .replace(/_/g, " ")
+      .toLowerCase()
+      .replace(/\b\w/g, (l) => l.toUpperCase());
+  };
 
   const getReadTime = (text?: string | null) => {
     const content = (text ?? "").trim();
@@ -114,11 +126,28 @@ export default function PostsGrid() {
       <Box id="mais-historias" sx={{ mb: 4, textAlign: "center" }}>
         <Typography
           level="h2"
+          className={playfair.className}
           sx={{
-            fontSize: { xs: "1.8rem", md: "2.2rem" },
+            fontSize: { xs: "1.8rem", md: "2.5rem" },
             fontWeight: 700,
-            color: "var(--cv-textPrimary)",
+            background: "linear-gradient(135deg, var(--cv-brazilGreen) 0%, var(--cv-brazilYellow) 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
             mb: 1,
+            position: "relative",
+            display: "inline-block",
+            "&::after": {
+              content: '""',
+              position: "absolute",
+              bottom: "-8px",
+              left: "50%",
+              transform: "translateX(-50%)",
+              width: "60px",
+              height: "4px",
+              background: "linear-gradient(90deg, var(--cv-brazilGreen), var(--cv-brazilYellow))",
+              borderRadius: "2px",
+            },
           }}
         >
           Mais Histórias
@@ -256,11 +285,11 @@ export default function PostsGrid() {
                   year: "numeric",
                 })
               : "";
-            const category = getRandomCategory(index);
+            const category = formatTag(post.tag);
             const readTime = getReadTime(post.description);
 
             return (
-              <Grid xs={12} sm={6} md={isLarge ? 8 : 4} key={String(post.id)}>
+              <Grid key={String(post.id)}>
                 <Link
                   href={`/posts/${post.id}`}
                   style={{ textDecoration: "none", color: "inherit" }}
@@ -269,21 +298,37 @@ export default function PostsGrid() {
                     variant="outlined"
                     sx={{
                       position: "relative",
-                      height: isLarge ? 480 : 420,
-                      transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                      width: 390,
+                      height: 550,
+                      transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
                       cursor: "pointer",
                       overflow: "hidden",
                       background: "var(--cv-backgroundPaper)",
-                      border: "1px solid var(--cv-neutral200)",
-                      borderRadius: 12,
+                      border: "2px solid var(--cv-neutral200)",
+                      borderRadius: 16,
                       display: "flex",
                       flexDirection: "column",
+                      p: 0,
+                      "&::before": {
+                        content: '""',
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        height: "4px",
+                        background: "linear-gradient(90deg, var(--cv-brazilGreen), var(--cv-brazilYellow), var(--cv-brazilBlue))",
+                        opacity: 0,
+                        transition: "opacity 0.4s ease",
+                      },
                       "&:hover": {
-                        transform: "translateY(-8px)",
-                        boxShadow: "0 20px 40px rgba(0,0,0,0.12)",
+                        transform: "translateY(-12px) scale(1.02)",
+                        boxShadow: "0 24px 48px rgba(34,139,34,0.2)",
                         borderColor: "var(--cv-brazilGreen)",
+                        "&::before": {
+                          opacity: 1,
+                        },
                         "& .post-image": {
-                          transform: "scale(1.05)",
+                          transform: "scale(1.1) rotate(1deg)",
                         },
                         "& .post-overlay": {
                           opacity: 1,
@@ -292,6 +337,15 @@ export default function PostsGrid() {
                           transform: "translateY(0)",
                           opacity: 1,
                         },
+                      },
+                      "& .post-image": {
+                        position: "absolute",
+                        inset: 0,
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        objectPosition: "top",
+                        transition: "transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
                       },
                     }}
                   >
@@ -306,6 +360,7 @@ export default function PostsGrid() {
                           top: 12,
                           right: 12,
                           zIndex: 3,
+                          transform: "none",
                           bgcolor: "var(--cv-brazilGreen)",
                           "&:hover": {
                             bgcolor: "#1e5f28",
@@ -320,15 +375,13 @@ export default function PostsGrid() {
                       </IconButton>
                     )}
 
-                    {/* Image Section */}
                     <Box
                       sx={{
-                        width: "100%",
-                        height: isLarge ? 280 : 240,
                         position: "relative",
-                        overflow: "hidden",
-                        background: `linear-gradient(135deg, var(--cv-brazilGreen)20, var(--cv-brazilYellow)20)`,
+                        width: "100%",
+                        height: 260,
                         flexShrink: 0,
+                        overflow: "hidden",
                       }}
                     >
                       {post.image ? (
@@ -336,7 +389,13 @@ export default function PostsGrid() {
                           src={post.image}
                           alt={post.name}
                           fill
-                          style={{ objectFit: "cover" }}
+                          sizes="(max-width: 600px) 100vw, 390px"
+                          style={{
+                            objectFit: "cover",
+                            objectPosition: "top",
+                            transition: "transform 0.3s ease",
+                            display: "block",
+                          }}
                           className="post-image"
                           unoptimized
                         />
@@ -344,12 +403,11 @@ export default function PostsGrid() {
                         <Box
                           className="post-image"
                           sx={{
-                            width: "100%",
-                            height: "100%",
+                            position: "absolute",
+                            inset: 0,
                             display: "block",
-                            background:
-                              "linear-gradient(135deg, rgba(0,0,0,0.04), rgba(0,0,0,0.02))",
                             transition: "transform 0.3s ease",
+                            backgroundColor: "var(--cv-neutral100)",
                           }}
                         />
                       )}
@@ -363,10 +421,10 @@ export default function PostsGrid() {
                           left: 0,
                           right: 0,
                           bottom: 0,
-                          background:
-                            "linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.7) 100%)",
+                          background: "linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(34,139,34,0.6) 100%)",
                           opacity: 0,
-                          transition: "opacity 0.3s ease",
+                          transition: "opacity 0.4s ease",
+                          zIndex: 2,
                         }}
                       />
 
@@ -376,12 +434,20 @@ export default function PostsGrid() {
                         size="sm"
                         sx={{
                           position: "absolute",
-                          top: 12,
+                          top: 8,
                           left: 12,
+                          transform: "none",
+                          zIndex: 3,
                           bgcolor: "var(--cv-brazilYellow)",
                           color: "var(--cv-textPrimary)",
-                          fontWeight: 600,
+                          fontWeight: 700,
                           fontSize: "0.75rem",
+                          transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                          boxShadow: "0 2px 8px rgba(255,215,0,0.4)",
+                          "&:hover": {
+                            transform: "scale(1.1) translateY(-2px)",
+                            boxShadow: "0 4px 12px rgba(255,215,0,0.6)",
+                          },
                         }}
                       >
                         {category}
@@ -399,6 +465,7 @@ export default function PostsGrid() {
                       <Stack spacing={isLarge ? 2 : 1.5} sx={{ flexGrow: 1 }}>
                         <Typography
                           level={isLarge ? "h4" : "title-md"}
+                          className={playfair.className}
                           sx={{
                             fontWeight: 700,
                             color: "var(--cv-textPrimary)",
@@ -407,6 +474,10 @@ export default function PostsGrid() {
                             WebkitLineClamp: 2,
                             WebkitBoxOrient: "vertical",
                             overflow: "hidden",
+                            transition: "color 0.3s ease",
+                            "&:hover": {
+                              color: "var(--cv-brazilGreen)",
+                            },
                           }}
                         >
                           {post.name}
@@ -478,9 +549,7 @@ export default function PostsGrid() {
                               fontWeight: 600,
                             }}
                           >
-                            {post.author?.name ??
-                              post.createdBy?.name ??
-                              "Autor"}
+                            {post.author?.name ?? "Autor Desconhecido"}
                           </Typography>
 
                           <Typography
@@ -488,7 +557,7 @@ export default function PostsGrid() {
                             sx={{ color: "var(--cv-textMuted70)" }}
                           >
                             {post.createdBy?.name
-                              ? `Colaborador: ${post.createdBy.name}`
+                              ? `Criado: ${post.createdBy.name}`
                               : ""}
                           </Typography>
                         </Stack>
