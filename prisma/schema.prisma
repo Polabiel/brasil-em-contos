@@ -61,7 +61,7 @@ model Post {
     image       String?
     imageBlob   Bytes?
     imageMime   String?
-    tag         BookTag?
+    tags        BookTag[]
     featured    Boolean   @default(false)
     // relation to Author: a post can have an author
     author      Author?   @relation(fields: [authorId], references: [id])

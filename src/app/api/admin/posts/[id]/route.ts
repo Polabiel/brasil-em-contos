@@ -25,7 +25,7 @@ export async function PUT(
     );
   const bodySchema = z.object({
     name: z.string().min(1, "name required"),
-    tag: z.string().optional(),
+    tags: z.array(z.string()).optional(),
     authorId: z.number().optional(),
     content: z.string().optional(),
     description: z.string().optional(),
@@ -47,6 +47,7 @@ export async function PUT(
     const contentField = form.get("content");
     const descriptionField = form.get("description");
     const imageField = form.get("image");
+    const tagsField = form.get("tags");
     const file = form.get("imageFile");
 
     const toParse = {
@@ -55,6 +56,7 @@ export async function PUT(
       description:
         typeof descriptionField === "string" ? descriptionField : undefined,
       image: typeof imageField === "string" ? imageField : undefined,
+      tags: typeof tagsField === "string" ? JSON.parse(tagsField) : undefined,
     };
 
     parsedBody = bodySchema.safeParse(toParse);
@@ -103,13 +105,15 @@ export async function PUT(
   const description =
     parsed.description == null ? null : String(parsed.description);
   const image = parsed.image == null ? null : String(parsed.image);
-  const rawTag = (parsed as Record<string, unknown>).tag;
+  const rawTags = (parsed as Record<string, unknown>).tags;
   const rawAuthor = (parsed as Record<string, unknown>).authorId;
   const authorId =
     typeof rawAuthor === "string" || typeof rawAuthor === "number"
       ? Number(rawAuthor)
       : null;
-  const tagValue = typeof rawTag === "string" ? rawTag : null;
+  const tagsValue = Array.isArray(rawTags)
+    ? rawTags.filter((t): t is string => typeof t === "string")
+    : [];
   const imageBlob =
     (parsed as Record<string, unknown>).imageBlob == null
       ? null
@@ -128,9 +132,17 @@ export async function PUT(
     imageMime: imageMime ?? undefined,
   };
 
-  // attach tag only when validated against Prisma enum
-  if (tagValue != null && Object.values(BookTag).includes(tagValue as unknown as BookTag)) {
-    updatePayload.tag = tagValue as unknown as BookTag;
+  // attach tags only when validated against Prisma enum
+  if (tagsValue.length > 0) {
+    const validTags = tagsValue.filter(tag =>
+      Object.values(BookTag).includes(tag as unknown as BookTag)
+    ) as unknown as BookTag[];
+    if (validTags.length > 0) {
+      updatePayload.tags = validTags;
+    }
+  } else {
+    // If tags array is empty, set to empty array to clear existing tags
+    updatePayload.tags = [];
   }
 
   if (authorId != null && !Number.isNaN(authorId)) {

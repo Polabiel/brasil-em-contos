@@ -24,10 +24,8 @@ export default async function EditPage({
   const initialContent = String(post.content ?? "");
   const initialDescription = String(post.description ?? "");
   const initialImage = String(post.image ?? "");
-  const initialTag =
-    (post as unknown as { tag?: string })?.tag == null
-      ? null
-      : String((post as unknown as { tag?: string }).tag);
+  const initialTags =
+    (post as unknown as { tags?: string[] })?.tags ?? [];
   const initialAuthorId =
     (post as unknown as { authorId?: number })?.authorId ?? null;
 
@@ -38,7 +36,7 @@ export default async function EditPage({
       initialContent={initialContent}
       initialDescription={initialDescription}
       initialImage={initialImage}
-      initialTag={initialTag}
+      initialTags={initialTags}
       initialAuthorId={initialAuthorId}
     />
   );
