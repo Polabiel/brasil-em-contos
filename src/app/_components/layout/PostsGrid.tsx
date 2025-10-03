@@ -283,7 +283,7 @@ export default function PostsGrid() {
                       variant="plain"
                       sx={{
                         position: "relative",
-                        width: 390,
+                        width: 350,
                         height: 550,
                         transition: "all 0.35s cubic-bezier(0.2, 0, 0.2, 1)",
                         cursor: "pointer",
@@ -387,7 +387,7 @@ export default function PostsGrid() {
                     variant="outlined"
                     sx={{
                       position: "relative",
-                      width: 390,
+                      width: 350,
                       height: 550,
                       transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
                       cursor: "pointer",
