@@ -56,6 +56,12 @@ export default function StandardModal({
           from: { opacity: 0 },
           to: { opacity: 1 },
         },
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 9999,
       }}
     >
       <ModalDialog
@@ -69,6 +75,7 @@ export default function StandardModal({
           borderRadius: '16px',
           border: '2px solid var(--cv-neutral200)',
           position: 'relative',
+          m: 'auto',
           animation: 'slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
           '@keyframes slideUp': {
             from: {
