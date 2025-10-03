@@ -2,8 +2,15 @@
 
 import MDEditor from "@uiw/react-md-editor";
 import Box from "@mui/joy/Box";
+import remarkGfm from "remark-gfm";
+import remarkBreaks from "remark-breaks";
 
 export default function PostContentClient({ content }: { content: string }) {
+  const processedContent = content.replace(
+    /ㅤ/g,
+    '<span style="display:inline-block;width:2em"></span>',
+  );
+
   return (
     <Box
       sx={{
@@ -26,6 +33,13 @@ export default function PostContentClient({ content }: { content: string }) {
             color: "var(--cv-textPrimary)",
             marginBottom: "1.2rem",
             lineHeight: 1.7,
+            textAlign: "justify",
+          },
+
+          "& br": {
+            display: "block",
+            content: '""',
+            marginTop: "0.5rem",
           },
 
           // Links
@@ -227,7 +241,11 @@ export default function PostContentClient({ content }: { content: string }) {
         },
       }}
     >
-      <MDEditor.Markdown source={content} />
+      <MDEditor.Markdown
+        source={processedContent}
+        skipHtml={false}
+        remarkPlugins={[remarkGfm, remarkBreaks]}
+      />
     </Box>
   );
 }
