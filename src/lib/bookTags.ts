@@ -7,6 +7,8 @@ export const BookTagValues: BookTag[] = [
   "CONTO",
   "POESIA",
   "DRAMA",
+  "MODERNISMO",
+  "CONTEMPORANEO",
   "FANTASIA",
   "MISTERIO",
   "POLICIAL",

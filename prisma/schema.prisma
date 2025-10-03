@@ -28,8 +28,12 @@ enum BookTag {
     // Gênero Dramático
     DRAMA
 
+    // Movimentos Literários
+    MODERNISMO
+    CONTEMPORANEO
+
     // Gêneros e Temas Específicos
-    FANTASIA // 4
+    FANTASIA
     MISTERIO
     POLICIAL
     FICCAO
@@ -38,10 +42,10 @@ enum BookTag {
     AUTOAJUDA
     CLASSICO
     TERROR
-    SUSPENSE // 13
+    SUSPENSE
 
     // Outros já existentes (mantidos para compatibilidade)
-    FICCAO_CIENTIFICA // 14
+    FICCAO_CIENTIFICA
     HORROR
     THRILLER
     COMEDIA
@@ -49,7 +53,7 @@ enum BookTag {
     LITERATURA_INFANTOJUVENIL
     REGIONAL
     LITERATURA_FEMININA
-    MEMORIAS // 22
+    MEMORIAS
     OUTROS
 }
 
@@ -61,7 +65,7 @@ model Post {
     image       String?
     imageBlob   Bytes?
     imageMime   String?
-    tag         BookTag?
+    tags        BookTag[]
     featured    Boolean   @default(false)
     // relation to Author: a post can have an author
     author      Author?   @relation(fields: [authorId], references: [id])

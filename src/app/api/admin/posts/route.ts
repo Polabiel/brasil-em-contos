@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
 
   const bodySchema = z.object({
     name: z.string().min(1, "name required"),
-    tag: z.string().optional(),
+    tags: z.array(z.string()).optional(),
     authorId: z.number().optional(),
     description: z.string().optional(),
     content: z.string().optional(),
@@ -40,6 +40,7 @@ export async function POST(req: NextRequest) {
     const descriptionField = form.get("description");
     const contentField = form.get("content");
     const imageField = form.get("image");
+    const tagsField = form.get("tags");
     const file = form.get("imageFile");
 
     const toParse = {
@@ -48,6 +49,7 @@ export async function POST(req: NextRequest) {
         typeof descriptionField === "string" ? descriptionField : undefined,
       content: typeof contentField === "string" ? contentField : undefined,
       image: typeof imageField === "string" ? imageField : undefined,
+      tags: typeof tagsField === "string" ? JSON.parse(tagsField) : undefined,
     };
 
     parsedBody = bodySchema.safeParse(toParse);
@@ -95,13 +97,15 @@ export async function POST(req: NextRequest) {
 
   // normalize into a safe shape
   const name = String(parsed.name);
-  const rawTag = (parsed as Record<string, unknown>).tag;
+  const rawTags = (parsed as Record<string, unknown>).tags;
   const rawAuthor = (parsed as Record<string, unknown>).authorId;
   const authorId =
     typeof rawAuthor === "string" || typeof rawAuthor === "number"
       ? Number(rawAuthor)
       : null;
-  const tagValue = typeof rawTag === "string" ? rawTag : null;
+  const tagsValue = Array.isArray(rawTags) 
+    ? rawTags.filter((t): t is string => typeof t === "string")
+    : [];
   const description: string | null =
     parsed.description == null ? null : String(parsed.description);
   const contentValue = parsed.content == null ? null : String(parsed.content);
@@ -130,9 +134,14 @@ export async function POST(req: NextRequest) {
     (createData as Record<string, unknown>).authorId = Number(authorId);
   }
 
-  if (tagValue != null && Object.values(BookTag).includes(tagValue as unknown as BookTag)) {
-    // Prisma.PostUncheckedCreateInput accepts the enum literal type for tag
-    (createData as unknown as Record<string, unknown>).tag = tagValue as unknown as BookTag;
+  if (tagsValue.length > 0) {
+    // Filter tags to only include valid BookTag enum values
+    const validTags = tagsValue.filter(tag => 
+      Object.values(BookTag).includes(tag as unknown as BookTag)
+    ) as unknown as BookTag[];
+    if (validTags.length > 0) {
+      (createData as unknown as Record<string, unknown>).tags = validTags;
+    }
   }
 
   const created = (await db.post.create({ data: createData })) as {

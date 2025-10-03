@@ -97,7 +97,7 @@ export default async function PostPage({
       description: true,
       image: true,
       imageBlob: true,
-      tag: true,
+      tags: true,
       createdAt: true,
       createdBy: { select: { id: true, name: true, image: true, bio: true } },
       author: {
@@ -306,8 +306,8 @@ export default async function PostPage({
                 </Typography>
               )}
 
-              {/* Genre/Tag */}
-              {post.tag && (
+              {/* Genre/Tags */}
+              {post.tags && post.tags.length > 0 && (
                 <Box sx={{ mb: 2 }}>
                   <Typography
                     level="body-xs"
@@ -317,14 +317,27 @@ export default async function PostPage({
                       mb: 0.5,
                     }}
                   >
-                    Gênero
+                    {post.tags.length === 1 ? "Gênero" : "Gêneros"}
                   </Typography>
-                  <Typography level="body-sm">
-                    {String(post.tag)
-                      .replaceAll("_", " ")
-                      .toLowerCase()
-                      .replace(/(^\w|\s\w)/g, (m: string) => m.toUpperCase())}
-                  </Typography>
+                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                    {post.tags.map((tag) => (
+                      <Typography
+                        key={tag}
+                        level="body-sm"
+                        sx={{
+                          px: 1,
+                          py: 0.5,
+                          bgcolor: "var(--cv-neutral100)",
+                          borderRadius: "4px",
+                        }}
+                      >
+                        {String(tag)
+                          .replaceAll("_", " ")
+                          .toLowerCase()
+                          .replace(/(^\w|\s\w)/g, (m: string) => m.toUpperCase())}
+                      </Typography>
+                    ))}
+                  </Box>
                 </Box>
               )}
 

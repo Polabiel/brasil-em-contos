@@ -21,7 +21,7 @@ export default function EditPostClient({
   initialContent,
   initialDescription,
   initialImage,
-  initialTag,
+  initialTags,
   initialAuthorId,
 }: {
   id: number;
@@ -29,7 +29,7 @@ export default function EditPostClient({
   initialContent: string;
   initialDescription?: string;
   initialImage?: string;
-  initialTag?: string | null;
+  initialTags?: string[];
   initialAuthorId?: number | null;
   initialCreatedAt?: string | null;
   initialUpdatedAt?: string | null;
@@ -40,7 +40,7 @@ export default function EditPostClient({
   const [image, setImage] = useState(initialImage ?? "");
   const [createdAt, setCreatedAt] = useState<string | null>(null);
   const [updatedAt, setUpdatedAt] = useState<string | null>(null);
-  const [tag, setTag] = useState<string | null>(initialTag ?? null);
+  const [tags, setTags] = useState<string[]>(initialTags ?? []);
   const [authorId, setAuthorId] = useState<number | null>(
     initialAuthorId ?? null,
   );
@@ -56,35 +56,13 @@ export default function EditPostClient({
   });
   const toast = useToast();
 
-  // Helper to ensure tag is always a string or null, never an event object
-  const sanitizeTag = (value: unknown): string | null => {
-    if (value === null || value === undefined) return null;
-    if (typeof value === "string") return value;
-    // If it's an object (event), return null
-    return null;
-  };
-
-  // Clean up tag state if it contains an invalid value (event object)
-  useEffect(() => {
-    if (tag !== null && typeof tag !== "string") {
-      console.warn("Invalid tag value detected, resetting to null");
-      setTag(null);
-    }
-  }, [tag]);
-
   const handleAutoSave = useCallback(async () => {
     setAutoSaving(true);
     try {
-      const cleanTag = sanitizeTag(tag);
-
-      // Debug logs
-      console.log("Auto-save - Raw tag:", typeof tag, tag);
-      console.log("Auto-save - Clean tag:", typeof cleanTag, cleanTag);
-
       if (selectedFile) {
         const form = new FormData();
         form.append("name", name);
-        if (cleanTag) form.append("tag", cleanTag);
+        if (tags.length > 0) form.append("tags", JSON.stringify(tags));
         if (authorId != null) form.append("authorId", String(authorId));
         form.append("content", content);
         form.append("description", description ?? "");
@@ -105,11 +83,9 @@ export default function EditPostClient({
           content,
           description,
           image: image ?? undefined,
-          tag: cleanTag ?? undefined,
+          tags: tags,
           authorId: authorId ?? undefined,
         };
-
-        console.log("Mutation payload:", JSON.stringify(payload, null, 2));
 
         await updateMutation.mutateAsync(payload);
       }
@@ -121,7 +97,7 @@ export default function EditPostClient({
   }, [
     selectedFile,
     name,
-    tag,
+    tags,
     authorId,
     content,
     description,
@@ -158,7 +134,7 @@ export default function EditPostClient({
     image,
     initialDescription,
     imageBlobBase64,
-    tag,
+    tags,
   ]);
 
   async function handleSave() {
@@ -168,7 +144,6 @@ export default function EditPostClient({
     }
     setSaving(true);
     try {
-      const cleanTag = sanitizeTag(tag);
       let res: Response;
       if (selectedFile) {
         const form = new FormData();
@@ -176,6 +151,7 @@ export default function EditPostClient({
         form.append("content", content);
         form.append("description", description ?? "");
         form.append("image", image ?? "");
+        if (tags.length > 0) form.append("tags", JSON.stringify(tags));
         form.append("imageFile", selectedFile);
         res = await fetch(`/api/admin/posts/${id}`, {
           method: "PUT",
@@ -188,7 +164,7 @@ export default function EditPostClient({
           body: JSON.stringify({
             name,
             content,
-            tag: cleanTag ?? undefined,
+            tags: tags,
             authorId: authorId ?? undefined,
             description,
             image,
@@ -290,9 +266,10 @@ export default function EditPostClient({
         </Box>
 
         <Select
-          placeholder="Tag do livro (opcional)"
-          value={tag}
-          onChange={(_, newValue) => setTag(newValue)}
+          placeholder="Tags do livro (opcional)"
+          multiple
+          value={tags}
+          onChange={(_, newValue) => setTags(newValue as string[])}
           size="md"
         >
           {(api.post.bookTags.useQuery().data ?? []).map((v) => (
