@@ -198,7 +198,7 @@ export default function EditPostClient({
         });
       }
       if (!res.ok) throw new Error("Falha ao salvar");
-      router.back();
+      window.location.href = `/posts/${id}`;
     } catch (err) {
       console.error(err);
       toast.push("Erro ao salvar", "danger");

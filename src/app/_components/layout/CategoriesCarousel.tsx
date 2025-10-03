@@ -3,10 +3,8 @@
 import Box from "@mui/joy/Box";
 import Typography from "@mui/joy/Typography";
 import Chip from "@mui/joy/Chip";
-import Stack from "@mui/joy/Stack";
 import { Playfair_Display } from "next/font/google";
 import { BookTagValues, type BookTag } from "@/lib/bookTags";
-import { useRef, useEffect, useState } from "react";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -19,18 +17,7 @@ type Category = {
   label: string;
 };
 
-type CategoryGroup = {
-  title: string;
-  categories: Category[];
-  color: "primary" | "neutral" | "warning" | "success" | "danger";
-};
-
 export default function CategoriesCarousel() {
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const [isPaused, setIsPaused] = useState(false);
-  const animationRef = useRef<number | null>(null);
-  const scrollSpeedRef = useRef(0.5); // pixels por frame
-
   const categories: Category[] = BookTagValues.map((tag: BookTag) => ({
     value: tag,
     label: tag
@@ -39,87 +26,6 @@ export default function CategoriesCarousel() {
       .replace(/\b\w/g, (l: string) => l.toUpperCase()),
   }));
 
-  const categoryGroups: CategoryGroup[] = [
-    {
-      title: "Gêneros Narrativos",
-      categories: categories.slice(0, 2),
-      color: "primary",
-    },
-    {
-      title: "Gênero Lírico",
-      categories: categories.slice(2, 3),
-      color: "neutral",
-    },
-    {
-      title: "Gênero Dramático",
-      categories: categories.slice(3, 4),
-      color: "warning",
-    },
-    {
-      title: "Temas Específicos",
-      categories: categories.slice(4, 14),
-      color: "success",
-    },
-    {
-      title: "Outras Categorias",
-      categories: categories.slice(14),
-      color: "danger",
-    },
-  ];
-
-  // Triplicar os grupos para criar efeito de loop infinito suave
-  const infiniteGroups = [
-    ...categoryGroups,
-    ...categoryGroups,
-    ...categoryGroups,
-  ];
-
-  // Auto-scroll contínuo com requestAnimationFrame
-  useEffect(() => {
-    const container = scrollContainerRef.current;
-    if (!container) return;
-
-    const animate = () => {
-      if (!isPaused && container) {
-        container.scrollLeft += scrollSpeedRef.current;
-
-        // Reset para o meio quando chegar no final da primeira duplicação
-        const singleSetWidth = container.scrollWidth / 3;
-        if (container.scrollLeft >= singleSetWidth * 2) {
-          container.scrollLeft = singleSetWidth;
-        }
-        // Reset para o meio quando voltar muito para trás
-        if (container.scrollLeft <= 0) {
-          container.scrollLeft = singleSetWidth;
-        }
-      }
-
-      animationRef.current = requestAnimationFrame(animate);
-    };
-
-    // Iniciar no meio (segundo conjunto)
-    if (container.scrollLeft === 0) {
-      const singleSetWidth = container.scrollWidth / 3;
-      container.scrollLeft = singleSetWidth;
-    }
-
-    animationRef.current = requestAnimationFrame(animate);
-
-    return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-    };
-  }, [isPaused]);
-
-  const handleMouseEnter = () => {
-    setIsPaused(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsPaused(false);
-  };
-
   return (
     <Box
       sx={{
@@ -127,194 +33,98 @@ export default function CategoriesCarousel() {
         bgcolor: "white",
         py: { xs: 6, md: 8 },
         px: { xs: 2, md: 4 },
-        borderTop: "1px solid var(--cv-neutral200)",
         overflow: "hidden",
       }}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
     >
       <Box sx={{ maxWidth: "1400px", mx: "auto" }}>
         {/* Header */}
-        <Stack
-          direction="row"
-          alignItems="center"
-          justifyContent="space-between"
-          sx={{ mb: 4 }}
-        >
-          <Box>
-            <Typography
-              level="h2"
-              sx={{
-                fontFamily: playfair.style.fontFamily,
-                fontWeight: 700,
-                color: "var(--cv-textPrimary)",
-                fontSize: { xs: "1.5rem", md: "2rem" },
-                mb: 1,
-                background:
-                  "linear-gradient(135deg, var(--cv-brazilGreen) 0%, var(--cv-brazilYellow) 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}
-            >
-              Explore Gêneros Literários
-            </Typography>
-            <Typography
-              level="body-md"
-              sx={{
-                color: "var(--cv-textMuted70)",
-                fontSize: { xs: "0.9rem", md: "1rem" },
-              }}
-            >
-              Descubra contos através dos diferentes gêneros literários
-            </Typography>
-          </Box>
-        </Stack>
-
-        {/* Carousel Container with fade edges */}
-        <Box sx={{ position: "relative" }}>
-          {/* Left fade overlay */}
-          <Box
+        <Box sx={{ mb: 4, textAlign: "center" }}>
+          <Typography
+            level="h2"
             sx={{
-              position: "absolute",
-              left: 0,
-              top: 0,
-              bottom: 0,
-              width: { xs: 40, md: 80 },
-              background: "linear-gradient(to right, white, transparent)",
-              zIndex: 2,
-              pointerEvents: "none",
-            }}
-          />
-
-          {/* Right fade overlay */}
-          <Box
-            sx={{
-              position: "absolute",
-              right: 0,
-              top: 0,
-              bottom: 0,
-              width: { xs: 40, md: 80 },
-              background: "linear-gradient(to left, white, transparent)",
-              zIndex: 2,
-              pointerEvents: "none",
-            }}
-          />
-
-          {/* Carousel - Infinite Loop */}
-          <Box
-            ref={scrollContainerRef}
-            sx={{
-              display: "flex",
-              gap: 3,
-              overflowX: "hidden",
-              pb: 2,
-              scrollbarWidth: "none",
-              "&::-webkit-scrollbar": {
-                display: "none",
-              },
+              fontFamily: playfair.style.fontFamily,
+              fontWeight: 700,
+              color: "var(--cv-textPrimary)",
+              fontSize: { xs: "1.5rem", md: "2rem" },
+              mb: 1,
+              background:
+                "linear-gradient(135deg, var(--cv-brazilGreen) 0%, var(--cv-brazilYellow) 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
             }}
           >
-            {infiniteGroups.map((group, idx) => (
-              <Box
-                key={`${group.title}-${idx}`}
+            Explore Gêneros Literários
+          </Typography>
+          <Typography
+            level="body-md"
+            sx={{
+              color: "var(--cv-textMuted70)",
+              fontSize: { xs: "0.9rem", md: "1rem" },
+            }}
+          >
+            Descubra contos através dos diferentes gêneros literários
+          </Typography>
+        </Box>
+
+        {/* Categories Grid (fixed column width per breakpoint) */}
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: {
+              xs: "repeat(auto-fit, 180px)",
+              sm: "repeat(auto-fit, 200px)",
+              md: "repeat(auto-fit, 220px)",
+            },
+            justifyContent: "space-between",
+            gap: { xs: 2.5, sm: 3, md: 4 },
+            alignItems: "start",
+            width: "100%",
+            maxWidth: "1400px",
+            mx: "auto",
+            px: { xs: 2, md: 4 },
+          }}
+        >
+          {categories.map((category) => (
+            <Box key={category.value} sx={{ display: "flex", justifyContent: "center" }}>
+              <Chip
+                variant="soft"
+                color="success"
                 sx={{
-                  minWidth: { xs: 280, sm: 280, md: 300 },
-                  bgcolor: "var(--cv-backgroundDefault)",
-                  borderRadius: 3,
-                  p: 3,
-                  border: "2px solid var(--cv-neutral200)",
-                  transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-                  position: "relative",
+                  width: { xs: 160, sm: 180, md: 200 },
+                  textAlign: "center",
+                  fontSize: { xs: "0.95rem", md: "1.05rem" },
+                  height: { xs: 48, md: 56 },
+                  px: { xs: 2, md: 3 },
+                  borderRadius: 2,
+                  cursor: "pointer",
+                  transition: "all 0.28s cubic-bezier(0.4, 0, 0.2, 1)",
+                  fontWeight: 600,
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+                  display: "inline-flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  whiteSpace: "nowrap",
                   overflow: "hidden",
-                  flexShrink: 0,
-                  "&::before": {
-                    content: '""',
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    height: "4px",
-                    background: `linear-gradient(90deg, ${
-                      group.color === "primary"
-                        ? "var(--cv-brazilBlue)"
-                        : group.color === "neutral"
-                          ? "var(--cv-neutral400)"
-                          : group.color === "warning"
-                            ? "var(--cv-brazilYellow)"
-                            : group.color === "success"
-                              ? "var(--cv-brazilGreen)"
-                              : "var(--cv-brazilRed)"
-                    }, transparent)`,
-                    opacity: 0,
-                    transition: "opacity 0.3s ease",
+                  textOverflow: "ellipsis",
+                  textTransform: "none",
+                  "& .joy-Chip-label": {
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
                   },
                   "&:hover": {
-                    transform: "translateY(-8px) scale(1.02)",
-                    boxShadow: "0 12px 32px rgba(34,139,34,0.2)",
-                    borderColor: "var(--cv-brazilGreen)",
-                    "&::before": {
-                      opacity: 1,
-                    },
+                    transform: "translateY(-6px) scale(1.03)",
+                    boxShadow: "0 10px 28px rgba(34,139,34,0.18)",
+                    bgcolor: "var(--cv-brazilGreen)",
+                    color: "white",
                   },
                 }}
               >
-                <Typography
-                  level="h4"
-                  sx={{
-                    fontFamily: playfair.style.fontFamily,
-                    fontWeight: 700,
-                    color: "var(--cv-textPrimary)",
-                    mb: 2.5,
-                    fontSize: { xs: "1.1rem", md: "1.2rem" },
-                    position: "relative",
-                    paddingBottom: "8px",
-                    "&::after": {
-                      content: '""',
-                      position: "absolute",
-                      bottom: 0,
-                      left: 0,
-                      width: "40px",
-                      height: "3px",
-                      bgcolor: "var(--cv-brazilGreen)",
-                      borderRadius: "2px",
-                    },
-                  }}
-                >
-                  {group.title}
-                </Typography>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    gap: 1.5,
-                  }}
-                >
-                  {group.categories.map((category, catIdx) => (
-                    <Chip
-                      key={`${category.value}-${idx}-${catIdx}`}
-                      variant="soft"
-                      color={group.color}
-                      sx={{
-                        fontSize: "0.85rem",
-                        py: 0.75,
-                        px: 2,
-                        cursor: "pointer",
-                        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                        fontWeight: 500,
-                        "&:hover": {
-                          transform: "translateY(-2px) scale(1.08)",
-                          boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-                        },
-                      }}
-                    >
-                      {category.label}
-                    </Chip>
-                  ))}
-                </Box>
-              </Box>
-            ))}
-          </Box>
+                {category.label}
+              </Chip>
+            </Box>
+          ))}
         </Box>
       </Box>
     </Box>

@@ -489,12 +489,16 @@ export default function NavBar() {
                         sx={{
                           width: 36,
                           height: 36,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
                           position: "relative",
                           borderRadius: "50%",
                           overflow: "hidden",
                           cursor: "pointer",
                           border: "2px solid var(--cv-brazilGreen)",
                           transition: "all 0.2s ease",
+                          background: "var(--cv-neutral100)",
                           "&:hover": {
                             borderColor: "var(--cv-brazilYellow)",
                             transform: "scale(1.05)",
@@ -509,9 +513,14 @@ export default function NavBar() {
                               : "/api/user/image"
                           }
                           alt={session.user?.name ?? "Avatar"}
-                          width={32}
-                          height={32}
-                          style={{ objectFit: "cover" }}
+                          width={36}
+                          height={36}
+                          style={{
+                            objectFit: "cover",
+                            width: "100%",
+                            height: "100%",
+                            display: "block",
+                          }}
                           unoptimized
                         />
                       </Box>

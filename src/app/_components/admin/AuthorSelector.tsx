@@ -13,14 +13,22 @@ import Textarea from "@mui/joy/Textarea";
 import { api } from "@/trpc/react";
 import StandardModal from "@/app/_components/ui/StandardModal";
 
+interface AuthorSelectorProps {
+  value?: number | null;
+  onChange: (v: number | null) => void;
+}
+
 export default function AuthorSelector({
   value,
   onChange,
-}: {
-  value?: number | null;
-  onChange: (v: number | null) => void;
-}) {
-  const { data: authors = [], isLoading } = api.author.list.useQuery();
+}: AuthorSelectorProps) {
+  const { data: authorsRaw = [], isLoading } = api.author.list.useQuery();
+  const authors = authorsRaw
+    .map((a) => ({
+      ...a,
+      id: typeof a.id === "string" ? Number(a.id) : a.id,
+    }))
+    .filter((a) => typeof a.id === "number" && !Number.isNaN(a.id));
   const ctx = api.useContext();
   const create = api.author.create.useMutation({
     onSuccess() {
@@ -69,7 +77,7 @@ export default function AuthorSelector({
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
                         src={sel.image}
-                        alt={sel.name}
+                        alt={sel.name ?? ""}
                         style={{
                           width: "100%",
                           height: "100%",
@@ -158,8 +166,10 @@ export default function AuthorSelector({
                   <ListItem
                     key={a.id}
                     onClick={() => {
-                      onChange(a.id);
-                      setPickerOpen(false);
+                      if (typeof a.id === "number" && !Number.isNaN(a.id)) {
+                        onChange(a.id);
+                        setPickerOpen(false);
+                      }
                     }}
                     sx={{ cursor: "pointer" }}
                   >
@@ -177,7 +187,7 @@ export default function AuthorSelector({
                           // eslint-disable-next-line @next/next/no-img-element
                           <img
                             src={a.image}
-                            alt={a.name}
+                            alt={a.name ?? ""}
                             style={{
                               width: "100%",
                               height: "100%",
