@@ -9,6 +9,7 @@ import Input from "@mui/joy/Input";
 import Stack from "@mui/joy/Stack";
 import Button from "@mui/joy/Button";
 import Avatar from "@mui/joy/Avatar";
+import Textarea from "@mui/joy/Textarea";
 
 import { useSession } from "next-auth/react";
 import { api } from "@/trpc/react";
@@ -21,6 +22,7 @@ type UserPayload = {
   name: string | null;
   email: string | null;
   image: string | null;
+  bio: string | null;
 };
 
 export default function ProfilePage() {
@@ -28,6 +30,7 @@ export default function ProfilePage() {
   const [user, setUser] = useState<UserPayload | null>(null);
   const [name, setName] = useState<string>("");
   const [imageUrl, setImageUrl] = useState<string>("");
+  const [bio, setBio] = useState<string>("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -47,6 +50,7 @@ export default function ProfilePage() {
     setUser(me as UserPayload);
     setName(me.name ?? "");
     setImageUrl(me.image ?? "");
+    setBio(me.bio ?? "");
     setPreview(me.image ?? null);
   }, [me]);
 
@@ -102,6 +106,13 @@ export default function ProfilePage() {
                 setImageUrl((e.target as HTMLInputElement).value)
               }
             />
+            
+            <Textarea
+              placeholder="Biografia (opcional)"
+              value={bio}
+              onChange={(e) => setBio((e.target as HTMLTextAreaElement).value)}
+              minRows={4}
+            />
 
             <UploadButton
               buttonLabel="Escolher arquivo"
@@ -128,6 +139,7 @@ export default function ProfilePage() {
                       const fd = new FormData();
                       fd.append("name", name);
                       fd.append("image", imageUrl || "");
+                      fd.append("bio", bio || "");
                       fd.append("avatar", selectedFile, selectedFile.name);
                       const res = await fetch("/api/user", {
                         method: "PATCH",
@@ -143,7 +155,7 @@ export default function ProfilePage() {
                       window.dispatchEvent(new Event("avatarUpdated"));
                       toast.push("Perfil atualizado com sucesso", "success");
                     } else {
-                      await updateUser.mutateAsync({ name, image: imageUrl });
+                      await updateUser.mutateAsync({ name, image: imageUrl, bio });
 
                       await utils.user.me.invalidate();
                       window.dispatchEvent(new Event("avatarUpdated"));
