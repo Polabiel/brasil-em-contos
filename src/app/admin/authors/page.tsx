@@ -9,20 +9,21 @@ import StandardModal from '@/app/_components/ui/StandardModal';
 type Author = RouterOutputs['author']['list'][number];
 
 export default function AuthorsAdminPage() {
-  const { data: authors = [], isLoading, refetch } = api.author.list.useQuery();
+  const { data: authors = [], isLoading } = api.author.list.useQuery();
+  const utils = api.useContext();
   const deleteMutation = api.author.delete.useMutation({
-    onSuccess: () => void refetch()
+    onSuccess: () => void utils.author.list.invalidate()
   });
   const createMutation = api.author.create.useMutation({
     onSuccess: () => {
-      void refetch();
+      void utils.author.list.invalidate();
       setShowCreateModal(false);
       setCreateForm({ name: '', period: '', bio: '' });
     }
   });
   const updateMutation = api.author.update.useMutation({
     onSuccess: () => {
-      void refetch();
+      void utils.author.list.invalidate();
       setShowEditModal(false);
       setEditForm({ id: 0, name: '', period: '', bio: '' });
     }

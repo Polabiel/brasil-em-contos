@@ -20,21 +20,22 @@ import StandardModal from "@/app/_components/ui/StandardModal";
 type Book = RouterOutputs["book"]["list"][number];
 
 export default function BooksAdminPage() {
-  const { data: books = [], isLoading, refetch } = api.book.list.useQuery();
+  const { data: books = [], isLoading } = api.book.list.useQuery();
   const { data: authors = [] } = api.author.list.useQuery();
+  const utils = api.useContext();
   const deleteMutation = api.book.delete.useMutation({
-    onSuccess: () => void refetch(),
+    onSuccess: () => void utils.book.list.invalidate(),
   });
   const createMutation = api.book.create.useMutation({
     onSuccess: () => {
-      void refetch();
+      void utils.book.list.invalidate();
       setShowCreateModal(false);
       setCreateForm({ title: "", year: "", authorId: 0 });
     },
   });
   const updateMutation = api.book.update.useMutation({
     onSuccess: () => {
-      void refetch();
+      void utils.book.list.invalidate();
       setShowEditModal(false);
       setEditForm({ id: 0, title: "", year: "", authorId: 0 });
     },
