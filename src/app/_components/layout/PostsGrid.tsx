@@ -2,7 +2,6 @@
 
 import Grid from "@mui/joy/Grid";
 import Card from "@mui/joy/Card";
-import CardContent from "@mui/joy/CardContent";
 import Typography from "@mui/joy/Typography";
 import Box from "@mui/joy/Box";
 import IconButton from "@mui/joy/IconButton";
@@ -83,7 +82,7 @@ export default function PostsGrid() {
     const content = (text ?? "").trim();
     if (!content) return "1 min";
     const words = content.split(/\s+/).filter(Boolean).length;
-    const wpm = 200;
+    const wpm = 80;
     const minutes = Math.max(1, Math.ceil(words / wpm));
     return `${minutes} min`;
   };
@@ -120,14 +119,18 @@ export default function PostsGrid() {
 
   return (
     <Box sx={{ mb: 6 }}>
-      <Box id="mais-historias" sx={{ mb: 4, textAlign: "center" }}>
+      <Box
+        id="mais-historias"
+        sx={{ mb: 4, textAlign: "center", justifyContent: "center" }}
+      >
         <Typography
           level="h2"
           className={playfair.className}
           sx={{
             fontSize: { xs: "1.8rem", md: "2.5rem" },
             fontWeight: 700,
-            background: "linear-gradient(135deg, var(--cv-brazilGreen) 0%, var(--cv-brazilYellow) 100%)",
+            background:
+              "linear-gradient(135deg, var(--cv-brazilGreen) 0%, var(--cv-brazilYellow) 100%)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
             backgroundClip: "text",
@@ -142,7 +145,8 @@ export default function PostsGrid() {
               transform: "translateX(-50%)",
               width: "60px",
               height: "4px",
-              background: "linear-gradient(90deg, var(--cv-brazilGreen), var(--cv-brazilYellow))",
+              background:
+                "linear-gradient(90deg, var(--cv-brazilGreen), var(--cv-brazilYellow))",
               borderRadius: "2px",
             },
           }}
@@ -262,95 +266,134 @@ export default function PostsGrid() {
           )}
         </Box>
       ) : (
-        <Grid container spacing={3}>
+        <Grid container spacing={3} sx={{ justifyContent: 'center' }}>
           {displayItems.map((p, index) => {
             const isLarge = index === 0;
             if (p === "coming-soon") {
               return (
                 <Grid xs={12} sm={6} md={4} key="coming-soon">
-                  <motion.div
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: index * 0.08 }}
-                    whileHover={{ scale: 1.03, y: -6 }}
-                    whileTap={{ scale: 0.98 }}
-                    style={{ perspective: "800px" }}
+                  <Box
+                    sx={{
+                      maxWidth: 300,
+                      mx: "auto",
+
+                      transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                      "&:hover": {
+                        transform: "translateY(-12px)",
+                        "& .coming-soon-card": {
+                          boxShadow:
+                            "0 24px 48px rgba(0,0,0,0.15), 0 12px 24px rgba(0,0,0,0.1)",
+                        },
+                      },
+                    }}
                   >
                     <Card
+                      className="coming-soon-card"
                       variant="plain"
                       sx={{
                         position: "relative",
-                        width: 350,
-                        height: 550,
+                        width: 300,
+                        height: 450,
                         transition: "all 0.35s cubic-bezier(0.2, 0, 0.2, 1)",
                         cursor: "pointer",
                         overflow: "hidden",
                         background: "rgba(255,255,255,0.92)",
                         backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><rect width='24' height='24' fill='%23ffffff'/><path fill='%23000000' opacity='0.02' d='M0 0h1v1H0zM2 3h1v1H2zM5 1h1v1H5z'/></svg>")`,
                         backgroundRepeat: "repeat",
-                        border: "1px solid rgba(0,0,0,0.06)",
+                        border: "2px solid rgba(0,0,0,0.06)",
                         backdropFilter: "blur(6px)",
                         WebkitBackdropFilter: "blur(6px)",
-                        borderRadius: 16,
+                        borderRadius: 12,
                         display: "flex",
                         flexDirection: "column",
-                        p: 0,
-                        boxShadow: "0 8px 30px rgba(2,6,23,0.06)",
-                        "&::before": {
-                          content: '""',
-                          position: "absolute",
-                          top: 0,
-                          left: 0,
-                          right: 0,
-                          height: "4px",
-                          background:
-                            "linear-gradient(90deg, rgba(0,0,0,0.04), rgba(0,0,0,0.02))",
-                          opacity: 0.6,
-                          transition: "opacity 0.3s ease",
-                        },
-                        "&:hover": {
-                          borderColor: "rgba(0,0,0,0.08)",
-                          boxShadow: "0 18px 40px rgba(2,6,23,0.12)",
-                          transform: "translateY(-6px)",
-                          "&::before": {
-                            opacity: 1,
-                          },
-                        },
+                        alignItems: "center",
+                        justifyContent: "center",
+                        p: 3,
+                        boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
                       }}
                     >
-                      <Box sx={{ position: "relative", width: "100%", height: 260, flexShrink: 0, overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                        <motion.div animate={{ translateY: [0, -6, 0] }} transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}>
-                          <Typography level="h1" sx={{ color: "#111111", fontSize: "3.4rem", fontWeight: 800, textShadow: "0 6px 18px rgba(0,0,0,0.06)", opacity: 0.95 }}>
-                            🚀
-                          </Typography>
-                        </motion.div>
-                      </Box>
+                      <motion.div
+                        animate={{ translateY: [0, -6, 0] }}
+                        transition={{
+                          duration: 3.5,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                        }}
+                      >
+                        <Typography
+                          level="h1"
+                          sx={{
+                            color: "#111111",
+                            fontSize: "3.4rem",
+                            fontWeight: 800,
+                            textShadow: "0 6px 18px rgba(0,0,0,0.06)",
+                            opacity: 0.95,
+                            mb: 3,
+                          }}
+                        >
+                          🚀
+                        </Typography>
+                      </motion.div>
 
-                      <CardContent sx={{ p: 2.5, flexGrow: 1, display: "flex", flexDirection: "column", background: "transparent" }}>
-                        <Stack spacing={1.5} sx={{ flexGrow: 1 }}>
-                          <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.45, delay: 0.15 }}>
-                            <Typography level="title-md" className={playfair.className} sx={{ fontWeight: 700, color: "#111111", lineHeight: 1.3, textAlign: "center", fontSize: "1.6rem" }}>
-                              Em Breve
-                            </Typography>
-                          </motion.div>
+                      <Typography
+                        level="title-lg"
+                        className={playfair.className}
+                        sx={{
+                          fontWeight: 700,
+                          color: "#111111",
+                          lineHeight: 1.3,
+                          textAlign: "center",
+                          fontSize: "1.6rem",
+                          mb: 2,
+                        }}
+                      >
+                        Em Breve
+                      </Typography>
 
-                          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.3 }}>
-                            <Typography level="body-sm" sx={{ color: "#333333", lineHeight: 1.5, textAlign: "center", flexGrow: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                              Novas histórias incríveis estão chegando... Prepare-se para mais aventuras literárias!
-                            </Typography>
-                          </motion.div>
-
-                          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.45, delay: 0.5 }} whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.98 }}>
-                            <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-                              <Box sx={{ width: 40, height: 40, borderRadius: "50%", background: "linear-gradient(45deg, #e6e6e6, #ffffff)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 6px 18px rgba(0,0,0,0.06)" }}>
-                                <i className="fas fa-clock" style={{ color: "#111111", fontSize: "1.05rem" }} />
-                              </Box>
-                            </Box>
-                          </motion.div>
-                        </Stack>
-                      </CardContent>
+                      <Typography
+                        level="body-sm"
+                        sx={{
+                          color: "#333333",
+                          lineHeight: 1.5,
+                          textAlign: "center",
+                          px: 2,
+                        }}
+                      >
+                        Novas histórias incríveis estão chegando...
+                      </Typography>
                     </Card>
-                  </motion.div>
+
+                    {/* Data de lançamento */}
+                    <Box
+                      sx={{
+                        mt: 2,
+                        textAlign: "center",
+                        width: "100%",
+                        px: 1,
+                      }}
+                    >
+                      <Stack
+                        direction="row"
+                        spacing={0.5}
+                        alignItems="center"
+                        justifyContent="center"
+                      >
+                        <i
+                          className="fas fa-clock"
+                          style={{
+                            color: "var(--cv-textMuted60)",
+                            fontSize: "0.75rem",
+                          }}
+                        />
+                        <Typography
+                          level="body-xs"
+                          sx={{ color: "var(--cv-textMuted70)" }}
+                        >
+                          {new Date(2026, 7, 10).toLocaleDateString("pt-BR")}
+                        </Typography>
+                      </Stack>
+                    </Box>
+                  </Box>
                 </Grid>
               );
             }
@@ -364,155 +407,99 @@ export default function PostsGrid() {
             }
 
             const post = p;
-            const date = post.createdAt
-              ? new Date(post.createdAt).toLocaleDateString("pt-BR", {
-                  day: "2-digit",
-                  month: "short",
-                  year: "numeric",
-                })
-              : "";
-            const category = post.tags && post.tags.length > 0 ? formatTag(post.tags[0]) : "Conto Brasileiro";
-            const readTime = getReadTime(post.description);
+            const category =
+              post.tags && post.tags.length > 0
+                ? formatTag(post.tags[0])
+                : "Conto Brasileiro";
+            const readTime = getReadTime(post.content);
 
             return (
               <Grid key={String(post.id)}>
-                <Link
-                  href={`/posts/${post.id}`}
-                  style={{ textDecoration: "none", color: "inherit" }}
+                <Box
+                  sx={{
+                    maxWidth: 300,
+                    mx: "auto",
+                    justifyContent: "center",
+                    transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                    "&:hover": {
+                      transform: "translateY(-12px)",
+                      "& .book-card": {
+                        boxShadow:
+                          "0 24px 48px rgba(34,139,34,0.25), 0 12px 24px rgba(0,0,0,0.15)",
+                      },
+                    },
+                  }}
                 >
-                  <Card
-                    variant="outlined"
-                    sx={{
-                      position: "relative",
-                      width: 350,
-                      height: 550,
-                      transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-                      cursor: "pointer",
-                      overflow: "hidden",
-                      background: "var(--cv-backgroundPaper)",
-                      border: "2px solid var(--cv-neutral200)",
-                      borderRadius: 16,
-                      display: "flex",
-                      flexDirection: "column",
-                      p: 0,
-                      "&::before": {
-                        content: '""',
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        height: "4px",
-                        background: "linear-gradient(90deg, var(--cv-brazilGreen), var(--cv-brazilYellow), var(--cv-brazilBlue))",
-                        opacity: 0,
-                        transition: "opacity 0.4s ease",
-                      },
-                      "&:hover": {
-                        transform: "translateY(-12px) scale(1.02)",
-                        boxShadow: "0 24px 48px rgba(34,139,34,0.2)",
-                        borderColor: "var(--cv-brazilGreen)",
-                        "&::before": {
-                          opacity: 1,
-                        },
-                        "& .post-image": {
-                          transform: "scale(1.1) rotate(1deg)",
-                        },
-                        "& .post-overlay": {
-                          opacity: 1,
-                        },
-                        "& .read-more": {
-                          transform: "translateY(0)",
-                          opacity: 1,
-                        },
-                      },
-                      "& .post-image": {
-                        position: "absolute",
-                        inset: 0,
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        objectPosition: "top",
-                        transition: "transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
-                      },
-                    }}
+                  <Link
+                    href={`/posts/${post.id}`}
+                    style={{ textDecoration: "none", color: "inherit" }}
                   >
-                    {session?.user?.role === "ADMIN" && (
-                      <IconButton
-                        aria-label={`Editar post ${post.id}`}
-                        size="sm"
-                        variant="solid"
-                        color="primary"
-                        sx={{
-                          position: "absolute",
-                          top: 12,
-                          right: 12,
-                          zIndex: 3,
-                          transform: "none",
-                          bgcolor: "var(--cv-brazilGreen)",
-                          "&:hover": {
-                            bgcolor: "#1e5f28",
-                          },
-                        }}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          router.push(`/admin/posts/${post.id}/edit`);
-                        }}
-                      >
-                        <i className="fas fa-pen" aria-hidden="true" />
-                      </IconButton>
-                    )}
-
-                    <Box
+                    <Card
+                      className="book-card"
+                      variant="outlined"
                       sx={{
                         position: "relative",
-                        width: "100%",
-                        height: 260,
-                        flexShrink: 0,
+                        width: 300,
+                        height: 450,
+                        transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                        cursor: "pointer",
                         overflow: "hidden",
+                        background: "var(--cv-backgroundPaper)",
+                        border: "2px solid var(--cv-neutral200)",
+                        borderRadius: 12,
+                        p: 0,
+                        justifyContent: "center",
+
+                        boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
                       }}
                     >
+                      {session?.user?.role === "ADMIN" && (
+                        <IconButton
+                          aria-label={`Editar post ${post.id}`}
+                          size="sm"
+                          variant="solid"
+                          color="primary"
+                          sx={{
+                            position: "absolute",
+                            top: 12,
+                            right: 12,
+                            zIndex: 3,
+                            bgcolor: "var(--cv-brazilGreen)",
+                            "&:hover": {
+                              bgcolor: "#1e5f28",
+                            },
+                          }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            router.push(`/admin/posts/${post.id}/edit`);
+                          }}
+                        >
+                          <i className="fas fa-pen" aria-hidden="true" />
+                        </IconButton>
+                      )}
+
+                      {/* Imagem da Capa - Preenche todo o Card */}
                       {post.image ? (
                         <Image
                           src={post.image}
                           alt={post.name}
                           fill
-                          sizes="(max-width: 600px) 100vw, 390px"
+                          sizes="300px"
                           style={{
                             objectFit: "cover",
                             objectPosition: "top",
-                            transition: "transform 0.3s ease",
-                            display: "block",
                           }}
-                          className="post-image"
                           unoptimized
                         />
                       ) : (
                         <Box
-                          className="post-image"
                           sx={{
                             position: "absolute",
                             inset: 0,
-                            display: "block",
-                            transition: "transform 0.3s ease",
                             backgroundColor: "var(--cv-neutral100)",
                           }}
                         />
                       )}
-
-                      {/* Overlay for better text readability */}
-                      <Box
-                        className="post-overlay"
-                        sx={{
-                          position: "absolute",
-                          top: 0,
-                          left: 0,
-                          right: 0,
-                          bottom: 0,
-                          background: "linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(34,139,34,0.6) 100%)",
-                          opacity: 0,
-                          transition: "opacity 0.4s ease",
-                          zIndex: 2,
-                        }}
-                      />
 
                       {/* Category Chip */}
                       <Chip
@@ -522,157 +509,83 @@ export default function PostsGrid() {
                           position: "absolute",
                           top: 8,
                           left: 12,
-                          transform: "none",
                           zIndex: 3,
                           bgcolor: "var(--cv-brazilYellow)",
                           color: "var(--cv-textPrimary)",
                           fontWeight: 700,
                           fontSize: "0.75rem",
-                          transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
                           boxShadow: "0 2px 8px rgba(255,215,0,0.4)",
-                          "&:hover": {
-                            transform: "scale(1.1) translateY(-2px)",
-                            boxShadow: "0 4px 12px rgba(255,215,0,0.6)",
-                          },
                         }}
                       >
                         {category}
                       </Chip>
-                    </Box>
+                    </Card>
 
-                    <CardContent
+                    {/* Informações do Livro - FORA DO CARD */}
+                    <Box
                       sx={{
-                        p: isLarge ? 3 : 2.5,
-                        flexGrow: 1,
-                        display: "flex",
-                        flexDirection: "column",
+                        mt: 2,
+                        textAlign: "center",
+                        width: "100%",
+                        px: 1,
                       }}
                     >
-                      <Stack spacing={isLarge ? 2 : 1.5} sx={{ flexGrow: 1 }}>
+                      {/* Título */}
+                      <Typography
+                        level="title-lg"
+                        className={playfair.className}
+                        sx={{
+                          fontWeight: 700,
+                          color: "var(--cv-textPrimary)",
+                          lineHeight: 1.3,
+                          display: "-webkit-box",
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: "vertical",
+                          overflow: "hidden",
+                          mb: 0.5,
+                        }}
+                      >
+                        {post.name}
+                      </Typography>
+
+                      {/* Autor */}
+                      <Typography
+                        level="body-sm"
+                        sx={{
+                          color: "var(--cv-brazilGreen)",
+                          fontWeight: 600,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.5px",
+                          mb: 1,
+                        }}
+                      >
+                        {post.author?.name ?? "Autor Desconhecido"}
+                      </Typography>
+
+                      {/* Tempo de Leitura */}
+                      <Stack
+                        direction="row"
+                        spacing={0.5}
+                        alignItems="center"
+                        justifyContent="center"
+                      >
+                        <i
+                          className="fas fa-clock"
+                          style={{
+                            color: "var(--cv-textMuted60)",
+                            fontSize: "0.75rem",
+                          }}
+                        />
                         <Typography
-                          level={isLarge ? "h4" : "title-md"}
-                          className={playfair.className}
-                          sx={{
-                            fontWeight: 700,
-                            color: "var(--cv-textPrimary)",
-                            lineHeight: 1.3,
-                            display: "-webkit-box",
-                            WebkitLineClamp: 2,
-                            WebkitBoxOrient: "vertical",
-                            overflow: "hidden",
-                            transition: "color 0.3s ease",
-                            "&:hover": {
-                              color: "var(--cv-brazilGreen)",
-                            },
-                          }}
+                          level="body-xs"
+                          sx={{ color: "var(--cv-textMuted70)" }}
                         >
-                          {post.name}
+                          {readTime} leitura
                         </Typography>
-
-                        <Stack direction="row" spacing={2} alignItems="center">
-                          <Stack
-                            direction="row"
-                            spacing={1}
-                            alignItems="center"
-                          >
-                            <i
-                              className="fas fa-calendar"
-                              style={{
-                                color: "var(--cv-textMuted60)",
-                                fontSize: "0.8rem",
-                              }}
-                            />
-                            <Typography
-                              level="body-xs"
-                              sx={{ color: "var(--cv-textMuted70)" }}
-                            >
-                              {date}
-                            </Typography>
-                          </Stack>
-                          <Stack
-                            direction="row"
-                            spacing={1}
-                            alignItems="center"
-                          >
-                            <i
-                              className="fas fa-clock"
-                              style={{
-                                color: "var(--cv-textMuted60)",
-                                fontSize: "0.8rem",
-                              }}
-                            />
-                            <Typography
-                              level="body-xs"
-                              sx={{ color: "var(--cv-textMuted70)" }}
-                            >
-                              {readTime} leitura
-                            </Typography>
-                          </Stack>
-                        </Stack>
-
-                        <Typography
-                          level="body-sm"
-                          sx={{
-                            color: "var(--cv-textMuted80)",
-                            lineHeight: 1.5,
-                            display: "-webkit-box",
-                            WebkitLineClamp: isLarge ? 3 : 2,
-                            WebkitBoxOrient: "vertical",
-                            overflow: "hidden",
-                            flexGrow: 1,
-                          }}
-                        >
-                          {post.description ??
-                            "Uma história cativante que explora os aspectos únicos da cultura brasileira através da literatura."}
-                        </Typography>
-
-                        {/* Author and collaborator info */}
-                        <Stack direction="row" spacing={2} alignItems="center">
-                          <Typography
-                            level="body-xs"
-                            sx={{
-                              color: "var(--cv-brazilGreen)",
-                              fontWeight: 600,
-                            }}
-                          >
-                            {post.author?.name ?? "Autor Desconhecido"}
-                          </Typography>
-
-                          <Typography
-                            level="body-xs"
-                            sx={{ color: "var(--cv-textMuted70)" }}
-                          >
-                            {post.createdBy?.name
-                              ? `Criado: ${post.createdBy.name}`
-                              : ""}
-                          </Typography>
-                        </Stack>
-
-                        {/* Read more button - appears on hover */}
-                        <Stack
-                          direction="row"
-                          alignItems="center"
-                          spacing={1}
-                          className="read-more"
-                          sx={{
-                            transform: "translateY(8px)",
-                            opacity: 0,
-                            transition: "all 0.3s ease",
-                            color: "var(--cv-brazilGreen)",
-                            fontWeight: 600,
-                            fontSize: "0.9rem",
-                          }}
-                        >
-                          <span>Ler história</span>
-                          <i
-                            className="fas fa-arrow-right"
-                            style={{ fontSize: "0.8rem" }}
-                          />
-                        </Stack>
                       </Stack>
-                    </CardContent>
-                  </Card>
-                </Link>
+                    </Box>
+                  </Link>
+                </Box>
               </Grid>
             );
           })}
