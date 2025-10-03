@@ -23,7 +23,7 @@ export const postRouter = createTRPCRouter({
         name: z.string().min(1),
         description: z.string().optional(),
         image: z.string().optional(),
-        tag: z.string().nullable().optional(),
+        tags: z.array(z.string()).optional(),
         authorId: z.number().nullable().optional(),
       }),
     )
@@ -34,7 +34,7 @@ export const postRouter = createTRPCRouter({
           description: input.description ?? null,
           image: input.image ?? null,
           ...(input.authorId ? { authorId: input.authorId } : {}),
-          ...(input.tag ? { tag: input.tag as BookTag } : {}),
+          ...(input.tags && input.tags.length > 0 ? { tags: input.tags as BookTag[] } : {}),
           createdById: ctx.session.user.id,
         },
         include: { createdBy: true, author: true },
@@ -89,7 +89,7 @@ export const postRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const take = input.take ?? 12;
       const posts = await ctx.db.post.findMany({
-        where: { tag: input.tag as unknown as BookTag },
+        where: { tags: { has: input.tag as BookTag } },
         orderBy: { createdAt: "desc" },
         take,
         include: { createdBy: true, author: true },
@@ -123,7 +123,7 @@ export const postRouter = createTRPCRouter({
         content: z.string().optional(),
         description: z.string().optional(),
         image: z.string().optional(),
-        tag: z.string().nullable().optional(),
+        tags: z.array(z.string()).optional(),
         authorId: z.number().nullable().optional(),
       }),
     )
@@ -133,7 +133,7 @@ export const postRouter = createTRPCRouter({
         content?: string;
         description?: string | null;
         image?: string | null;
-        tag?: BookTag | null;
+        tags?: BookTag[];
         authorId?: number | null;
       } = {};
 
@@ -142,8 +142,8 @@ export const postRouter = createTRPCRouter({
       if (typeof input.description === "string")
         data.description = input.description ?? null;
       if (typeof input.image === "string") data.image = input.image ?? null;
-      if (input.tag !== undefined) {
-        data.tag = input.tag ? (input.tag as BookTag) : null;
+      if (input.tags !== undefined) {
+        data.tags = input.tags as BookTag[];
       }
       if (input.authorId !== undefined) {
         data.authorId = input.authorId;
@@ -175,19 +175,26 @@ export const postRouter = createTRPCRouter({
   }),
 
   tags: publicProcedure.query(async ({ ctx }) => {
-    const rows = await ctx.db.post.groupBy({
-      by: ["tag"],
-      where: { tag: { not: null } },
-      _count: { _all: true },
+    // Com tags[], não podemos usar groupBy diretamente
+    // Vamos buscar todos os posts e contar tags manualmente
+    const posts = await ctx.db.post.findMany({
+      select: { tags: true },
+      where: { tags: { isEmpty: false } },
     });
 
-    const sorted = rows
-      .slice()
-      .sort((a, b) => (b._count._all ?? 0) - (a._count._all ?? 0));
-    return sorted.map((r) => ({
-      tag: String(r.tag),
-      count: Number(r._count._all ?? 0),
-    }));
+    const tagCount = new Map<string, number>();
+    posts.forEach((post) => {
+      const postTags = post.tags as string[];
+      postTags.forEach((tag: string) => {
+        tagCount.set(tag, (tagCount.get(tag) ?? 0) + 1);
+      });
+    });
+
+    const sorted = Array.from(tagCount.entries())
+      .map(([tag, count]) => ({ tag, count }))
+      .sort((a, b) => b.count - a.count);
+    
+    return sorted;
   }),
 
   bookTags: publicProcedure.query(() => {

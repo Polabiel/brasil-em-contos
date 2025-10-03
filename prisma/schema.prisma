@@ -51,6 +51,10 @@ enum BookTag {
     LITERATURA_FEMININA
     MEMORIAS // 22
     OUTROS
+
+    // Períodos Literários
+    MODERNISMO
+    CONTEMPORANEO
 }
 
 model Post {
@@ -61,7 +65,7 @@ model Post {
     image       String?
     imageBlob   Bytes?
     imageMime   String?
-    tag         BookTag?
+    tags        BookTag[] @default([])
     featured    Boolean   @default(false)
     // relation to Author: a post can have an author
     author      Author?   @relation(fields: [authorId], references: [id])
@@ -69,10 +73,10 @@ model Post {
     createdAt   DateTime  @default(now())
     updatedAt   DateTime  @updatedAt
 
-    createdBy   User      @relation(fields: [createdById], references: [id])
+    createdBy   User   @relation(fields: [createdById], references: [id])
     createdById String
-    
-    comments    Comment[]
+
+    comments Comment[]
 
     @@index([name])
     @@index([featured])
@@ -160,17 +164,17 @@ model Comment {
     updatedAt DateTime @updatedAt
 
     // Parent-child relationship for threaded comments
-    parent      Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
-    parentId    Int?
-    replies     Comment[] @relation("CommentReplies")
+    parent   Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+    parentId Int?
+    replies  Comment[] @relation("CommentReplies")
 
     // Relation to Post
-    post        Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
-    postId      Int
+    post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+    postId Int
 
     // Relation to User (author of comment)
-    author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
-    authorId    String
+    author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+    authorId String
 
     @@index([postId])
     @@index([parentId])

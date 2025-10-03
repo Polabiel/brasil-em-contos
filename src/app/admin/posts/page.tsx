@@ -12,6 +12,7 @@ export default async function AdminPostsPage() {
       content: true,
       description: true,
       image: true,
+      tags: true,
       createdAt: true,
       updatedAt: true,
       featured: true,

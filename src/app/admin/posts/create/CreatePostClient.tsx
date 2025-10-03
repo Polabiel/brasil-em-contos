@@ -24,7 +24,7 @@ export default function CreatePostClient() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [description, setDescription] = useState("");
   const [content, setContent] = useState("");
-  const [tag, setTag] = useState<string | null>(null);
+  const [tags, setTags] = useState<string[]>([]);
   const [authorId, setAuthorId] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -47,7 +47,7 @@ export default function CreatePostClient() {
         const fd = new FormData();
         fd.append("name", name);
         if (authorId != null) fd.append("authorId", String(authorId));
-        if (tag) fd.append("tag", tag);
+        if (tags.length > 0) fd.append("tags", JSON.stringify(tags));
         fd.append("description", description || "");
         fd.append("content", content || "");
         fd.append("image", image || "");
@@ -66,7 +66,7 @@ export default function CreatePostClient() {
           const fd = new FormData();
           fd.append("name", name);
           if (authorId != null) fd.append("authorId", String(authorId));
-          if (tag) fd.append("tag", tag);
+          if (tags.length > 0) fd.append("tags", JSON.stringify(tags));
           fd.append("description", description || "");
           fd.append("content", content || "");
           fd.append("image", image || "");
@@ -80,7 +80,7 @@ export default function CreatePostClient() {
             name,
             description: description ?? undefined,
             image: image ?? undefined,
-            tag: tag ?? undefined,
+            tags: tags.length > 0 ? tags : undefined,
             authorId: authorId ?? undefined,
           });
           res = new Response(null, { status: 200 });
@@ -139,16 +139,17 @@ export default function CreatePostClient() {
               type="datetime-local"
               value={updatedAt ?? ""}
               onChange={(e) =>
-                setUpdatedAt((e.target as HTMLInputElement).value || null)
+                setUpdatedAt(e.target.value || null)
               }
             />
           </Box>
         </Box>
 
         <Select
-          placeholder="Tag do livro (opcional)"
-          value={tag}
-          onChange={(_, newValue) => setTag(newValue)}
+          placeholder="Tags do livro (opcional)"
+          multiple
+          value={tags}
+          onChange={(_, newValue) => setTags(newValue)}
           size="md"
         >
           {(api.post.bookTags.useQuery().data ?? []).map((v) => (

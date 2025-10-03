@@ -25,7 +25,7 @@ export async function PUT(
     );
   const bodySchema = z.object({
     name: z.string().min(1, "name required"),
-    tag: z.string().optional(),
+    tags: z.array(z.string()).optional(),
     authorId: z.number().optional(),
     content: z.string().optional(),
     description: z.string().optional(),
@@ -82,8 +82,9 @@ export async function PUT(
         description: toParse.description,
         image: toParse.image,
       } as z.infer<typeof bodySchema>;
-      (parsed as Record<string, unknown>).imageBlob = buf.toString("base64");
-      (parsed as Record<string, unknown>).imageMime = mime;
+      const parsedRecord = parsed as Record<string, unknown>;
+      parsedRecord.imageBlob = buf.toString("base64");
+      parsedRecord.imageMime = mime;
     }
   } else {
     try {
@@ -103,13 +104,14 @@ export async function PUT(
   const description =
     parsed.description == null ? null : String(parsed.description);
   const image = parsed.image == null ? null : String(parsed.image);
-  const rawTag = (parsed as Record<string, unknown>).tag;
+  const rawTags = (parsed as Record<string, unknown>).tags;
   const rawAuthor = (parsed as Record<string, unknown>).authorId;
   const authorId =
     typeof rawAuthor === "string" || typeof rawAuthor === "number"
       ? Number(rawAuthor)
       : null;
-  const tagValue = typeof rawTag === "string" ? rawTag : null;
+  const tagsValue = Array.isArray(rawTags) ? rawTags.filter((t): t is string => typeof t === "string") : [];
+  const validTags = tagsValue.filter((t) => Object.values(BookTag).includes(t as BookTag));
   const imageBlob =
     (parsed as Record<string, unknown>).imageBlob == null
       ? null
@@ -128,9 +130,9 @@ export async function PUT(
     imageMime: imageMime ?? undefined,
   };
 
-  // attach tag only when validated against Prisma enum
-  if (tagValue != null && Object.values(BookTag).includes(tagValue as unknown as BookTag)) {
-    updatePayload.tag = tagValue as unknown as BookTag;
+  // attach tags only when validated against Prisma enum
+  if (validTags.length > 0) {
+    updatePayload.tags = validTags as BookTag[];
   }
 
   if (authorId != null && !Number.isNaN(authorId)) {

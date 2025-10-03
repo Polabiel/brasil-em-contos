@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
 
   const bodySchema = z.object({
     name: z.string().min(1, "name required"),
-    tag: z.string().optional(),
+    tags: z.array(z.string()).optional(),
     authorId: z.number().optional(),
     description: z.string().optional(),
     content: z.string().optional(),
@@ -77,8 +77,9 @@ export async function POST(req: NextRequest) {
         image: toParse.image,
       } as z.infer<typeof bodySchema>;
       // attach image fields as base64/mime
-      (parsed as Record<string, unknown>).imageBlob = buf.toString("base64");
-      (parsed as Record<string, unknown>).imageMime = mime;
+      const parsedRecord = parsed as Record<string, unknown>;
+      parsedRecord.imageBlob = buf.toString("base64");
+      parsedRecord.imageMime = mime;
     }
   } else {
     try {
@@ -95,13 +96,14 @@ export async function POST(req: NextRequest) {
 
   // normalize into a safe shape
   const name = String(parsed.name);
-  const rawTag = (parsed as Record<string, unknown>).tag;
+  const rawTags = (parsed as Record<string, unknown>).tags;
   const rawAuthor = (parsed as Record<string, unknown>).authorId;
   const authorId =
     typeof rawAuthor === "string" || typeof rawAuthor === "number"
       ? Number(rawAuthor)
       : null;
-  const tagValue = typeof rawTag === "string" ? rawTag : null;
+  const tagsValue = Array.isArray(rawTags) ? rawTags.filter((t): t is string => typeof t === "string") : [];
+  const validTags = tagsValue.filter((t) => Object.values(BookTag).includes(t as BookTag));
   const description: string | null =
     parsed.description == null ? null : String(parsed.description);
   const contentValue = parsed.content == null ? null : String(parsed.content);
@@ -130,9 +132,8 @@ export async function POST(req: NextRequest) {
     (createData as Record<string, unknown>).authorId = Number(authorId);
   }
 
-  if (tagValue != null && Object.values(BookTag).includes(tagValue as unknown as BookTag)) {
-    // Prisma.PostUncheckedCreateInput accepts the enum literal type for tag
-    (createData as unknown as Record<string, unknown>).tag = tagValue as unknown as BookTag;
+  if (validTags.length > 0) {
+    (createData as unknown as Record<string, unknown>).tags = validTags as BookTag[];
   }
 
   const created = (await db.post.create({ data: createData })) as {

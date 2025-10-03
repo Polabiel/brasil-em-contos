@@ -97,7 +97,7 @@ export default async function PostPage({
       description: true,
       image: true,
       imageBlob: true,
-      tag: true,
+      tags: true,
       createdAt: true,
       createdBy: { select: { id: true, name: true, image: true, bio: true } },
       author: {
@@ -129,10 +129,20 @@ export default async function PostPage({
       ? `/api/posts/${post.id}/image`
       : undefined;
 
-  const authorImageSrc = post.author?.image
-    ? String(post.author.image)
-    : post.author?.imageBlob
-      ? `/api/authors/${post.author.id}/image`
+  const postAuthor = (post.author ?? null) as {
+    id: number;
+    name: string | null;
+    period: string | null;
+    bio: string | null;
+    image: string | null;
+    imageBlob: Uint8Array | null;
+    slug: string | null;
+    books: { id: number; title: string; year: number | null }[];
+  } | null;
+  const authorImageSrc = postAuthor?.image
+    ? String(postAuthor.image)
+    : postAuthor?.imageBlob
+      ? `/api/authors/${postAuthor.id}/image`
       : undefined;
 
   return (
@@ -218,7 +228,7 @@ export default async function PostPage({
                 >
                   <Image
                     src={authorImageSrc}
-                    alt={String(post.author.name ?? "")}
+                    alt={String(postAuthor?.name ?? "")}
                     fill
                     style={{ objectFit: "cover" }}
                     unoptimized
@@ -227,20 +237,22 @@ export default async function PostPage({
               )}
 
               <Typography level="title-md" sx={{ fontWeight: 700, mb: 0.5 }}>
-                {String(post.author.name ?? "")}
+                {String(postAuthor?.name ?? "")}
               </Typography>
 
-              {post.author.period && (
+              {postAuthor?.period && (
                 <Typography
                   level="body-sm"
                   sx={{ color: "var(--cv-textMuted80)", mb: 1 }}
                 >
-                  {post.author.period}
+                  {postAuthor.period}
                 </Typography>
               )}
 
               {/* Genre/Tag */}
-              {post.tag && (
+              {(() => {
+                const tags = post.tags as string[] | undefined;
+                return Array.isArray(tags) && tags.length > 0 && (
                 <Box sx={{ mb: 2 }}>
                   <Typography
                     level="body-xs"
@@ -253,13 +265,14 @@ export default async function PostPage({
                     Gênero
                   </Typography>
                   <Typography level="body-sm">
-                    {String(post.tag)
+                    {String(tags[0])
                       .replaceAll("_", " ")
                       .toLowerCase()
                       .replace(/(^\w|\s\w)/g, (m: string) => m.toUpperCase())}
                   </Typography>
                 </Box>
-              )}
+                );
+              })()}
 
               {/* Social links placeholder */}
               <Box sx={{ display: "flex", gap: 1, mt: 2 }}>
