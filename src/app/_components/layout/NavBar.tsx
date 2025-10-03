@@ -457,7 +457,7 @@ export default function NavBar() {
                       Criar
                     </Button>
                   </LinkNext>
-                  <LinkNext href="/admin/posts">
+                  <LinkNext href="/admin">
                     <Button 
                       variant="outlined" 
                       color="warning" 
@@ -656,7 +656,7 @@ export default function NavBar() {
                       Criar Post
                     </Button>
                   </LinkNext>
-                  <LinkNext href="/admin/posts" role="menuitem">
+                  <LinkNext href="/admin" role="menuitem">
                     <Button
                       fullWidth
                       variant="outlined"
@@ -664,7 +664,7 @@ export default function NavBar() {
                       sx={{ py: 1.5 }}
                     >
                       <i className="fas fa-cog" style={{ marginRight: 8 }} />
-                      Gerenciar Posts
+                      Gerenciar
                     </Button>
                   </LinkNext>
                 </Stack>
