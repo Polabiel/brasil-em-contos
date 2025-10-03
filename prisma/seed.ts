@@ -2,6 +2,7 @@ import { db } from "@/server/db";
 
 async function main() {
   // use Prisma client methods for seeding
+  await db.comment.deleteMany();
   await db.book.deleteMany();
   await db.post.deleteMany();
   await db.author.deleteMany();
