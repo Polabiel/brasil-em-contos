@@ -14,6 +14,7 @@ export const authorRouter = createTRPCRouter({
       period: a.period ?? undefined,
       slug: a.slug ?? undefined,
       image: a.image ?? undefined,
+      bio: a.bio ?? undefined,
       imageMime: a.imageMime ?? undefined,
       books: (a.books ?? []).map((b) => ({
         id: Number(b.id),

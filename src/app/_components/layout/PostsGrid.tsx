@@ -17,6 +17,7 @@ import { api } from "@/trpc/react";
 import { useSearchParams, useRouter } from "next/navigation";
 
 import { Playfair_Display } from "next/font/google";
+import { motion } from "motion/react";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -73,13 +74,6 @@ export default function PostsGrid() {
   // Final ordered list: featured first, then non-featured (both trimmed to requested take)
   const orderedPosts = [...featured, ...nonFeatured].slice(0, 12);
 
-  const categories = (bookTagsQuery.data ?? []).map((tag) =>
-    String(tag)
-      .replace(/_/g, " ")
-      .toLowerCase()
-      .replace(/\b\w/g, (l) => l.toUpperCase()),
-  );
-
   const formatTag = (tag?: string | null): string => {
     if (!tag) return "Conto Brasileiro";
     return String(tag)
@@ -116,6 +110,12 @@ export default function PostsGrid() {
     : orderedPosts && orderedPosts.length > 0
       ? orderedPosts.slice(0, 6)
       : [];
+
+  // Add "Em breve" sentinel at the end when posts exist
+  const displayItems: (PostItem | "coming-soon")[] = [...items];
+  if (!isLoading && orderedPosts && orderedPosts.length > 0) {
+    displayItems.push("coming-soon");
+  }
 
   // Check if we should show empty state
   const showEmptyState =
@@ -266,9 +266,98 @@ export default function PostsGrid() {
         </Box>
       ) : (
         <Grid container spacing={3}>
-          {items.map((p, index) => {
-            const isPlaceholder = !p;
+          {displayItems.map((p, index) => {
             const isLarge = index === 0;
+            if (p === "coming-soon") {
+              return (
+                <Grid xs={12} sm={6} md={4} key="coming-soon">
+                  <motion.div
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.08 }}
+                    whileHover={{ scale: 1.03, y: -6 }}
+                    whileTap={{ scale: 0.98 }}
+                    style={{ perspective: "800px" }}
+                  >
+                    <Card
+                      variant="plain"
+                      sx={{
+                        position: "relative",
+                        width: 390,
+                        height: 550,
+                        transition: "all 0.35s cubic-bezier(0.2, 0, 0.2, 1)",
+                        cursor: "pointer",
+                        overflow: "hidden",
+                        background: "rgba(255,255,255,0.92)",
+                        backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><rect width='24' height='24' fill='%23ffffff'/><path fill='%23000000' opacity='0.02' d='M0 0h1v1H0zM2 3h1v1H2zM5 1h1v1H5z'/></svg>")`,
+                        backgroundRepeat: "repeat",
+                        border: "1px solid rgba(0,0,0,0.06)",
+                        backdropFilter: "blur(6px)",
+                        WebkitBackdropFilter: "blur(6px)",
+                        borderRadius: 16,
+                        display: "flex",
+                        flexDirection: "column",
+                        p: 0,
+                        boxShadow: "0 8px 30px rgba(2,6,23,0.06)",
+                        "&::before": {
+                          content: '""',
+                          position: "absolute",
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          height: "4px",
+                          background:
+                            "linear-gradient(90deg, rgba(0,0,0,0.04), rgba(0,0,0,0.02))",
+                          opacity: 0.6,
+                          transition: "opacity 0.3s ease",
+                        },
+                        "&:hover": {
+                          borderColor: "rgba(0,0,0,0.08)",
+                          boxShadow: "0 18px 40px rgba(2,6,23,0.12)",
+                          transform: "translateY(-6px)",
+                          "&::before": {
+                            opacity: 1,
+                          },
+                        },
+                      }}
+                    >
+                      <Box sx={{ position: "relative", width: "100%", height: 260, flexShrink: 0, overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <motion.div animate={{ translateY: [0, -6, 0] }} transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}>
+                          <Typography level="h1" sx={{ color: "#111111", fontSize: "3.4rem", fontWeight: 800, textShadow: "0 6px 18px rgba(0,0,0,0.06)", opacity: 0.95 }}>
+                            🚀
+                          </Typography>
+                        </motion.div>
+                      </Box>
+
+                      <CardContent sx={{ p: 2.5, flexGrow: 1, display: "flex", flexDirection: "column", background: "transparent" }}>
+                        <Stack spacing={1.5} sx={{ flexGrow: 1 }}>
+                          <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.45, delay: 0.15 }}>
+                            <Typography level="title-md" className={playfair.className} sx={{ fontWeight: 700, color: "#111111", lineHeight: 1.3, textAlign: "center", fontSize: "1.6rem" }}>
+                              Em Breve
+                            </Typography>
+                          </motion.div>
+
+                          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.3 }}>
+                            <Typography level="body-sm" sx={{ color: "#333333", lineHeight: 1.5, textAlign: "center", flexGrow: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                              Novas histórias incríveis estão chegando... Prepare-se para mais aventuras literárias!
+                            </Typography>
+                          </motion.div>
+
+                          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.45, delay: 0.5 }} whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.98 }}>
+                            <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+                              <Box sx={{ width: 40, height: 40, borderRadius: "50%", background: "linear-gradient(45deg, #e6e6e6, #ffffff)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 6px 18px rgba(0,0,0,0.06)" }}>
+                                <i className="fas fa-clock" style={{ color: "#111111", fontSize: "1.05rem" }} />
+                              </Box>
+                            </Box>
+                          </motion.div>
+                        </Stack>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                </Grid>
+              );
+            }
+            const isPlaceholder = !p;
             if (isPlaceholder) {
               return (
                 <Grid xs={12} sm={6} md={isLarge ? 8 : 4} key={`ph-${index}`}>

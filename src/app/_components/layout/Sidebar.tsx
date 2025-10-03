@@ -7,46 +7,10 @@ import Typography from "@mui/joy/Typography";
 import Box from "@mui/joy/Box";
 import Stack from "@mui/joy/Stack";
 import Divider from "@mui/joy/Divider";
-import TagsList from "./TagsList";
 import { api } from "@/trpc/react";
 import type { RouterOutputs } from "@/trpc/react";
 import CircularProgress from "@mui/joy/CircularProgress";
 
-function TagsFetcher() {
-  const { data, isLoading, error } = api.post.tags.useQuery();
-
-  if (isLoading)
-    return (
-      <Box sx={{ display: "flex", justifyContent: "center", py: 2 }}>
-        <CircularProgress size="sm" />
-      </Box>
-    );
-  if (error)
-    return (
-      <Typography level="body-sm" sx={{ color: "var(--cv-textMuted80)" }}>
-        Erro ao carregar tags
-      </Typography>
-    );
-
-  const tags = (data ?? []).map((t: { tag: string; count: number }) => ({
-    label: String(t.tag)
-      .replaceAll("_", " ")
-      .toLowerCase()
-      .replace(/(^\w|\s\w)/g, (m: string) => m.toUpperCase()),
-    value: String(t.tag),
-    color: (t.tag.includes("REALISMO") || t.tag.includes("REGIONAL")
-      ? "primary"
-      : "default") as
-      | "default"
-      | "primary"
-      | "success"
-      | "warning"
-      | "danger"
-      | undefined,
-  }));
-
-  return <TagsList tags={tags} />;
-}
 import { Playfair_Display } from "next/font/google";
 import Link from "next/link";
 
@@ -66,179 +30,17 @@ export default function Sidebar() {
   type AuthorItem = RouterOutputs["author"]["list"][number];
 
   const literaryFacts = [
-    "O Brasil tem mais de 200 anos de literatura nacional rica e diversa",
-    "Machado de Assis é considerado o maior escritor brasileiro",
-    "A literatura brasileira reflete nossa diversidade cultural única",
-    `O Brasil em Contos nasceu como um projeto de faculdade e continua ativo até hoje, ${new Date().getFullYear() - 2018} anos depois!`,
-  ];
-
-  const bloggers = [
-    {
-      id: "blog1",
-      name: "Bruna Stefany",
-      img: "/icon.png",
-      desc: "A garota mais linda do mundo.",
-    },
-    {
-      id: "blog2",
-      name: "Gabriel Oliveira",
-      img: "/icon.png",
-      desc: "o dev. 💻",
-    },
+    "Nosso blog surgiu por conta de um trabalho para a faculdade",
+    "Com amor e dedicação, estamos a cerca de 3 anos trazendo resenhas",
+    "Criamos um clube do livro que tem cerca de 20 pessoas",
   ];
 
   return (
     <aside className="w-full space-y-4">
-      {/* Blogueiras */}
-      <Card 
-        variant="outlined" 
-        sx={{ 
-          mb: 4,
-          transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-          border: "2px solid var(--cv-neutral200)",
-          borderRadius: 3,
-          position: "relative",
-          overflow: "hidden",
-          "&::before": {
-            content: '""',
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            height: "4px",
-            background: "linear-gradient(90deg, var(--cv-brazilGreen), var(--cv-brazilYellow))",
-            opacity: 0,
-            transition: "opacity 0.3s ease",
-          },
-          "&:hover": {
-            transform: "translateY(-4px)",
-            boxShadow: "0 12px 32px rgba(34,139,34,0.15)",
-            borderColor: "var(--cv-brazilGreen)",
-            "&::before": {
-              opacity: 1,
-            },
-          },
-        }}
-      >
-        <CardContent>
-          <Typography
-            level="h4"
-            className={playfair.className}
-            sx={{
-              mb: 2,
-              fontWeight: 700,
-              display: "flex",
-              alignItems: "center",
-              gap: 1,
-              color: "var(--cv-textPrimary)",
-            }}
-          >
-            <i
-              className="fas fa-users"
-              style={{ color: "var(--cv-brazilGreen)" }}
-            />
-            Blogueiras
-          </Typography>
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
-              gap: 2,
-              alignItems: "start",
-            }}
-          >
-            {bloggers.map((b) => (
-              <Stack
-                key={b.id}
-                spacing={1}
-                alignItems="center"
-                sx={{ 
-                  textAlign: "center", 
-                  p: 1,
-                  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                  borderRadius: 2,
-                  "&:hover": {
-                    transform: "translateY(-6px) scale(1.05)",
-                    bgcolor: "var(--cv-neutral50)",
-                  },
-                }}
-              >
-                <Box
-                  sx={{
-                    borderRadius: "50%",
-                    overflow: "hidden",
-                    boxShadow: "0 8px 24px rgba(34,139,34,0.15)",
-                    width: 80,
-                    height: 80,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    position: "relative",
-                    border: "3px solid transparent",
-                    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                    "&::before": {
-                      content: '""',
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      borderRadius: "50%",
-                      padding: "3px",
-                      background: "linear-gradient(135deg, var(--cv-brazilGreen), var(--cv-brazilYellow))",
-                      WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-                      WebkitMaskComposite: "xor",
-                      maskComposite: "exclude",
-                      opacity: 0,
-                      transition: "opacity 0.3s ease",
-                    },
-                    "&:hover": {
-                      transform: "scale(1.1) rotate(5deg)",
-                      boxShadow: "0 12px 32px rgba(34,139,34,0.3)",
-                      "&::before": {
-                        opacity: 1,
-                      },
-                    },
-                  }}
-                >
-                  <Box
-                    component="img"
-                    src={b.img}
-                    alt={b.name}
-                    sx={{
-                      objectFit: "cover",
-                      width: "100%",
-                      height: "100%",
-                    }}
-                  />
-                </Box>
-
-                <Typography
-                  level="body-md"
-                  sx={{ fontWeight: 700, fontSize: "0.9rem" }}
-                >
-                  {b.name}
-                </Typography>
-
-                <Typography
-                  level="body-sm"
-                  sx={{
-                    color: "var(--cv-textMuted70)",
-                    fontSize: "0.8rem",
-                  }}
-                >
-                  {b.desc}
-                </Typography>
-              </Stack>
-            ))}
-          </Box>
-        </CardContent>
-      </Card>
-
       {/* Featured Authors (from DB) */}
-      <Card 
-        variant="outlined" 
-        sx={{ 
+      <Card
+        variant="outlined"
+        sx={{
           mb: 4,
           transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
           border: "2px solid var(--cv-neutral200)",
@@ -252,7 +54,8 @@ export default function Sidebar() {
             left: 0,
             right: 0,
             height: "4px",
-            background: "linear-gradient(90deg, var(--cv-brazilYellow), var(--cv-brazilGreen))",
+            background:
+              "linear-gradient(90deg, var(--cv-brazilYellow), var(--cv-brazilGreen))",
             opacity: 0,
             transition: "opacity 0.3s ease",
           },
@@ -304,122 +107,181 @@ export default function Sidebar() {
                   Nenhum autor encontrado
                 </Typography>
               ) : (
-                authors.map((author: AuthorItem, index: number) => (
-                  <Box key={author.id}>
-                    <Link
-                      href={`/authors/${author.slug ?? String(author.id)}`}
-                      style={{ textDecoration: "none" }}
-                    >
-                      <Box
-                        sx={{
-                          p: 2,
-                          borderRadius: 8,
-                          cursor: "pointer",
-                          transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                          border: "2px solid transparent",
-                          position: "relative",
-                          overflow: "hidden",
-                          "&::before": {
-                            content: '""',
-                            position: "absolute",
-                            left: 0,
-                            top: 0,
-                            bottom: 0,
-                            width: "4px",
-                            background: "linear-gradient(180deg, var(--cv-brazilGreen), var(--cv-brazilYellow))",
-                            transform: "scaleY(0)",
-                            transition: "transform 0.3s ease",
-                          },
-                          "&:hover": {
-                            bgcolor: "var(--cv-neutral50)",
-                            borderColor: "var(--cv-brazilGreen)",
-                            transform: "translateX(8px)",
-                            boxShadow: "0 4px 12px rgba(34,139,34,0.1)",
-                            "&::before": {
-                              transform: "scaleY(1)",
-                            },
-                          },
-                        }}
-                        onMouseEnter={() => {
-                          try {
-                            if (author.slug)
-                              void trpcCtx.author.bySlug.prefetch({
-                                slug: author.slug,
-                              });
-                          } catch {}
-                        }}
-                        onFocus={() => {
-                          try {
-                            if (author.slug)
-                              void trpcCtx.author.bySlug.prefetch({
-                                slug: author.slug,
-                              });
-                          } catch {}
-                        }}
-                        onTouchStart={() => {
-                          try {
-                            if (author.slug)
-                              void trpcCtx.author.bySlug.prefetch({
-                                slug: author.slug,
-                              });
-                          } catch {}
-                        }}
+                // Grid responsivo para autores - versão compacta e elegante
+                <Box
+                  sx={{
+                    display: "grid",
+                    gridTemplateColumns: {
+                      xs: "1fr",
+                      sm: "repeat(auto-fill, minmax(280px, 1fr))",
+                      md: "1fr",
+                    },
+                    gap: { xs: 1.5, sm: 2 },
+                  }}
+                >
+                  {authors.map((author: AuthorItem, index: number) => (
+                    <Box key={author.id}>
+                      <Link
+                        href={`/authors/${author.slug ?? String(author.id)}`}
+                        style={{ textDecoration: "none" }}
                       >
-                        <Typography
-                          level="title-sm"
-                          className={playfair.className}
+                        <Box
                           sx={{
-                            fontWeight: 600,
-                            color: "var(--cv-textPrimary)",
-                            mb: 0.5,
+                            p: { xs: 1.25, sm: 1.5 },
+                            borderRadius: { xs: 6, sm: 8 },
+                            cursor: "pointer",
+                            transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                            border: "1.5px solid transparent",
+                            position: "relative",
+                            overflow: "hidden",
+                            minHeight: { xs: 60, sm: 70 },
+                            bgcolor: "background.body",
+                            boxShadow: "0 2px 6px rgba(34,139,34,0.04)",
+                            "&::before": {
+                              content: '""',
+                              position: "absolute",
+                              left: 0,
+                              top: 0,
+                              bottom: 0,
+                              width: "3px",
+                              background:
+                                "linear-gradient(180deg, var(--cv-brazilGreen), var(--cv-brazilYellow))",
+                              transform: "scaleY(0)",
+                              transition: "transform 0.3s ease",
+                            },
+                            "&::after": {
+                              content: '""',
+                              position: "absolute",
+                              top: 0,
+                              right: 0,
+                              width: "0",
+                              height: "100%",
+                              background:
+                                "linear-gradient(90deg, transparent, var(--cv-brazilGreen)05)",
+                              transition: "width 0.4s ease",
+                            },
+                            "&:hover": {
+                              bgcolor: "var(--cv-neutral50)",
+                              borderColor: "var(--cv-brazilGreen)40",
+                              transform: "translateX(6px) scale(1.02)",
+                              boxShadow: "0 6px 16px rgba(34,139,34,0.1)",
+                              "&::before": {
+                                transform: "scaleY(1)",
+                              },
+                              "&::after": {
+                                width: "100%",
+                              },
+                            },
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
+                          }}
+                          onMouseEnter={() => {
+                            try {
+                              if (author.slug)
+                                void trpcCtx.author.bySlug.prefetch({
+                                  slug: author.slug,
+                                });
+                            } catch {}
+                          }}
+                          onFocus={() => {
+                            try {
+                              if (author.slug)
+                                void trpcCtx.author.bySlug.prefetch({
+                                  slug: author.slug,
+                                });
+                            } catch {}
+                          }}
+                          onTouchStart={() => {
+                            try {
+                              if (author.slug)
+                                void trpcCtx.author.bySlug.prefetch({
+                                  slug: author.slug,
+                                });
+                            } catch {}
                           }}
                         >
-                          {author.name}
-                        </Typography>
-                        {author.period && (
                           <Typography
-                            level="body-xs"
+                            level="title-sm"
+                            className={playfair.className}
                             sx={{
-                              color: "var(--cv-textMuted60)",
-                              mb: 0.5,
-                              fontSize: "0.75rem",
+                              fontWeight: 700,
+                              color: "var(--cv-textPrimary)",
+                              mb: 0.25,
+                              fontSize: { xs: "0.875rem", sm: "0.95rem" },
+                              lineHeight: 1.3,
+                              background:
+                                "linear-gradient(135deg, var(--cv-textPrimary), var(--cv-brazilGreen))",
+                              WebkitBackgroundClip: "text",
+                              WebkitTextFillColor: "transparent",
+                              backgroundClip: "text",
                             }}
                           >
-                            {author.period}
+                            {author.name}
                           </Typography>
-                        )}
-                        {author.slug && (
-                          <Typography
-                            level="body-xs"
-                            sx={{
-                              color: "var(--cv-textMuted60)",
-                              mb: 0.5,
-                              fontSize: "0.75rem",
-                            }}
-                          >
-                            {author.slug}
-                          </Typography>
-                        )}
-                        {author.books && author.books.length > 0 && (
-                          <Typography
-                            level="body-sm"
-                            sx={{
-                              color: "var(--cv-textMuted70)",
-                              fontSize: "0.8rem",
-                              fontStyle: "italic",
-                            }}
-                          >
-                            {author.books
-                              .slice(0, 2)
-                              .map((b) => b.title)
-                              .join(", ")}
-                          </Typography>
-                        )}
-                      </Box>
-                    </Link>
-                    {index < authors.length - 1 && <Divider sx={{ my: 1 }} />}
-                  </Box>
-                ))
+                          {author.period && (
+                            <Typography
+                              level="body-xs"
+                              sx={{
+                                color: "var(--cv-textMuted60)",
+                                mb: 0.25,
+                                fontSize: { xs: "0.65rem", sm: "0.7rem" },
+                                opacity: 0.85,
+                              }}
+                            >
+                              {author.period}
+                            </Typography>
+                          )}
+                          {author.bio && (
+                            <Typography
+                              level="body-xs"
+                              sx={{
+                                color: "var(--cv-textMuted60)",
+                                mb: 0.25,
+                                fontSize: { xs: "0.7rem", sm: "0.75rem" },
+                                display: "-webkit-box",
+                                WebkitLineClamp: 2,
+                                WebkitBoxOrient: "vertical",
+                                overflow: "hidden",
+                                lineHeight: 1.4,
+                              }}
+                            >
+                              {author.bio}
+                            </Typography>
+                          )}
+                          {author.books && author.books.length > 0 && (
+                            <Typography
+                              level="body-xs"
+                              sx={{
+                                color: "var(--cv-brazilGreen)",
+                                fontSize: { xs: "0.65rem", sm: "0.7rem" },
+                                fontStyle: "italic",
+                                mt: 0.25,
+                                opacity: 0.9,
+                                fontWeight: 500,
+                              }}
+                            >
+                              {author.books
+                                .slice(0, 1)
+                                .map((b) => b.title)
+                                .join("")}
+                            </Typography>
+                          )}
+                        </Box>
+                      </Link>
+                      {/* Divider sutil */}
+                      {index < authors.length - 1 && (
+                        <Divider
+                          sx={{
+                            my: { xs: 0.75, sm: 1 },
+                            display: { xs: "none", md: "block" },
+                            opacity: 0.3,
+                          }}
+                        />
+                      )}
+                    </Box>
+                  ))}
+                </Box>
               )}
             </Stack>
           )}
@@ -445,7 +307,8 @@ export default function Sidebar() {
             left: 0,
             right: 0,
             height: "4px",
-            background: "linear-gradient(90deg, var(--cv-brazilGreen), var(--cv-brazilYellow), var(--cv-brazilBlue))",
+            background:
+              "linear-gradient(90deg, var(--cv-brazilGreen), var(--cv-brazilYellow), var(--cv-brazilBlue))",
             opacity: 0,
             transition: "opacity 0.3s ease",
           },
