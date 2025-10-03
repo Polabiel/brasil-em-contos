@@ -150,6 +150,7 @@ export default function EditPostClient({
         form.append("content", content);
         form.append("description", description ?? "");
         form.append("image", image ?? "");
+        if (tags.length > 0) form.append("tags", JSON.stringify(tags));
         form.append("imageFile", selectedFile);
         res = await fetch(`/api/admin/posts/${id}`, {
           method: "PUT",

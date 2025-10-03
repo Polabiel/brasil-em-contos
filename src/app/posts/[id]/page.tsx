@@ -164,6 +164,73 @@ export default async function PostPage({
         },
       }}
     >
+      {/* Top-left corner decoration */}
+      <Box
+        sx={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: { xs: 120, md: 180 },
+          height: { xs: 120, md: 180 },
+          zIndex: 10,
+          pointerEvents: "none",
+          opacity: 0.5,
+          background: `url("data:image/svg+xml,%3Csvg width='180' height='180' viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='grad1' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23228b22;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23ffd700;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M0 0 L180 0 L0 180 Z' fill='url(%23grad1)' opacity='0.4'/%3E%3Cpath d='M20 20 L40 10 L60 20 L40 30 Z' fill='%23228b22' opacity='0.6'/%3E%3Cpath d='M50 50 L70 40 L90 50 L70 60 Z' fill='%23ffd700' opacity='0.5'/%3E%3Ccircle cx='30' cy='80' r='8' fill='%23228b22' opacity='0.4'/%3E%3Ccircle cx='100' cy='40' r='6' fill='%23ffd700' opacity='0.5'/%3E%3Cpath d='M10 40 Q15 35 20 40 T30 40' stroke='%23228b22' stroke-width='2' fill='none' opacity='0.4'/%3E%3C/svg%3E")`,
+          backgroundSize: "contain",
+          backgroundRepeat: "no-repeat",
+        }}
+      />
+
+      {/* Top-right corner decoration */}
+      <Box
+        sx={{
+          position: "fixed",
+          top: 0,
+          right: 0,
+          width: { xs: 120, md: 180 },
+          height: { xs: 120, md: 180 },
+          zIndex: 10,
+          pointerEvents: "none",
+          opacity: 0.5,
+          background: `url("data:image/svg+xml,%3Csvg width='180' height='180' viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='grad2' x1='100%25' y1='0%25' x2='0%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23ffd700;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23228b22;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M180 0 L0 0 L180 180 Z' fill='url(%23grad2)' opacity='0.4'/%3E%3Cpath d='M160 20 L140 10 L120 20 L140 30 Z' fill='%23ffd700' opacity='0.6'/%3E%3Cpath d='M130 50 L110 40 L90 50 L110 60 Z' fill='%23228b22' opacity='0.5'/%3E%3Ccircle cx='150' cy='80' r='8' fill='%23ffd700' opacity='0.4'/%3E%3Ccircle cx='80' cy='40' r='6' fill='%23228b22' opacity='0.5'/%3E%3Cpath d='M170 40 Q165 35 160 40 T150 40' stroke='%23ffd700' stroke-width='2' fill='none' opacity='0.4'/%3E%3C/svg%3E")`,
+          backgroundSize: "contain",
+          backgroundRepeat: "no-repeat",
+        }}
+      />
+
+      {/* Bottom-left corner decoration */}
+      <Box
+        sx={{
+          position: "fixed",
+          bottom: 0,
+          left: 0,
+          width: { xs: 120, md: 180 },
+          height: { xs: 120, md: 180 },
+          zIndex: 10,
+          pointerEvents: "none",
+          opacity: 0.5,
+          background: `url("data:image/svg+xml,%3Csvg width='180' height='180' viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='grad3' x1='0%25' y1='100%25' x2='100%25' y2='0%25'%3E%3Cstop offset='0%25' style='stop-color:%23228b22;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23ffd700;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M0 180 L180 180 L0 0 Z' fill='url(%23grad3)' opacity='0.4'/%3E%3Cpath d='M20 160 L40 150 L60 160 L40 170 Z' fill='%23228b22' opacity='0.6'/%3E%3Cpath d='M50 130 L70 120 L90 130 L70 140 Z' fill='%23ffd700' opacity='0.5'/%3E%3Ccircle cx='30' cy='100' r='8' fill='%23228b22' opacity='0.4'/%3E%3Ccircle cx='100' cy='140' r='6' fill='%23ffd700' opacity='0.5'/%3E%3Cpath d='M10 140 Q15 135 20 140 T30 140' stroke='%23228b22' stroke-width='2' fill='none' opacity='0.4'/%3E%3C/svg%3E")`,
+          backgroundSize: "contain",
+          backgroundRepeat: "no-repeat",
+        }}
+      />
+
+      {/* Bottom-right corner decoration */}
+      <Box
+        sx={{
+          position: "fixed",
+          bottom: 0,
+          right: 0,
+          width: { xs: 120, md: 180 },
+          height: { xs: 120, md: 180 },
+          zIndex: 10,
+          pointerEvents: "none",
+          opacity: 0.5,
+          background: `url("data:image/svg+xml,%3Csvg width='180' height='180' viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='grad4' x1='100%25' y1='100%25' x2='0%25' y2='0%25'%3E%3Cstop offset='0%25' style='stop-color:%23ffd700;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23228b22;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M180 180 L0 180 L180 0 Z' fill='url(%23grad4)' opacity='0.4'/%3E%3Cpath d='M160 160 L140 150 L120 160 L140 170 Z' fill='%23ffd700' opacity='0.6'/%3E%3Cpath d='M130 130 L110 120 L90 130 L110 140 Z' fill='%23228b22' opacity='0.5'/%3E%3Ccircle cx='150' cy='100' r='8' fill='%23ffd700' opacity='0.4'/%3E%3Ccircle cx='80' cy='140' r='6' fill='%23228b22' opacity='0.5'/%3E%3Cpath d='M170 140 Q165 135 160 140 T150 140' stroke='%23ffd700' stroke-width='2' fill='none' opacity='0.4'/%3E%3C/svg%3E")`,
+          backgroundSize: "contain",
+          backgroundRepeat: "no-repeat",
+        }}
+      />
       <Box sx={{ maxWidth: 1400, mx: "auto", py: 6, px: { xs: 2, md: 4 }, position: "relative", zIndex: 1 }}>
       <Box
         sx={{
@@ -249,10 +316,10 @@ export default async function PostPage({
                 </Typography>
               )}
 
-              {/* Genre/Tag */}
+              {/* Genre/Tags */}
               {(() => {
-                const tags = post.tags as string[] | undefined;
-                return Array.isArray(tags) && tags.length > 0 && (
+                const tags = (post.tags ?? []) as string[];
+                return tags.length > 0 && (
                 <Box sx={{ mb: 2 }}>
                   <Typography
                     level="body-xs"
@@ -262,14 +329,27 @@ export default async function PostPage({
                       mb: 0.5,
                     }}
                   >
-                    Gênero
+                    {tags.length === 1 ? "Gênero" : "Gêneros"}
                   </Typography>
-                  <Typography level="body-sm">
-                    {String(tags[0])
-                      .replaceAll("_", " ")
-                      .toLowerCase()
-                      .replace(/(^\w|\s\w)/g, (m: string) => m.toUpperCase())}
-                  </Typography>
+                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                    {tags.map((tag) => (
+                      <Typography
+                        key={tag}
+                        level="body-sm"
+                        sx={{
+                          px: 1,
+                          py: 0.5,
+                          bgcolor: "var(--cv-neutral100)",
+                          borderRadius: "4px",
+                        }}
+                      >
+                        {String(tag)
+                          .replaceAll("_", " ")
+                          .toLowerCase()
+                          .replace(/(^\w|\s\w)/g, (m: string) => m.toUpperCase())}
+                      </Typography>
+                    ))}
+                  </Box>
                 </Box>
                 );
               })()}

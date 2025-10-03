@@ -132,16 +132,16 @@ export default function AdminPostsClient({ posts }: { posts: Post[] }) {
                   <td>{post.name}</td>
                   <td>
                     {post.tags && post.tags.length > 0 ? (
-                      <Stack direction="row" spacing={0.5} flexWrap="wrap">
+                      <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}>
                         {post.tags.map((tag) => (
-                          <Chip key={tag} size="sm" variant="soft" sx={{ fontWeight: 700, mb: 0.5 }}>
+                          <Chip key={tag} size="sm" variant="soft" sx={{ fontWeight: 700 }}>
                             {String(tag)
                               .replace(/_/g, " ")
                               .toLowerCase()
                               .replace(/\b\w/g, (l: string) => l.toUpperCase())}
                           </Chip>
                         ))}
-                      </Stack>
+                      </Box>
                     ) : (
                       <Chip size="sm" variant="outlined">
                         Sem tags

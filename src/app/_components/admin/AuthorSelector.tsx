@@ -141,6 +141,7 @@ export default function AuthorSelector({
         onClose={() => setPickerOpen(false)}
         title="Selecionar Autor"
         size="md"
+        zIndex={10000}
       >
         <Stack spacing={2}>
           <Input
@@ -238,6 +239,7 @@ export default function AuthorSelector({
         onClose={() => setOpen(false)}
         title="Criar Novo Autor"
         size="md"
+        zIndex={10000}
       >
         <Stack spacing={3}>
           <Input

@@ -21,6 +21,7 @@ interface StandardModalProps {
   children: React.ReactNode;
   size?: 'sm' | 'md' | 'lg';
   showCloseButton?: boolean;
+  zIndex?: number;
 }
 
 export default function StandardModal({ 
@@ -29,7 +30,8 @@ export default function StandardModal({
   title, 
   children, 
   size = 'md',
-  showCloseButton = true 
+  showCloseButton = true,
+  zIndex = 9999
 }: StandardModalProps) {
   const getMaxWidth = () => {
     switch (size) {
@@ -45,9 +47,16 @@ export default function StandardModal({
       open={open} 
       onClose={onClose}
       sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+        display: 'flex !important',
+        alignItems: 'center !important',
+        justifyContent: 'center !important',
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        width: '100vw',
+        height: '100vh',
         p: 2,
         backdropFilter: 'blur(8px)',
         background: 'rgba(0,0,0,0.3)',
@@ -56,6 +65,7 @@ export default function StandardModal({
           from: { opacity: 0 },
           to: { opacity: 1 },
         },
+        zIndex: zIndex,
       }}
     >
       <ModalDialog
@@ -69,6 +79,9 @@ export default function StandardModal({
           borderRadius: '16px',
           border: '2px solid var(--cv-neutral200)',
           position: 'relative',
+          transform: 'none !important',
+          top: 'auto !important',
+          left: 'auto !important',
           animation: 'slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
           '@keyframes slideUp': {
             from: {

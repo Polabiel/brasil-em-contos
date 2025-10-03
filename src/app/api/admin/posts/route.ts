@@ -40,6 +40,7 @@ export async function POST(req: NextRequest) {
     const descriptionField = form.get("description");
     const contentField = form.get("content");
     const imageField = form.get("image");
+    const tagsField = form.get("tags");
     const file = form.get("imageFile");
 
     const toParse = {
@@ -48,6 +49,7 @@ export async function POST(req: NextRequest) {
         typeof descriptionField === "string" ? descriptionField : undefined,
       content: typeof contentField === "string" ? contentField : undefined,
       image: typeof imageField === "string" ? imageField : undefined,
+      tags: typeof tagsField === "string" ? JSON.parse(tagsField) as unknown : undefined,
     };
 
     parsedBody = bodySchema.safeParse(toParse);

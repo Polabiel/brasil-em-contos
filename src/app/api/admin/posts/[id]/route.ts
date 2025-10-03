@@ -47,6 +47,7 @@ export async function PUT(
     const contentField = form.get("content");
     const descriptionField = form.get("description");
     const imageField = form.get("image");
+    const tagsField = form.get("tags");
     const file = form.get("imageFile");
 
     const toParse = {
@@ -55,6 +56,7 @@ export async function PUT(
       description:
         typeof descriptionField === "string" ? descriptionField : undefined,
       image: typeof imageField === "string" ? imageField : undefined,
+      tags: typeof tagsField === "string" ? JSON.parse(tagsField) as unknown : undefined,
     };
 
     parsedBody = bodySchema.safeParse(toParse);
