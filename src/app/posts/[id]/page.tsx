@@ -5,6 +5,7 @@ import Typography from "@mui/joy/Typography";
 import Box from "@mui/joy/Box";
 import PostContentClient from "../PostContentClient";
 import AdminEditButton from "./AdminEditButton";
+import CommentSection from "./CommentSection";
 
 function AuthorProfile({
   author,
@@ -14,6 +15,7 @@ function AuthorProfile({
         id: string | number;
         name?: string | null;
         image?: string | null;
+        bio?: string | null;
       }
     | null;
 }) {
@@ -25,7 +27,7 @@ function AuthorProfile({
     );
 
   return (
-    <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+    <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start" }}>
       {author.image ? (
         <Box
           sx={{
@@ -34,6 +36,7 @@ function AuthorProfile({
             position: "relative",
             borderRadius: "50%",
             overflow: "hidden",
+            flexShrink: 0,
           }}
         >
           <Image
@@ -54,6 +57,7 @@ function AuthorProfile({
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
+            flexShrink: 0,
           }}
         >
           <span style={{ color: "var(--cv-neutral500)" }}>
@@ -65,6 +69,11 @@ function AuthorProfile({
         <Typography level="body-md" sx={{ fontWeight: 600 }}>
           {String(author.name ?? "")}
         </Typography>
+        {author.bio && (
+          <Typography level="body-sm" sx={{ color: "var(--cv-textMuted80)", mt: 0.5 }}>
+            {author.bio}
+          </Typography>
+        )}
       </Box>
     </Box>
   );
@@ -90,7 +99,7 @@ export default async function PostPage({
       imageBlob: true,
       tag: true,
       createdAt: true,
-      createdBy: { select: { id: true, name: true, image: true } },
+      createdBy: { select: { id: true, name: true, image: true, bio: true } },
       author: {
         select: {
           id: true,
@@ -338,7 +347,7 @@ export default async function PostPage({
             </Typography>
             {(() => {
               const creator = post.createdBy as
-                | { id: string; name?: string | null; image?: string | null }
+                | { id: string; name?: string | null; image?: string | null; bio?: string | null }
                 | null;
               return <AuthorProfile author={creator} />;
             })()}
@@ -348,6 +357,9 @@ export default async function PostPage({
           <Box sx={{ "& .wmde-markdown p": { textAlign: "justify" } }}>
             <PostContentClient content={String(post.content ?? "")} />
           </Box>
+
+          {/* Comments Section */}
+          <CommentSection postId={post.id} />
         </Box>
       </Box>
       </Box>
