@@ -36,18 +36,6 @@ export default async function Home() {
               backgroundPosition: "0% 50%",
             },
           },
-          "&::after": {
-            content: '""',
-            position: "absolute",
-            left: 0,
-            right: 0,
-            bottom: 0,
-            height: { xs: "120px", md: "180px" },
-            pointerEvents: "none",
-            background:
-              "linear-gradient(-180deg, rgba(255,255,255,0) 0%, #fff 90%)",
-            zIndex: 2,
-          },
         }}
       >
         <Box
