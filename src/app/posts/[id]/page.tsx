@@ -5,6 +5,7 @@ import Typography from "@mui/joy/Typography";
 import Box from "@mui/joy/Box";
 import PostContentClient from "../PostContentClient";
 import AdminEditButton from "./AdminEditButton";
+import CommentSection from "./CommentSection";
 
 function AuthorProfile({
   author,
@@ -356,6 +357,9 @@ export default async function PostPage({
           <Box sx={{ "& .wmde-markdown p": { textAlign: "justify" } }}>
             <PostContentClient content={String(post.content ?? "")} />
           </Box>
+
+          {/* Comments Section */}
+          <CommentSection postId={post.id} />
         </Box>
       </Box>
       </Box>
