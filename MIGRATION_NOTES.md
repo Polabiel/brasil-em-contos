@@ -19,15 +19,19 @@ npx prisma migrate deploy
 ```
 
 The migration will:
-1. Add a new `tags` column as an array of `BookTag` enum values
-2. Migrate existing `tag` values to the `tags` array
-3. Remove the old `tag` column
+1. Add MODERNISMO and CONTEMPORANEO values to the BookTag enum
+2. Add a new `tags` column as an array of `BookTag` enum values
+3. Migrate existing `tag` values to the `tags` array
+4. Remove the old `tag` column
 
 ## Changes Made
 
 ### Schema Changes
 - Updated `prisma/schema.prisma` to change `tag: BookTag?` to `tags: BookTag[]`
-- Created migration file in `prisma/migrations/20251003_convert_tag_to_tags_array/`
+- Added MODERNISMO and CONTEMPORANEO to the BookTag enum
+- Created migration files:
+  - `prisma/migrations/20251003_add_modernismo_contemporaneo/` for new enum values
+  - `prisma/migrations/20251003_convert_tag_to_tags_array/` for tag to tags conversion
 
 ### API Changes
 - Updated POST `/api/admin/posts` to accept `tags` array
