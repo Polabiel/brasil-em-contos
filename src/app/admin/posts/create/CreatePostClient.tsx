@@ -148,7 +148,7 @@ export default function CreatePostClient() {
         <Select
           placeholder="Tag do livro (opcional)"
           value={tag}
-          onChange={(e) => setTag(e as string | null)}
+          onChange={(_, newValue) => setTag(newValue)}
           size="md"
         >
           {(api.post.bookTags.useQuery().data ?? []).map((v) => (

@@ -4,8 +4,15 @@ import { z } from "zod";
 export const authorRouter = createTRPCRouter({
   list: publicProcedure.query(async ({ ctx }) => {
     const authors = await ctx.db.author.findMany({
+      where: {
+        OR: [{ books: { some: {} } }, { posts: { some: {} } }],
+      },
       orderBy: { name: "asc" },
-      include: { books: { select: { id: true, title: true, year: true } } },
+      take: 5,
+      include: {
+        books: { select: { id: true, title: true, year: true }, take: 4 },
+        posts: { select: { id: true, content: true }, take: 1 },
+      },
     });
 
     return authors.map((a) => ({
@@ -20,6 +27,10 @@ export const authorRouter = createTRPCRouter({
         id: Number(b.id),
         title: String(b.title),
         year: b.year ?? undefined,
+      })),
+      posts: (a.posts ?? []).map((p) => ({
+        id: Number(p.id),
+        title: String(p.content),
       })),
     }));
   }),
