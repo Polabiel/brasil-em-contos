@@ -22,7 +22,7 @@ type Post = {
   createdAt: Date;
   updatedAt: Date;
   featured: boolean;
-  tag?: string | null;
+  tags?: string[];
 };
 
 export default function AdminPostsClient({ posts }: { posts: Post[] }) {
@@ -118,7 +118,7 @@ export default function AdminPostsClient({ posts }: { posts: Post[] }) {
             <thead>
               <tr>
                 <th>Título</th>
-                <th>Tag</th>
+                <th>Tags</th>
                 <th>Status</th>
                 <th>Destaque</th>
                 <th>Criado em</th>
@@ -131,16 +131,20 @@ export default function AdminPostsClient({ posts }: { posts: Post[] }) {
                 <tr key={post.id}>
                   <td>{post.name}</td>
                   <td>
-                    {post.tag ? (
-                      <Chip size="sm" variant="soft" sx={{ fontWeight: 700 }}>
-                        {String(post.tag)
-                          .replace(/_/g, " ")
-                          .toLowerCase()
-                          .replace(/\b\w/g, (l: string) => l.toUpperCase())}
-                      </Chip>
+                    {post.tags && post.tags.length > 0 ? (
+                      <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}>
+                        {post.tags.map((tag) => (
+                          <Chip key={tag} size="sm" variant="soft" sx={{ fontWeight: 700 }}>
+                            {String(tag)
+                              .replace(/_/g, " ")
+                              .toLowerCase()
+                              .replace(/\b\w/g, (l: string) => l.toUpperCase())}
+                          </Chip>
+                        ))}
+                      </Box>
                     ) : (
                       <Chip size="sm" variant="outlined">
-                        Sem tag
+                        Sem tags
                       </Chip>
                     )}
                   </td>
@@ -246,16 +250,18 @@ export default function AdminPostsClient({ posts }: { posts: Post[] }) {
                         flexWrap: "wrap",
                       }}
                     >
-                      {post.tag ? (
-                        <Chip size="sm" variant="soft" sx={{ fontWeight: 700 }}>
-                          {String(post.tag)
-                            .replace(/_/g, " ")
-                            .toLowerCase()
-                            .replace(/\b\w/g, (l: string) => l.toUpperCase())}
-                        </Chip>
+                      {post.tags && post.tags.length > 0 ? (
+                        post.tags.map((tag) => (
+                          <Chip key={tag} size="sm" variant="soft" sx={{ fontWeight: 700 }}>
+                            {String(tag)
+                              .replace(/_/g, " ")
+                              .toLowerCase()
+                              .replace(/\b\w/g, (l: string) => l.toUpperCase())}
+                          </Chip>
+                        ))
                       ) : (
                         <Chip size="sm" variant="outlined">
-                          Sem tag
+                          Sem tags
                         </Chip>
                       )}
 

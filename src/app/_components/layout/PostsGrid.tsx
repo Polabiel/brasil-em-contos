@@ -98,7 +98,7 @@ export default function PostsGrid() {
     description?: string | null;
     image?: string | null;
     content?: string | null;
-    tag?: string | null;
+    tags?: string[];
     author?: { name: string | null } | null;
     createdBy?: { name: string | null } | null;
     featured?: boolean;
@@ -374,7 +374,9 @@ export default function PostsGrid() {
                   year: "numeric",
                 })
               : "";
-            const category = formatTag(post.tag);
+            const category = post.tags && post.tags.length > 0 
+              ? formatTag(post.tags[0]) 
+              : formatTag(null);
             const readTime = getReadTime(post.description);
 
             return (
