@@ -9,7 +9,7 @@ export async function GET(_req: Request) {
 
   const user = await db.user.findUnique({
     where: { id: session.user.id },
-    select: { id: true, name: true, email: true, image: true },
+    select: { id: true, name: true, email: true, image: true, bio: true },
   });
   if (!user)
     return NextResponse.json({ error: "User not found" }, { status: 404 });
@@ -31,6 +31,7 @@ export async function PATCH(req: Request) {
     image?: string | null;
     imageBlob?: Buffer | null;
     imageMime?: string | null;
+    bio?: string | null;
   } = {};
 
   // Validation: limit uploads to reasonable size and mime types
@@ -43,11 +44,14 @@ export async function PATCH(req: Request) {
     const nameField = form.get("name");
     const imageField = form.get("image");
     const avatar = form.get("avatar"); // file input
+    const bioField = form.get("bio");
 
     if (typeof nameField === "string")
       updates.name = nameField.trim().length > 0 ? nameField.trim() : null;
     if (typeof imageField === "string")
       updates.image = imageField.trim().length > 0 ? imageField.trim() : null;
+    if (typeof bioField === "string")
+      updates.bio = bioField.trim().length > 0 ? bioField.trim() : null;
 
     if (avatar && typeof (avatar as Blob).arrayBuffer === "function") {
       const blob = avatar as Blob;
@@ -80,17 +84,20 @@ export async function PATCH(req: Request) {
       typeof raw === "object" && raw !== null
         ? (raw as Record<string, unknown>)
         : {};
-    const { name, image, imageBlob, imageMime } = body as {
+    const { name, image, imageBlob, imageMime, bio } = body as {
       name?: unknown;
       image?: unknown;
       imageBlob?: unknown;
       imageMime?: unknown;
+      bio?: unknown;
     };
 
     if (typeof name === "string")
       updates.name = name.trim().length > 0 ? name.trim() : null;
     if (typeof image === "string")
       updates.image = image.trim().length > 0 ? image.trim() : null;
+    if (typeof bio === "string")
+      updates.bio = bio.trim().length > 0 ? bio.trim() : null;
 
     if (typeof imageBlob === "string" && typeof imageMime === "string") {
       const buf = Buffer.from(imageBlob, "base64");
@@ -115,7 +122,7 @@ export async function PATCH(req: Request) {
     const updated = await db.user.update({
       where: { id: session.user.id },
       data: updates,
-      select: { id: true, name: true, email: true, image: true },
+      select: { id: true, name: true, email: true, image: true, bio: true },
     });
     return NextResponse.json({ ok: true, user: updated });
   } catch {
