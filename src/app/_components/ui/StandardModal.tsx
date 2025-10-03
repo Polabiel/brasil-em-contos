@@ -21,6 +21,7 @@ interface StandardModalProps {
   children: React.ReactNode;
   size?: 'sm' | 'md' | 'lg';
   showCloseButton?: boolean;
+  zIndex?: number;
 }
 
 export default function StandardModal({ 
@@ -29,7 +30,8 @@ export default function StandardModal({
   title, 
   children, 
   size = 'md',
-  showCloseButton = true 
+  showCloseButton = true,
+  zIndex = 9999
 }: StandardModalProps) {
   const getMaxWidth = () => {
     switch (size) {
@@ -63,7 +65,7 @@ export default function StandardModal({
           from: { opacity: 0 },
           to: { opacity: 1 },
         },
-        zIndex: 9999,
+        zIndex: zIndex,
       }}
     >
       <ModalDialog
