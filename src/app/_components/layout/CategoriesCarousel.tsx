@@ -4,7 +4,7 @@ import Box from "@mui/joy/Box";
 import Typography from "@mui/joy/Typography";
 import Chip from "@mui/joy/Chip";
 import { Playfair_Display } from "next/font/google";
-import { BookTagValues, type BookTag } from "@/lib/bookTags";
+import { BookTagValues, BookTagLabels, type BookTag } from "@/lib/bookTags";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -18,12 +18,9 @@ type Category = {
 };
 
 export default function CategoriesCarousel() {
-  const categories: Category[] = BookTagValues.map((tag: BookTag) => ({
+  const categories: Category[] = BookTagValues.map((tag) => ({
     value: tag,
-    label: tag
-      .replace(/_/g, " ")
-      .toLowerCase()
-      .replace(/\b\w/g, (l: string) => l.toUpperCase()),
+    label: BookTagLabels[tag] ?? tag,
   }));
 
   return (

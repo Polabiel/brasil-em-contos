@@ -23,10 +23,18 @@ enum BookTag {
     // Gêneros Narrativos
     ROMANCE
     CONTO
+    NARRATIVA
+    FICCAO_NARRATIVA
     // Gênero Lírico
     POESIA
     // Gênero Dramático
     DRAMA
+
+    // Outros solicitados
+    AUTOBIOGRAFIA
+    ROMANTISMO
+    INFANTIL
+    COMPORTAMENTO
 
     // Movimentos Literários
     MODERNISMO
@@ -55,7 +63,6 @@ enum BookTag {
     LITERATURA_FEMININA
     MEMORIAS
     OUTROS
-
 }
 
 model Post {
