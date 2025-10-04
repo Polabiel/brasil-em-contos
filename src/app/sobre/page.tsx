@@ -60,6 +60,106 @@ export default function SobrePage() {
         </Box>
       </Box>
 
+      {/* Banner da disciplina (estilizado) */}
+      <Box
+        sx={{
+          maxWidth: "900px",
+          mx: "auto",
+          px: { xs: 2, sm: 3, md: 4 },
+          pt: { xs: 4, md: 6 },
+        }}
+      >
+        <Card
+          variant="outlined"
+          sx={{
+            mb: 4,
+            px: { xs: 2, md: 3 },
+            py: 2.5,
+            borderRadius: 3,
+            background: "rgba(255,255,255,0.10)",
+            border: "none",
+            boxShadow: "0 4px 24px 0 rgba(0,0,0,0.07)",
+            position: "relative",
+            overflow: "visible",
+            "&:before": {
+              content: '""',
+              position: "absolute",
+              left: 0,
+              top: 16,
+              bottom: 16,
+              width: 6,
+              borderRadius: 8,
+              background: "linear-gradient(180deg, var(--cv-brazilGreen) 0%, #fff 100%)",
+              zIndex: 1,
+            },
+          }}
+        >
+          <CardContent sx={{ p: 0, pl: 4, position: "relative" }}>
+            <Stack direction="row" alignItems="flex-start" spacing={2}>
+              <Box
+                sx={{
+                  mt: 0.5,
+                  mr: 1,
+                  fontSize: 32,
+                  color: "var(--cv-brazilGreen)",
+                  flexShrink: 0,
+                  userSelect: "none",
+                }}
+                aria-label="Livro"
+              >
+                📖
+              </Box>
+              <Stack spacing={1}>
+                <Typography
+                  level="body-md"
+                  sx={{
+                    color: "var(--cv-textPrimary)",
+                    fontWeight: 700,
+                    fontSize: { xs: "1.05rem", md: "1.15rem" },
+                  }}
+                >
+                  Site desenvolvido para a disciplina de Antropologia do curso de Administração da Universidade Estadual de Maringá.
+                </Typography>
+                <Typography
+                  level="body-sm"
+                  sx={{ color: "var(--cv-textMuted80)" }}
+                >
+                  <strong>Professora:</strong> Renata Oliveira Dos Santos
+                </Typography>
+                <Typography
+                  level="body-sm"
+                  sx={{
+                    color: "var(--cv-brazilGreen)",
+                    fontWeight: 700,
+                    mt: 1,
+                    mb: 0.5,
+                    letterSpacing: 0.5,
+                  }}
+                >
+                  Integrantes
+                </Typography>
+                <Stack component="ul" spacing={0.5} sx={{ pl: 2, m: 0 }}>
+                  <Typography
+                    component="li"
+                    level="body-sm"
+                    sx={{ color: "var(--cv-textMuted80)" }}
+                  >
+                    Bruna Stefany de Matos Maranesi — RA: 145728
+                  </Typography>
+                  <Typography
+                    component="li"
+                    level="body-sm"
+                    sx={{ color: "var(--cv-textMuted80)" }}
+                  >
+                    Ana Karla Garcia — RA: 145702
+                  </Typography>
+                </Stack>
+              </Stack>
+            </Stack>
+          </CardContent>
+        </Card>
+      </Box>
+
       {/* Content Section */}
       <Box
         sx={{
@@ -92,10 +192,10 @@ export default function SobrePage() {
                 }}
               >
                 Brasil em Contos é uma plataforma dedicada a preservar, celebrar
-                e compartilhar a rica tradição literária brasileira. Nossa missão
-                é tornar acessível os contos clássicos e contemporâneos que
-                moldaram nossa cultura, inspirando novas gerações de leitores e
-                escritores.
+                e compartilhar a rica tradição literária brasileira. Nossa
+                missão é tornar acessível os contos clássicos e contemporâneos
+                que moldaram nossa cultura, inspirando novas gerações de
+                leitores e escritores.
               </Typography>
             </CardContent>
           </Card>
@@ -172,7 +272,8 @@ export default function SobrePage() {
                     sx={{ color: "var(--cv-textMuted80)" }}
                   >
                     Participe de discussões, descubra novos autores e faça parte
-                    de uma comunidade que valoriza a cultura literária brasileira.
+                    de uma comunidade que valoriza a cultura literária
+                    brasileira.
                   </Typography>
                 </Box>
               </Stack>
@@ -203,9 +304,9 @@ export default function SobrePage() {
               >
                 Brasil em Contos nasceu do amor pela literatura brasileira e do
                 desejo de torná-la mais acessível a todos. Acreditamos que os
-                contos são uma forma única de capturar a essência de uma cultura,
-                e a literatura brasileira oferece uma riqueza incomparável de
-                histórias, perspectivas e vozes.
+                contos são uma forma única de capturar a essência de uma
+                cultura, e a literatura brasileira oferece uma riqueza
+                incomparável de histórias, perspectivas e vozes.
               </Typography>
               <Typography
                 level="body-lg"
