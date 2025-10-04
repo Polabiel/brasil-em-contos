@@ -82,7 +82,7 @@ export default function PostsGrid() {
     const content = (text ?? "").trim();
     if (!content) return "1 min";
     const words = content.split(/\s+/).filter(Boolean).length;
-    const wpm = 80;
+    const wpm = 200;
     const minutes = Math.max(1, Math.ceil(words / wpm));
     return `${minutes} min`;
   };
