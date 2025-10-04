@@ -221,6 +221,16 @@ export default function PostContentClient({ content }: { content: string }) {
             maxWidth: "400px !important",
           },
 
+          // Disable float on mobile screens to prevent layout breaks
+          "@media (max-width: 768px)": {
+            '& img[title="left"], & img[title="right"]': {
+              float: "none",
+              marginLeft: "auto",
+              marginRight: "auto",
+              maxWidth: "100% !important",
+            },
+          },
+
           '& img[title="center"], & img[title=""], & img:not([title])': {
             marginLeft: "auto",
             marginRight: "auto",
