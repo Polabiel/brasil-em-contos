@@ -89,12 +89,25 @@ export default function SobrePage() {
               bottom: 16,
               width: 6,
               borderRadius: 8,
-              background: "linear-gradient(180deg, var(--cv-brazilGreen) 0%, #fff 100%)",
+              background:
+                "linear-gradient(180deg, var(--cv-brazilGreen) 0%, #fff 100%)",
               zIndex: 1,
             },
           }}
         >
           <CardContent sx={{ p: 0, pl: 4, position: "relative" }}>
+            <Typography
+              level="h3"
+              className={playfair.className}
+              sx={{
+                fontSize: { xs: "1.05rem", md: "1.2rem" },
+                fontWeight: 700,
+                color: "var(--cv-textPrimary)",
+                mb: 1,
+              }}
+            >
+              Trabalho de Antropologia — Brasil em Contos
+            </Typography>
             <Stack direction="row" alignItems="flex-start" spacing={2}>
               <Box
                 sx={{
@@ -111,14 +124,16 @@ export default function SobrePage() {
               </Box>
               <Stack spacing={1}>
                 <Typography
-                  level="body-md"
+                  level="body-sm"
                   sx={{
+                    mt: 1,
+                    mb: 0.5,
+                    letterSpacing: 0.5,
                     color: "var(--cv-textPrimary)",
-                    fontWeight: 700,
-                    fontSize: { xs: "1.05rem", md: "1.15rem" },
                   }}
                 >
-                  Site desenvolvido para a disciplina de Antropologia do curso de Administração da Universidade Estadual de Maringá.
+                  Site desenvolvido para a disciplina de Antropologia do curso
+                  de Administração da Universidade Estadual de Maringá.
                 </Typography>
                 <Typography
                   level="body-sm"
