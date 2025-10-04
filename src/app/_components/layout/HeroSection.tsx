@@ -474,7 +474,7 @@ export default function HeroSection() {
                     </Box>{" "}
                     do Brasil em Contos que, com amor mútuo pela literatura
                     nacional, decidimos criar um blog de resenha para dividirmos
-                    com outros amantes da literatura brasileiras, histórias
+                    com outros amantes da literatura brasileiras histórias
                     impactantes originadas de nosso tão amado país.
                   </Typography>
                 </Box>
