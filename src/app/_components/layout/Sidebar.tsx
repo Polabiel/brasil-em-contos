@@ -30,9 +30,9 @@ export default function Sidebar() {
   type AuthorItem = RouterOutputs["author"]["list"][number];
 
   const literaryFacts = [
-    "Nosso blog surgiu por conta de um trabalho para a faculdade",
-    "Com amor e dedicação, estamos a cerca de 3 anos trazendo resenhas",
-    "Criamos um clube do livro que tem cerca de 20 pessoas",
+    "Nosso blog surgiu por conta de um trabalho que fizemos para a faculdade",
+    "Com amor e dedicação, estamos a cerca de 3 anos trazendo resenhas e criando laços com leitores",
+    "Montamos um clube do livro que contém, atualmente, cerca de 20 pessoas",
   ];
 
   return (
