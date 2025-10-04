@@ -16,7 +16,6 @@ import { api } from "@/trpc/react";
 import { useSearchParams, useRouter } from "next/navigation";
 
 import { Playfair_Display } from "next/font/google";
-import { motion } from "motion/react";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -107,10 +106,10 @@ export default function PostsGrid() {
       ? orderedPosts.slice(0, 6)
       : [];
 
-  // Add "Em breve" sentinel at the end when posts exist
+  // Add "Em breve" sentinels - one for each image
   const displayItems: (PostItem | "coming-soon")[] = [...items];
   if (!isLoading && orderedPosts && orderedPosts.length > 0) {
-    displayItems.push("coming-soon");
+    displayItems.push("coming-soon", "coming-soon", "coming-soon");
   }
 
   // Check if we should show empty state
@@ -266,30 +265,57 @@ export default function PostsGrid() {
           )}
         </Box>
       ) : (
-        <Grid container spacing={3} sx={{ justifyContent: 'center' }}>
+        <Grid container spacing={3} sx={{ justifyContent: "center" }}>
           {displayItems.map((p, index) => {
             const isLarge = index === 0;
             if (p === "coming-soon") {
+              // Array de imagens disponíveis
+              const comingSoonImages = [
+                "/em_breve/canção.jpg",
+                "/em_breve/a_palavra.jpg",
+                "/em_breve/pequena.jpg",
+              ];
+
+              // Calcular qual imagem usar baseado no índice
+              const comingSoonCount = displayItems
+                .slice(0, index)
+                .filter((item) => item === "coming-soon").length;
+              const imageIndex = comingSoonCount % comingSoonImages.length;
+              const imageSrc =
+                comingSoonImages[imageIndex] ?? "/em_breve/canção.jpg";
+
+              // Gerar datas diferentes para cada card 'Em breve' usando Date
+              // Base: 10/12/2025 (10 de dezembro de 2025)
+              const comingSoonBase = new Date(2025, 11, 10); // mês é 0-indexado (11 = dezembro)
+              // Offsets em dias para criar datas diferentes (ajuste conforme necessário)
+              const comingSoonOffsets = [0, 30, 60];
+              const comingSoonDates = comingSoonOffsets.map((offset) => {
+                const d = new Date(comingSoonBase);
+                d.setDate(d.getDate() + offset);
+                return d.toLocaleDateString("pt-BR");
+              });
+              const dateText =
+                comingSoonDates[imageIndex % comingSoonDates.length];
+
               return (
-                <Grid xs={12} sm={6} md={4} key="coming-soon">
+                <Grid xs={12} sm={6} md={4} key={`coming-soon-${index}`}>
                   <Box
                     sx={{
                       maxWidth: 300,
                       mx: "auto",
-
                       transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
                       "&:hover": {
                         transform: "translateY(-12px)",
                         "& .coming-soon-card": {
                           boxShadow:
-                            "0 24px 48px rgba(0,0,0,0.15), 0 12px 24px rgba(0,0,0,0.1)",
+                            "0 24px 48px rgba(0,0,0,0.25), 0 12px 24px rgba(0,0,0,0.15)",
                         },
                       },
                     }}
                   >
                     <Card
                       className="coming-soon-card"
-                      variant="plain"
+                      variant="outlined"
                       sx={{
                         position: "relative",
                         width: 300,
@@ -297,101 +323,103 @@ export default function PostsGrid() {
                         transition: "all 0.35s cubic-bezier(0.2, 0, 0.2, 1)",
                         cursor: "pointer",
                         overflow: "hidden",
-                        background: "rgba(255,255,255,0.92)",
-                        backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><rect width='24' height='24' fill='%23ffffff'/><path fill='%23000000' opacity='0.02' d='M0 0h1v1H0zM2 3h1v1H2zM5 1h1v1H5z'/></svg>")`,
-                        backgroundRepeat: "repeat",
-                        border: "2px solid rgba(0,0,0,0.06)",
-                        backdropFilter: "blur(6px)",
-                        WebkitBackdropFilter: "blur(6px)",
+                        border: "2px solid var(--cv-neutral200)",
                         borderRadius: 12,
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        p: 3,
-                        boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
+                        p: 0,
+                        boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
                       }}
                     >
-                      <motion.div
-                        animate={{ translateY: [0, -6, 0] }}
-                        transition={{
-                          duration: 3.5,
-                          repeat: Infinity,
-                          ease: "easeInOut",
+                      {/* Imagem de fundo */}
+                      <Image
+                        src={imageSrc}
+                        alt="Em breve"
+                        fill
+                        sizes="300px"
+                        style={{
+                          objectFit: "cover",
+                          objectPosition: "center",
+                        }}
+                        unoptimized
+                      />
+
+                      {/* Overlay escuro (esfumado preto) */}
+                      <Box
+                        sx={{
+                          position: "absolute",
+                          inset: 0,
+                          background:
+                            "linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.7) 100%)",
+                          zIndex: 1,
+                        }}
+                      />
+
+                      {/* Conteúdo centralizado */}
+                      <Box
+                        sx={{
+                          position: "absolute",
+                          inset: 0,
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          zIndex: 2,
+                          p: 3,
                         }}
                       >
                         <Typography
-                          level="h1"
+                          level="title-lg"
+                          className={playfair.className}
                           sx={{
-                            color: "#111111",
-                            fontSize: "3.4rem",
-                            fontWeight: 800,
-                            textShadow: "0 6px 18px rgba(0,0,0,0.06)",
-                            opacity: 0.95,
-                            mb: 3,
+                            fontWeight: 700,
+                            color: "white",
+                            lineHeight: 1.3,
+                            textAlign: "center",
+                            fontSize: "1.6rem",
+                            mb: 2,
+                            textShadow: "0 2px 8px rgba(0,0,0,0.3)",
                           }}
                         >
-                          🚀
+                          Novas resenhas em breve
                         </Typography>
-                      </motion.div>
 
-                      <Typography
-                        level="title-lg"
-                        className={playfair.className}
-                        sx={{
-                          fontWeight: 700,
-                          color: "#111111",
-                          lineHeight: 1.3,
-                          textAlign: "center",
-                          fontSize: "1.6rem",
-                          mb: 2,
-                        }}
-                      >
-                        Em Breve
-                      </Typography>
-
-                      <Typography
-                        level="body-sm"
-                        sx={{
-                          color: "#333333",
-                          lineHeight: 1.5,
-                          textAlign: "center",
-                          px: 2,
-                        }}
-                      >
-                        Novas histórias incríveis estão chegando...
-                      </Typography>
+                        <Stack
+                          direction="row"
+                          spacing={0.5}
+                          alignItems="center"
+                          justifyContent="center"
+                        >
+                          <i
+                            className="fas fa-clock"
+                            style={{
+                              color: "white",
+                              fontSize: "0.85rem",
+                            }}
+                          />
+                          <Typography
+                            level="body-sm"
+                            sx={{
+                              color: "white",
+                              fontWeight: 600,
+                              textShadow: "0 2px 8px rgba(0,0,0,0.3)",
+                            }}
+                          >
+                            {dateText}
+                          </Typography>
+                        </Stack>
+                      </Box>
                     </Card>
 
-                    {/* Data de lançamento */}
+                    {/* Box de texto vazio para manter alinhamento */}
                     <Box
                       sx={{
                         mt: 2,
                         textAlign: "center",
                         width: "100%",
                         px: 1,
+                        visibility: "hidden",
                       }}
                     >
-                      <Stack
-                        direction="row"
-                        spacing={0.5}
-                        alignItems="center"
-                        justifyContent="center"
-                      >
-                        <i
-                          className="fas fa-clock"
-                          style={{
-                            color: "var(--cv-textMuted60)",
-                            fontSize: "0.75rem",
-                          }}
-                        />
-                        <Typography
-                          level="body-xs"
-                          sx={{ color: "var(--cv-textMuted70)" }}
-                        >
-                          {new Date(2026, 7, 10).toLocaleDateString("pt-BR")}
-                        </Typography>
-                      </Stack>
+                      <Typography level="body-xs">placeholder</Typography>
                     </Box>
                   </Box>
                 </Grid>
