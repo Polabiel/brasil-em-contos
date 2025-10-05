@@ -100,24 +100,292 @@ export default function PostsGrid() {
   } | null;
 
   // Show loading skeletons while loading, or posts if available, otherwise show empty state
+  // If featured posts exist, show only non-featured in the regular grid to avoid duplicates
+  const postsForGrid = featured && featured.length > 0 ? nonFeatured : orderedPosts;
   const items: PostItem[] = isLoading
     ? Array.from({ length: 6 }).map(() => null)
-    : orderedPosts && orderedPosts.length > 0
-      ? orderedPosts.slice(0, 6)
+    : postsForGrid && postsForGrid.length > 0
+      ? postsForGrid.slice(0, 6)
       : [];
 
   // Add "Em breve" sentinels - one for each image
   const displayItems: (PostItem | "coming-soon")[] = [...items];
-  if (!isLoading && orderedPosts && orderedPosts.length > 0) {
+  if (!isLoading && postsForGrid && postsForGrid.length > 0) {
     displayItems.push("coming-soon", "coming-soon", "coming-soon");
   }
 
-  // Check if we should show empty state
+  // Check if we should show empty state (no posts at all, neither featured nor regular)
   const showEmptyState =
-    !isLoading && (!orderedPosts || orderedPosts.length === 0);
+    !isLoading && (!posts || posts.length === 0);
 
   return (
     <Box sx={{ mb: 6 }}>
+      {/* Featured Books Section */}
+      {!isLoading && featured && featured.length > 0 && (
+        <Box sx={{ mb: 8 }}>
+          {/* Featured Title */}
+          <Box sx={{ mb: 4, textAlign: "center" }}>
+            <Typography
+              level="h2"
+              className={playfair.className}
+              sx={{
+                fontSize: { xs: "2rem", md: "3rem" },
+                fontWeight: 700,
+                background:
+                  "linear-gradient(135deg, var(--cv-brazilGreen) 0%, var(--cv-brazilYellow) 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+                mb: 1,
+                position: "relative",
+                display: "inline-block",
+                "&::after": {
+                  content: '""',
+                  position: "absolute",
+                  bottom: "-8px",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  width: "80px",
+                  height: "4px",
+                  background:
+                    "linear-gradient(90deg, var(--cv-brazilGreen), var(--cv-brazilYellow))",
+                  borderRadius: "2px",
+                },
+              }}
+            >
+              {featured.length === 1
+                ? "⭐ Livro Destaque do Mês"
+                : "⭐ Livros Destaques do Mês"}
+            </Typography>
+            <Typography
+              level="body-lg"
+              sx={{
+                color: "var(--cv-textMuted80)",
+                maxWidth: 700,
+                mx: "auto",
+                lineHeight: 1.6,
+                mt: 2,
+              }}
+            >
+              {featured.length === 1
+                ? "Selecionado especialmente para você este mês"
+                : "Selecionados especialmente para você este mês"}
+            </Typography>
+          </Box>
+
+          {/* Featured Books Grid */}
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 4,
+              justifyContent: "center",
+              alignItems: "stretch",
+              maxWidth: featured.length === 1 ? "400px" : "1200px",
+              mx: "auto",
+            }}
+          >
+            {featured.map((post: any) => {
+              const category =
+                post.tags && post.tags.length > 0
+                  ? formatTag(post.tags[0])
+                  : "Conto Brasileiro";
+              const readTime = getReadTime(post.content);
+
+              return (
+                <Box
+                  key={post.id}
+                  sx={{
+                    flex: featured.length === 1 ? "1 1 100%" : "1 1 300px",
+                    maxWidth: 350,
+                    mx: "auto",
+                    transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                    "&:hover": {
+                      transform: "translateY(-16px) scale(1.02)",
+                      "& .featured-card": {
+                        boxShadow:
+                          "0 32px 64px rgba(34,139,34,0.3), 0 16px 32px rgba(255,215,0,0.2)",
+                      },
+                    },
+                  }}
+                >
+                  <Link
+                    href={`/posts/${post.id}`}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    <Card
+                      className="featured-card"
+                      variant="outlined"
+                      sx={{
+                        position: "relative",
+                        width: "100%",
+                        height: 500,
+                        transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                        cursor: "pointer",
+                        overflow: "hidden",
+                        background: "var(--cv-backgroundPaper)",
+                        border: "3px solid var(--cv-brazilYellow)",
+                        borderRadius: 16,
+                        p: 0,
+                        boxShadow:
+                          "0 16px 48px rgba(34,139,34,0.2), 0 8px 24px rgba(255,215,0,0.15)",
+                      }}
+                    >
+                      {session?.user?.role === "ADMIN" && (
+                        <IconButton
+                          aria-label={`Editar post ${post.id}`}
+                          size="sm"
+                          variant="solid"
+                          color="primary"
+                          sx={{
+                            position: "absolute",
+                            top: 16,
+                            right: 16,
+                            zIndex: 3,
+                            bgcolor: "var(--cv-brazilGreen)",
+                            "&:hover": {
+                              bgcolor: "#1e5f28",
+                            },
+                          }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            router.push(`/admin/posts/${post.id}/edit`);
+                          }}
+                        >
+                          <i className="fas fa-pen" aria-hidden="true" />
+                        </IconButton>
+                      )}
+
+                      {/* Featured Badge */}
+                      <Chip
+                        variant="solid"
+                        size="md"
+                        sx={{
+                          position: "absolute",
+                          top: 12,
+                          left: 12,
+                          zIndex: 3,
+                          bgcolor: "var(--cv-brazilGreen)",
+                          color: "white",
+                          fontWeight: 700,
+                          fontSize: "0.85rem",
+                          boxShadow: "0 4px 12px rgba(34,139,34,0.5)",
+                          px: 2,
+                          py: 1,
+                        }}
+                      >
+                        ⭐ DESTAQUE
+                      </Chip>
+
+                      {/* Book Image */}
+                      {post.image ? (
+                        <Image
+                          src={post.image}
+                          alt={post.name}
+                          fill
+                          sizes="350px"
+                          style={{
+                            objectFit: "cover",
+                            objectPosition: "top",
+                          }}
+                          unoptimized
+                        />
+                      ) : (
+                        <Box
+                          sx={{
+                            position: "absolute",
+                            inset: 0,
+                            backgroundColor: "var(--cv-neutral100)",
+                          }}
+                        />
+                      )}
+
+                      {/* Category Chip */}
+                      <Chip
+                        variant="solid"
+                        size="sm"
+                        sx={{
+                          position: "absolute",
+                          bottom: 12,
+                          left: 12,
+                          zIndex: 3,
+                          bgcolor: "var(--cv-brazilYellow)",
+                          color: "var(--cv-textPrimary)",
+                          fontWeight: 700,
+                          fontSize: "0.75rem",
+                          boxShadow: "0 2px 8px rgba(255,215,0,0.4)",
+                        }}
+                      >
+                        {category}
+                      </Chip>
+                    </Card>
+
+                    {/* Book Info Below Card */}
+                    <Box
+                      sx={{
+                        mt: 2,
+                        textAlign: "center",
+                        width: "100%",
+                        px: 1,
+                      }}
+                    >
+                      <Typography
+                        level="h3"
+                        className={playfair.className}
+                        sx={{
+                          fontWeight: 700,
+                          color: "var(--cv-textPrimary)",
+                          lineHeight: 1.3,
+                          fontSize: { xs: "1.3rem", md: "1.5rem" },
+                          mb: 0.5,
+                        }}
+                      >
+                        {post.name}
+                      </Typography>
+
+                      <Typography
+                        level="body-md"
+                        sx={{
+                          color: "var(--cv-brazilGreen)",
+                          fontWeight: 600,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.5px",
+                          mb: 1,
+                        }}
+                      >
+                        {post.author?.name ?? "Autor Desconhecido"}
+                      </Typography>
+
+                      <Stack
+                        direction="row"
+                        spacing={0.5}
+                        alignItems="center"
+                        justifyContent="center"
+                      >
+                        <i
+                          className="fas fa-clock"
+                          style={{
+                            color: "var(--cv-textMuted60)",
+                            fontSize: "0.85rem",
+                          }}
+                        />
+                        <Typography
+                          level="body-sm"
+                          sx={{ color: "var(--cv-textMuted70)" }}
+                        >
+                          {readTime} leitura
+                        </Typography>
+                      </Stack>
+                    </Box>
+                  </Link>
+                </Box>
+              );
+            })}
+          </Box>
+        </Box>
+      )}
+
       <Box
         id="mais-historias"
         sx={{ mb: 4, textAlign: "center", justifyContent: "center" }}
