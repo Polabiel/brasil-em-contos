@@ -100,21 +100,23 @@ export default function PostsGrid() {
   } | null;
 
   // Show loading skeletons while loading, or posts if available, otherwise show empty state
+  // If featured posts exist, show only non-featured in the regular grid to avoid duplicates
+  const postsForGrid = featured && featured.length > 0 ? nonFeatured : orderedPosts;
   const items: PostItem[] = isLoading
     ? Array.from({ length: 6 }).map(() => null)
-    : orderedPosts && orderedPosts.length > 0
-      ? orderedPosts.slice(0, 6)
+    : postsForGrid && postsForGrid.length > 0
+      ? postsForGrid.slice(0, 6)
       : [];
 
   // Add "Em breve" sentinels - one for each image
   const displayItems: (PostItem | "coming-soon")[] = [...items];
-  if (!isLoading && orderedPosts && orderedPosts.length > 0) {
+  if (!isLoading && postsForGrid && postsForGrid.length > 0) {
     displayItems.push("coming-soon", "coming-soon", "coming-soon");
   }
 
-  // Check if we should show empty state
+  // Check if we should show empty state (no posts at all, neither featured nor regular)
   const showEmptyState =
-    !isLoading && (!orderedPosts || orderedPosts.length === 0);
+    !isLoading && (!posts || posts.length === 0);
 
   return (
     <Box sx={{ mb: 6 }}>
