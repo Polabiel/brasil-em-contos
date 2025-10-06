@@ -17,7 +17,7 @@ O site (https://brasilemcontos.vercel.app/) funciona como vitrine desse universo
 
 ## 🎓 Origem / Propósito Acadêmico
 
-Este projeto teve início como um trabalho universitário no curso de Antropologia da **UEM — Universidade Estadual de Maringá (PR)**, idealizado por **Bruna Stefany** com a participação de **Gabriel Oliveira (você, Polabiel)** e colaboração de **Ana Karla**, que contribuiu com resenha pontual.  
+Este projeto teve início como um trabalho universitário no curso de Antropologia da **UEM — Universidade Estadual de Maringá (PR)**, idealizado por **Bruna Stefany** com a participação de **Gabriel Oliveira** e colaboração de **Ana Karla**, que contribuiu com resenha pontual.  
 Embora nascido no ambiente acadêmico, o projeto evoluiu para um blog literário independente, com intuito de estudo, divulgação cultural e ampliação do repertório literário nacional.
 
 ---
