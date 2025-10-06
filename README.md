@@ -1,29 +1,83 @@
-# Create T3 App
+# Brasil em Contos
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+> “Conexões imaginárias entre vozes do Brasil”  
 
-## What's next? How do I make an app with this?
+## 📖 Sobre o Projeto
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+**Brasil em Contos** é um blog/coletânea literária dedicado à divulgação de contos brasileiros e à valorização da literatura nacional. Por meio de resenhas, textos autorais e curadoria, o projeto busca unir autores de diferentes regiões, refletir a diversidade cultural e incentivar a leitura crítica.
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+<img width="1880" height="923" alt="image" src="https://github.com/user-attachments/assets/8febe6a1-7199-4a25-9263-f9bcda80c3d3" />
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+A obra **Brasil em Contos: Conexões Imaginárias** reúne autores de várias regiões do Brasil, cada um apresentando uma expressão literária singular. :contentReference[oaicite:1]{index=1}
 
-## Learn More
+Além disso, há versões com temáticas como *Brasil em Contos: Cultura e Diversidade de um País Plural*. :contentReference[oaicite:2]{index=2}  
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+O site ( https://brasilemcontos.vercel.app/ ) funciona como vitrine desse universo literário, com seções como “Autores”, “Resenhas”, “Contos Recentes”, “Blogueiras”, “Comunidade” etc.
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+---
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+## 🎯 Missão & Objetivos
 
-## How do I deploy this?
+- Divulgar autores brasileiros de contos e ampliar seu alcance  
+- Valorizar a pluralidade linguística, cultural e temática do Brasil  
+- Fomentar o hábito da leitura e da escrita criativa  
+- Criar uma comunidade literária colaborativa, com participação ativa de leitores e escritores  
+- Tornar o projeto acessível e autossustentável  
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+<img width="1880" height="860" alt="image" src="https://github.com/user-attachments/assets/0ad0c024-a7bc-4ba0-a612-e42cf9b5f197" />
+
+---
+
+## 🏗 Funcionalidades / Estrutura do Projeto
+
+- Homepage com destaques de contos recentes  
+- Seção de autores e perfis literários  
+- Resenhas literárias (contos, antologias, livros)  
+- Clube de leitura / comunidade de leitores  
+- Área “Sobre” com história e equipe  
+- Possível integração com redes sociais, newsletter e formulários de envio de contos  
+
+---
+
+## 👥 Equipe / Colaboradores
+
+- [Nome 1] — idealização, curadoria literária  
+- [Nome 2] — criação de conteúdo, resenhas  
+- [Nome 3] — manutenção técnica / design  
+- Convidados / autores colaboradores  
+
+*(Ajuste conforme quem efetivamente participa)*
+
+---
+
+## 🛠 Tecnologias / Stack
+
+- Plataforma de hospedagem: Vercel  
+- Frontend: (React, Next.js, Gatsby ou outro framework que você esteja usando)  
+- Estilização: CSS / SASS / Tailwind / etc.  
+- CMS / backend: (se existir)  
+- Integrações: formulários, analytics, redes sociais  
+
+*(Se quiser, posso te ajudar a escrever uma seção técnica baseada no código real do projeto, se você me mostrar a stack usada.)*
+
+<img width="1889" height="870" alt="image" src="https://github.com/user-attachments/assets/b1fdf490-0d9c-40c1-9ddc-56e1734d0fe0" />
+
+---
+
+## 🚀 Instalação & Desenvolvimento Local
+
+```bash
+# clone o repositório
+git clone https://github.com/polabiel/brasil-em-contos.git
+
+# entre na pasta
+cd brasil-em-contos
+
+# instale dependências
+npm install
+
+# rode em modo de desenvolvimento
+npm run dev
+
+# crie build para produção
+npm run build
