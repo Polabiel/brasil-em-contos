@@ -4,25 +4,31 @@
 
 ## 📖 Sobre o Projeto
 
-**Brasil em Contos** é um blog/coletânea literária dedicado à divulgação de contos brasileiros e à valorização da literatura nacional. Por meio de resenhas, textos autorais e curadoria, o projeto busca unir autores de diferentes regiões, refletir a diversidade cultural e incentivar a leitura crítica.
+**Brasil em Contos** é um blog / coletânea literária com foco na divulgação de contos brasileiros e na valorização da literatura nacional. Por meio de resenhas, textos autorais e curadoria, o projeto busca unir autores de diferentes regiões, refletir a diversidade cultural e incentivar a leitura crítica.
 
-<img width="1880" height="923" alt="image" src="https://github.com/user-attachments/assets/8febe6a1-7199-4a25-9263-f9bcda80c3d3" />
+<img width="100%" alt="Captura de tela do site Brasil em Contos" src="https://github.com/user-attachments/assets/8febe6a1-7199-4a25-9263-f9bcda80c3d3" />
 
-A obra **Brasil em Contos: Conexões Imaginárias** reúne autores de várias regiões do Brasil, cada um apresentando uma expressão literária singular. :contentReference[oaicite:1]{index=1}
+A obra **Brasil em Contos: Conexões Imaginárias** reúne escritores de diversas regiões do Brasil, cada qual expressando sua singularidade literária. 
+Há também versões temáticas, como *Brasil em Contos: Cultura e Diversidade de um País Plural*, que reforçam a missão de dar voz às pluralidades regionais.   
 
-Além disso, há versões com temáticas como *Brasil em Contos: Cultura e Diversidade de um País Plural*. :contentReference[oaicite:2]{index=2}  
+O site (https://brasilemcontos.vercel.app/) funciona como vitrine desse universo literário, contemplando seções como “Autores”, “Resenhas”, “Contos Recentes”, “Blogueiras”, “Comunidade” etc.
 
-O site ( https://brasilemcontos.vercel.app/ ) funciona como vitrine desse universo literário, com seções como “Autores”, “Resenhas”, “Contos Recentes”, “Blogueiras”, “Comunidade” etc.
+---
+
+## 🎓 Origem / Propósito Acadêmico
+
+Este projeto teve início como um trabalho universitário no curso de Antropologia da **UEM — Universidade Estadual de Maringá (PR)**, idealizado por **Bruna Stefany** com a participação de **Gabriel Oliveira (você, Polabiel)** e colaboração de **Ana Karla**, que contribuiu com resenha pontual.  
+Embora nascido no ambiente acadêmico, o projeto evoluiu para um blog literário independente, com intuito de estudo, divulgação cultural e ampliação do repertório literário nacional.
 
 ---
 
 ## 🎯 Missão & Objetivos
 
-- Divulgar autores brasileiros de contos e ampliar seu alcance  
-- Valorizar a pluralidade linguística, cultural e temática do Brasil  
-- Fomentar o hábito da leitura e da escrita criativa  
-- Criar uma comunidade literária colaborativa, com participação ativa de leitores e escritores  
-- Tornar o projeto acessível e autossustentável  
+- Divulgar autores brasileiros de contos e ampliar seu alcance.  
+- Valorizar a pluralidade linguística, cultural e temática do Brasil.  
+- Fomentar o hábito da leitura e da escrita criativa.  
+- Promover uma comunidade literária colaborativa, com participação ativa de leitores e autores.  
+- Manter o projeto como um esforço de estudo acessível e sustentável.
 
 <img width="1880" height="860" alt="image" src="https://github.com/user-attachments/assets/0ad0c024-a7bc-4ba0-a612-e42cf9b5f197" />
 
@@ -30,35 +36,32 @@ O site ( https://brasilemcontos.vercel.app/ ) funciona como vitrine desse univer
 
 ## 🏗 Funcionalidades / Estrutura do Projeto
 
-- Homepage com destaques de contos recentes  
-- Seção de autores e perfis literários  
-- Resenhas literárias (contos, antologias, livros)  
-- Clube de leitura / comunidade de leitores  
-- Área “Sobre” com história e equipe  
-- Possível integração com redes sociais, newsletter e formulários de envio de contos  
+- Página inicial com destaques de contos recentes.  
+- Seção de autores e seus perfis literários.  
+- Resenhas literárias (contos, antologias, obras relacionadas).  
+- Clube de leitura / comunidade de leitores interativos.  
+- Página “Sobre” com história, propósito e equipe.  
+- Integrações possíveis: redes sociais, newsletter, sistema de envio de contos por leitores.
 
 ---
 
 ## 👥 Equipe / Colaboradores
 
-- [Nome 1] — idealização, curadoria literária  
-- [Nome 2] — criação de conteúdo, resenhas  
-- [Nome 3] — manutenção técnica / design  
-- Convidados / autores colaboradores  
-
-*(Ajuste conforme quem efetivamente participa)*
-
+- [Bruna Stefany](https://br.linkedin.com/in/bruna-stefany-matos-maranesi-89283032a) — idealização, curadoria literária, criação de conteúdo, resenhas
+- [Gabriel Oliveira](https://br.linkedin.com/in/polabiel) — manutenção técnica / design
+- [Ana Karla](https://br.linkedin.com) - ajudante e colaboradora
+- Convidados / autores colaboradores
+- 
 ---
 
 ## 🛠 Tecnologias / Stack
 
-- Plataforma de hospedagem: Vercel  
-- Frontend: (React, Next.js, Gatsby ou outro framework que você esteja usando)  
-- Estilização: CSS / SASS / Tailwind / etc.  
-- CMS / backend: (se existir)  
-- Integrações: formulários, analytics, redes sociais  
-
-*(Se quiser, posso te ajudar a escrever uma seção técnica baseada no código real do projeto, se você me mostrar a stack usada.)*
+- Hospedagem: **Vercel**  
+- Frontend: **Next.js**  
+- Estilização: **Tailwind CSS**  
+- Backend / ORM: **Prisma**  
+- API / estrutura de comunicação: **tRPC**  
+- Autenticação / login: **NextAuth.js** (com provedor Discord) 
 
 <img width="1889" height="870" alt="image" src="https://github.com/user-attachments/assets/b1fdf490-0d9c-40c1-9ddc-56e1734d0fe0" />
 
