@@ -185,7 +185,7 @@ export default function PostsGrid() {
               mx: "auto",
             }}
           >
-            {featured.map((post: any) => {
+            {featured.map((post) => {
               const category =
                 post.tags && post.tags.length > 0
                   ? formatTag(post.tags[0])
