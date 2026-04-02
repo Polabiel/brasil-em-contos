@@ -1,40 +1,74 @@
 export const colorTokens = {
-  // UI accents - Brazilian inspired colors
-  primaryMain: "#1e6b2e", // Brazilian green
-  secondaryMain: "#ffd500", // Brazilian yellow
-  successMain: "#16a34a", // Enhanced green
-  warningMain: "#f59e0b",
-  errorMain: "#dc2626",
-  // Backgrounds with warmth
-  backgroundDefault: "#fefefe",
-  backgroundPaper: "#ffffff",
-  gradientStart: "#f0f9ff", // Light blue tint
-  gradientMid: "#fefce8", // Light yellow tint
-  gradientEnd: "#f0fdf4", // Light green tint
-  // Text with better contrast
-  textPrimary: "#1a202c",
-  textSecondary: "#2d3748",
-  textMuted90: "rgba(26,32,44,0.9)",
-  textMuted80: "rgba(26,32,44,0.8)",
-  textMuted70: "rgba(26,32,44,0.7)",
-  textMuted60: "rgba(26,32,44,0.6)",
-  // Brazilian color palette
-  brazilGreen: "#228b22",
-  brazilYellow: "#ffd700",
-  brazilBlue: "#0039a6",
-  // Neutrals with warmth
-  neutral50: "#f7fafc",
-  neutral100: "#edf2f7",
-  neutral200: "#e2e8f0",
-  neutral300: "#cbd5e0",
-  neutral500: "#718096",
-  neutral700: "#4a5568",
-  // Accent colors
-  accentHsl: "hsl(147 75% 34%)", // Brazilian green in HSL
-  accentWarm: "#ff6b35", // Warm coral accent
-  accentCool: "#4f46e5", // Cool indigo accent
-  // Text color to use on top of primary backgrounds
-  textOnPrimary: "#ffffff",
+  // Primary Colors - Brazilian inspired, refined palette
+  primaryMain: "#0d6b2f", // Deep Brazilian green
+  primaryLight: "#16a34a", // Vibrant green
+  primaryLighter: "#86efac", // Light green for hover states
+  
+  // Secondary Colors - Golden Brazilian yellow
+  secondaryMain: "#f59e0b", // Warm amber (more sophisticated than bright yellow)
+  secondaryLight: "#fbbf24", // Light amber
+  
+  // Semantic colors
+  successMain: "#10b981", // Emerald green
+  warningMain: "#f59e0b", // Amber
+  errorMain: "#ef4444", // Red
+  dangerMain: "#dc2626", // Dark red
+  
+  // Backgrounds - Warm, inviting neutrals
+  backgroundDefault: "#fafaf8", // Off-white with warm tint
+  backgroundPaper: "#ffffff", // Pure white for cards
+  backgroundAlt: "#f7f5f3", // Warm beige
+  
+  // Gradients - Sophisticated Brazilian theme
+  gradientStart: "#f0fdf4", // Light green tint
+  gradientMid: "#fffbeb", // Light amber tint
+  gradientEnd: "#f0f9ff", // Subtle blue tint
+  
+  // Text colors - Professional hierarchy
+  textPrimary: "#1f2937", // Dark charcoal
+  textSecondary: "#4b5563", // Medium gray
+  textMuted: "#9ca3af", // Light gray
+  textOnPrimary: "#ffffff", // White on dark backgrounds
+  textOnSecondary: "#ffffff", // White on secondary
+  
+  // Legacy mappings for compatibility
+  textMuted90: "rgba(31,41,55,0.9)",
+  textMuted80: "rgba(31,41,55,0.8)",
+  textMuted70: "rgba(31,41,55,0.7)",
+  textMuted60: "rgba(31,41,55,0.6)",
+  
+  // Brazilian color palette - Extended
+  brazilGreen: "#0d6b2f",
+  brazilYellow: "#f59e0b",
+  brazilBlue: "#1e40af",
+  brazilOrange: "#ea580c",
+  
+  // Neutrals - Warm grays
+  neutral50: "#fafaf8",
+  neutral100: "#f5f3f0",
+  neutral200: "#e8e3de",
+  neutral300: "#d9cec5",
+  neutral400: "#c4b5a0",
+  neutral500: "#a89a87",
+  neutral600: "#847966",
+  neutral700: "#5f574b",
+  neutral800: "#3f3a36",
+  neutral900: "#1f2937",
+  
+  // Accent colors for special elements
+  accentWarm: "#ea580c", // Warm orange
+  accentCool: "#3b82f6", // Modern blue
+  accentViolet: "#a855f7", // Purple accent
+  
+  // Semantic shades
+  successLight: "#d1fae5",
+  warningLight: "#fef3c7",
+  errorLight: "#fee2e2",
+  
+  // Borders and dividers
+  borderLight: "#e5e7eb", // Light border
+  borderMedium: "#d1d5db", // Medium border
+  borderDark: "#9ca3af", // Dark border
 } as const;
 
 export type ColorTokens = typeof colorTokens;

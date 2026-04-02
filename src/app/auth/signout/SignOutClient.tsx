@@ -21,10 +21,24 @@ export default function SignOutButton() {
     <Button
       onClick={handleSignOut}
       variant="solid"
-      color="danger"
       loading={loading}
       startDecorator={!loading && <LogoutIcon />}
-      sx={{ width: '100%' }}
+      sx={{
+        width: '100%',
+        background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
+        fontWeight: 600,
+        fontSize: '0.95rem',
+        textTransform: 'uppercase',
+        letterSpacing: 0.5,
+        py: 1.2,
+        borderRadius: 'var(--radius-lg)',
+        boxShadow: 'var(--shadow-md)',
+        transition: 'all var(--transition-base)',
+        '&:hover': {
+          boxShadow: 'var(--shadow-lg)',
+          transform: 'translateY(-2px)',
+        },
+      }}
     >
       {loading ? "Saindo..." : "Sim, sair da conta"}
     </Button>

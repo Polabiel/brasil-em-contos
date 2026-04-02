@@ -18,7 +18,7 @@ export default function PostCardSkeleton({
         height: isLarge ? 400 : 320,
         overflow: "hidden",
         background: "var(--cv-backgroundPaper)",
-        border: "1px solid var(--cv-neutral200)",
+        border: "1px solid var(--cv-borderLight)",
         borderRadius: 12,
       }}
     >
@@ -27,7 +27,7 @@ export default function PostCardSkeleton({
           width: "100%",
           height: isLarge ? 200 : 160,
           background:
-            "linear-gradient(135deg, rgba(0,0,0,0.04), rgba(0,0,0,0.02))",
+            "linear-gradient(135deg, rgba(13,107,47,0.05), rgba(245,158,11,0.02))",
         }}
       />
       <CardContent
@@ -43,7 +43,7 @@ export default function PostCardSkeleton({
             sx={{
               height: isLarge ? 28 : 20,
               background:
-                "linear-gradient(90deg, rgba(0,0,0,0.06) 25%, rgba(255,255,255,0.02) 50%, rgba(0,0,0,0.06) 75%)",
+                "linear-gradient(90deg, rgba(13,107,47,0.08) 25%, rgba(255,255,255,0.02) 50%, rgba(13,107,47,0.08) 75%)",
               borderRadius: 1,
               backgroundSize: "200% 100%",
               animation: "shimmer 1.6s linear infinite",
@@ -54,7 +54,7 @@ export default function PostCardSkeleton({
               height: isLarge ? 16 : 12,
               width: "40%",
               background:
-                "linear-gradient(90deg, rgba(0,0,0,0.04) 25%, rgba(255,255,255,0.02) 50%, rgba(0,0,0,0.04) 75%)",
+                "linear-gradient(90deg, rgba(13,107,47,0.06) 25%, rgba(255,255,255,0.02) 50%, rgba(13,107,47,0.06) 75%)",
               borderRadius: 1,
               backgroundSize: "200% 100%",
               animation: "shimmer 1.6s linear infinite",
@@ -66,7 +66,7 @@ export default function PostCardSkeleton({
           sx={{
             height: isLarge ? 64 : 48,
             background:
-              "linear-gradient(90deg, rgba(0,0,0,0.03) 25%, rgba(255,255,255,0.02) 50%, rgba(0,0,0,0.03) 75%)",
+              "linear-gradient(90deg, rgba(13,107,47,0.05) 25%, rgba(255,255,255,0.02) 50%, rgba(13,107,47,0.05) 75%)",
             borderRadius: 2,
             backgroundSize: "200% 100%",
             animation: "shimmer 1.6s linear infinite",

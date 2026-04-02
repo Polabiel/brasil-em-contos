@@ -25,11 +25,15 @@ export default function Slogan() {
         level="h1"
         className={playfair.className}
         sx={{
-          color: "black",
+          color: "var(--cv-textPrimary)",
           fontWeight: 400,
           fontSize: "calc(var(--img-size) * 0.35)",
           lineHeight: 1,
           fontFamily: "'Playfair Display', serif",
+          background: "linear-gradient(135deg, var(--cv-primaryMain) 0%, var(--cv-brazilYellow) 100%)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          backgroundClip: "text",
         }}
       >
         Brasil em contos
@@ -41,7 +45,12 @@ export default function Slogan() {
         width={120}
         height={120}
         className="ml-2 inline-block"
-        style={{ width: "var(--img-size)", height: "var(--img-size)" }}
+        style={{ 
+          width: "var(--img-size)", 
+          height: "var(--img-size)",
+          filter: "drop-shadow(0 8px 24px rgba(13,107,47,0.2))",
+          transition: "all 0.3s ease",
+        }}
       />
     </Box>
   );

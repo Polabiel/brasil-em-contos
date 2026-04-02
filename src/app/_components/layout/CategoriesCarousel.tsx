@@ -27,10 +27,11 @@ export default function CategoriesCarousel() {
     <Box
       sx={{
         position: "relative",
-        bgcolor: "white",
+        bgcolor: "var(--cv-backgroundDefault)",
         py: { xs: 6, md: 8 },
         px: { xs: 2, md: 4 },
         overflow: "hidden",
+        background: `linear-gradient(135deg, var(--cv-gradientStart) 0%, var(--cv-gradientMid) 50%, var(--cv-gradientEnd) 100%)`,
       }}
     >
       <Box sx={{ maxWidth: "1400px", mx: "auto" }}>
@@ -45,7 +46,7 @@ export default function CategoriesCarousel() {
               fontSize: { xs: "1.5rem", md: "2rem" },
               mb: 1,
               background:
-                "linear-gradient(135deg, var(--cv-brazilGreen) 0%, var(--cv-brazilYellow) 100%)",
+                "linear-gradient(135deg, var(--cv-primaryMain) 0%, var(--cv-brazilYellow) 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
@@ -56,7 +57,7 @@ export default function CategoriesCarousel() {
           <Typography
             level="body-md"
             sx={{
-              color: "var(--cv-textMuted70)",
+              color: "var(--cv-textSecondary)",
               fontSize: { xs: "0.9rem", md: "1rem" },
             }}
           >
@@ -93,11 +94,11 @@ export default function CategoriesCarousel() {
                   fontSize: { xs: "0.95rem", md: "1.05rem" },
                   height: { xs: 48, md: 56 },
                   px: { xs: 2, md: 3 },
-                  borderRadius: 2,
+                  borderRadius: 8,
                   cursor: "pointer",
                   transition: "all 0.28s cubic-bezier(0.4, 0, 0.2, 1)",
                   fontWeight: 600,
-                  boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+                  boxShadow: "0 2px 8px rgba(13,107,47,0.08)",
                   display: "inline-flex",
                   justifyContent: "center",
                   alignItems: "center",
@@ -105,6 +106,8 @@ export default function CategoriesCarousel() {
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   textTransform: "none",
+                  bgcolor: "var(--cv-primaryLight)",
+                  color: "white",
                   "& .joy-Chip-label": {
                     overflow: "hidden",
                     textOverflow: "ellipsis",
@@ -112,8 +115,8 @@ export default function CategoriesCarousel() {
                   },
                   "&:hover": {
                     transform: "translateY(-6px) scale(1.03)",
-                    boxShadow: "0 10px 28px rgba(34,139,34,0.18)",
-                    bgcolor: "var(--cv-brazilGreen)",
+                    boxShadow: "0 10px 28px rgba(13,107,47,0.22)",
+                    bgcolor: "var(--cv-primaryMain)",
                     color: "white",
                   },
                 }}

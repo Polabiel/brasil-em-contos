@@ -9,6 +9,13 @@ import Button from "@mui/joy/Button";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import CircularProgress from "@mui/joy/CircularProgress";
 import Box from "@mui/joy/Box";
+import { Playfair_Display } from "next/font/google";
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["400", "600", "700"],
+  display: "swap",
+});
 
 interface Props {
   searchParams: Promise<{
@@ -44,52 +51,92 @@ async function ErrorContent({ searchParams }: Props) {
   }
 
   return (
-    <Sheet
+    <Box
       sx={{
         minHeight: "100vh",
-        background: `linear-gradient(to bottom, var(--cv-gradientStart), var(--cv-backgroundDefault))`,
+        background: `linear-gradient(135deg, var(--cv-gradientStart) 0%, var(--cv-gradientMid) 50%, var(--cv-gradientEnd) 100%)`,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         p: 2,
+        position: "relative",
+        "&::before": {
+          content: '""',
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%230d6b2f' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")",
+          opacity: 0.6,
+        },
       }}
     >
-      <Box sx={{ width: "100%", maxWidth: 400 }}>
+      <Box sx={{ width: "100%", maxWidth: 480, position: "relative", zIndex: 1 }}>
         <Stack spacing={4} alignItems="center">
           <Stack spacing={1} alignItems="center" textAlign="center">
-            <Typography level="h2" sx={{ color: "var(--cv-textPrimary)" }}>
+            <Typography
+              level="h2"
+              className={playfair.className}
+              sx={{
+                color: "var(--cv-textPrimary)",
+                fontSize: { xs: "1.8rem", md: "2rem" },
+                fontWeight: 700,
+              }}
+            >
               Brasil em{" "}
-              <span style={{ color: "var(--cv-accentHsl)" }}>Contos</span>
+              <Box component="span" sx={{ color: "var(--cv-brazilGreen)" }}>
+                Contos
+              </Box>
             </Typography>
-            <Typography level="body-lg" sx={{ color: "var(--cv-textMuted80)" }}>
+            <Typography level="body-lg" sx={{ color: "var(--cv-textSecondary)" }}>
               Erro na autenticação
             </Typography>
           </Stack>
 
-          <Card variant="outlined" sx={{ width: "100%" }}>
-            <CardContent>
+          <Card
+            variant="outlined"
+            sx={{
+              width: "100%",
+              boxShadow: "var(--shadow-lg)",
+              border: "2px solid var(--cv-primaryLight)",
+              borderRadius: "var(--radius-2xl)",
+              background: "rgba(255,255,255,0.02)",
+              backdropFilter: "blur(10px)",
+            }}
+          >
+            <CardContent sx={{ p: { xs: 3, md: 4 } }}>
               <Stack spacing={3} alignItems="center" textAlign="center">
                 <Box
                   sx={{
-                    width: 64,
-                    height: 64,
+                    width: 80,
+                    height: 80,
                     borderRadius: "50%",
-                    bgcolor: "danger.100",
+                    background: "rgba(239, 68, 68, 0.1)",
+                    border: "2px solid rgba(239, 68, 68, 0.3)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                   }}
                 >
                   <ErrorOutlineIcon
-                    sx={{ fontSize: 32, color: "danger.500" }}
+                    sx={{ fontSize: 40, color: "#ef4444" }}
                   />
                 </Box>
 
-                <Stack spacing={1}>
-                  <Typography level="title-lg" color="danger">
+                <Stack spacing={1.5}>
+                  <Typography
+                    level="title-lg"
+                    className={playfair.className}
+                    sx={{
+                      color: "#ef4444",
+                      fontSize: "1.2rem",
+                      fontWeight: 700,
+                    }}
+                  >
                     {errorMessage}
                   </Typography>
-                  <Typography level="body-md" color="neutral">
+                  <Typography level="body-md" sx={{ color: "var(--cv-textSecondary)" }}>
                     {errorDetails}
                   </Typography>
                 </Stack>
@@ -98,8 +145,22 @@ async function ErrorContent({ searchParams }: Props) {
                   <Link href="/auth/signin">
                     <Button
                       variant="solid"
-                      color="primary"
-                      sx={{ width: "100%" }}
+                      sx={{
+                        width: "100%",
+                        background: "linear-gradient(135deg, var(--cv-brazilGreen) 0%, #0a5222 100%)",
+                        fontWeight: 600,
+                        fontSize: "0.95rem",
+                        textTransform: "uppercase",
+                        letterSpacing: 0.5,
+                        py: 1.2,
+                        borderRadius: "var(--radius-lg)",
+                        boxShadow: "var(--shadow-md)",
+                        transition: "all var(--transition-base)",
+                        "&:hover": {
+                          boxShadow: "var(--shadow-lg)",
+                          transform: "translateY(-2px)",
+                        },
+                      }}
                     >
                       Tentar Novamente
                     </Button>
@@ -108,8 +169,22 @@ async function ErrorContent({ searchParams }: Props) {
                   <Link href="/">
                     <Button
                       variant="outlined"
-                      color="neutral"
-                      sx={{ width: "100%" }}
+                      sx={{
+                        width: "100%",
+                        borderColor: "var(--cv-primaryLight)",
+                        color: "var(--cv-textPrimary)",
+                        fontWeight: 600,
+                        fontSize: "0.95rem",
+                        textTransform: "uppercase",
+                        letterSpacing: 0.5,
+                        py: 1.2,
+                        borderRadius: "var(--radius-lg)",
+                        transition: "all var(--transition-base)",
+                        "&:hover": {
+                          borderColor: "var(--cv-brazilGreen)",
+                          bgcolor: "rgba(13, 107, 47, 0.05)",
+                        },
+                      }}
                     >
                       Voltar ao Início
                     </Button>
@@ -118,21 +193,9 @@ async function ErrorContent({ searchParams }: Props) {
               </Stack>
             </CardContent>
           </Card>
-
-          <Link href="/">
-            <Typography
-              level="body-sm"
-              sx={{
-                color: "var(--cv-textMuted60)",
-                "&:hover": { color: "var(--cv-textMuted80)" },
-              }}
-            >
-              ← Voltar ao início
-            </Typography>
-          </Link>
         </Stack>
       </Box>
-    </Sheet>
+    </Box>
   );
 }
 
@@ -152,7 +215,7 @@ export default function AuthError(props: Props) {
         </Sheet>
       }
     >
-      <ErrorContent {...props} />
+      <ErrorContent searchParams={props.searchParams} />
     </Suspense>
   );
 }

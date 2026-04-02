@@ -43,10 +43,11 @@ export default function Sidebar() {
         sx={{
           mb: 3,
           transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-          border: "1.5px solid var(--cv-neutral200)",
-          borderRadius: 2,
+          border: "1.5px solid var(--cv-borderLight)",
+          borderRadius: 12,
           position: "relative",
           overflow: "hidden",
+          background: "var(--cv-backgroundPaper)",
           "&::before": {
             content: '""',
             position: "absolute",
@@ -55,13 +56,13 @@ export default function Sidebar() {
             right: 0,
             height: "3px",
             background:
-              "linear-gradient(90deg, var(--cv-brazilYellow), var(--cv-brazilGreen))",
+              "linear-gradient(90deg, var(--cv-brazilYellow), var(--cv-primaryMain))",
             opacity: 0,
             transition: "opacity 0.3s ease",
           },
           "&:hover": {
             transform: "translateY(-2px)",
-            boxShadow: "0 6px 16px rgba(255,215,0,0.10)",
+            boxShadow: "0 8px 24px rgba(13,107,47,0.12)",
             borderColor: "var(--cv-brazilYellow)",
             "&::before": {
               opacity: 1,
@@ -98,7 +99,7 @@ export default function Sidebar() {
             <Typography
               level="body-sm"
               sx={{
-                color: "var(--cv-textMuted80)",
+                color: "var(--cv-textSecondary)",
                 fontSize: "0.85rem",
               }}
             >
@@ -110,7 +111,7 @@ export default function Sidebar() {
                 <Typography
                   level="body-sm"
                   sx={{
-                    color: "var(--cv-textMuted80)",
+                    color: "var(--cv-textSecondary)",
                     fontSize: "0.85rem",
                   }}
                 >
@@ -145,8 +146,8 @@ export default function Sidebar() {
                             position: "relative",
                             overflow: "hidden",
                             minHeight: { xs: 44, sm: 54 },
-                            bgcolor: "background.body",
-                            boxShadow: "0 1px 3px rgba(34,139,34,0.03)",
+                            bgcolor: "var(--cv-backgroundAlt)",
+                            boxShadow: "0 1px 3px rgba(13,107,47,0.03)",
                             "&::before": {
                               content: '""',
                               position: "absolute",

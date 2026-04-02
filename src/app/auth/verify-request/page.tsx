@@ -85,13 +85,15 @@ function VerifyRequestContent() {
             variant="outlined" 
             sx={{ 
               width: '100%',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
-              border: '1px solid var(--cv-neutral200)',
-              borderRadius: 16,
+              boxShadow: 'var(--shadow-lg)',
+              border: '2px solid var(--cv-primaryLight)',
+              borderRadius: 'var(--radius-2xl)',
               overflow: 'hidden',
+              background: 'rgba(255,255,255,0.02)',
+              backdropFilter: 'blur(10px)',
             }}
           >
-            <CardContent sx={{ p: 4 }}>
+            <CardContent sx={{ p: { xs: 3, md: 4 } }}>
               <Stack spacing={4} alignItems="center" textAlign="center">
                 
                 {/* Main Email Icon */}
@@ -100,11 +102,11 @@ function VerifyRequestContent() {
                     width: 80,
                     height: 80,
                     borderRadius: '50%',
-                    bgcolor: 'var(--cv-brazilGreen)15',
+                    background: 'linear-gradient(135deg, rgba(13, 107, 47, 0.1) 0%, rgba(245, 158, 11, 0.1) 100%)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    border: '3px solid var(--cv-brazilGreen)30',
+                    border: '3px solid var(--cv-brazilGreen)',
                   }}
                 >
                   <EmailIcon sx={{ fontSize: 40, color: 'var(--cv-brazilGreen)' }} />
@@ -113,10 +115,11 @@ function VerifyRequestContent() {
                 <Stack spacing={2} textAlign="center">
                   <Typography 
                     level="h3" 
+                    className={playfair.className}
                     sx={{ 
                       fontWeight: 700,
                       color: 'var(--cv-textPrimary)',
-                      fontSize: '1.5rem',
+                      fontSize: { xs: '1.3rem', md: '1.5rem' },
                     }}
                   >
                     Confira sua Caixa de Entrada
@@ -125,7 +128,7 @@ function VerifyRequestContent() {
                   <Typography 
                     level="body-lg" 
                     sx={{ 
-                      color: 'var(--cv-textMuted80)',
+                      color: 'var(--cv-textSecondary)',
                       lineHeight: 1.6,
                       fontSize: '1rem',
                     }}
@@ -140,17 +143,17 @@ function VerifyRequestContent() {
                   variant="soft" 
                   sx={{ 
                     width: '100%',
-                    bgcolor: 'var(--cv-brazilYellow)15',
+                    background: 'rgba(245, 158, 11, 0.08)',
                     color: 'var(--cv-textPrimary)',
-                    border: '1px solid var(--cv-brazilYellow)30',
-                    borderRadius: 8,
+                    border: '1px solid rgba(245, 158, 11, 0.3)',
+                    borderRadius: 'var(--radius-lg)',
                   }}
                 >
                   <Stack spacing={1}>
                     <Typography level="body-sm" sx={{ fontWeight: 600 }}>
                       📮 Dica importante:
                     </Typography>
-                    <Typography level="body-sm">
+                    <Typography level="body-sm" sx={{ color: 'var(--cv-textSecondary)' }}>
                       O link é válido por 24 horas. Se não encontrar o e-mail, 
                       verifique sua pasta de spam ou lixo eletrônico.
                     </Typography>
@@ -222,8 +225,16 @@ function VerifyRequestContent() {
                       color: 'var(--cv-brazilGreen)',
                       flex: 1,
                       py: 1.2,
+                      fontWeight: 600,
+                      fontSize: '0.95rem',
+                      textTransform: 'uppercase',
+                      letterSpacing: 0.5,
+                      borderRadius: 'var(--radius-lg)',
+                      transition: 'all var(--transition-base)',
                       '&:hover': {
-                        bgcolor: 'var(--cv-brazilGreen)10',
+                        bgcolor: 'rgba(13, 107, 47, 0.05)',
+                        borderColor: 'var(--cv-brazilGreen)',
+                        transform: 'translateY(-2px)',
                       }
                     }}
                     onClick={() => window.location.reload()}
@@ -236,11 +247,19 @@ function VerifyRequestContent() {
                     <Button
                       variant="solid"
                       sx={{
-                        bgcolor: 'var(--cv-brazilGreen)',
+                        background: 'linear-gradient(135deg, var(--cv-brazilGreen) 0%, #0a5222 100%)',
                         width: '100%',
                         py: 1.2,
+                        fontWeight: 600,
+                        fontSize: '0.95rem',
+                        textTransform: 'uppercase',
+                        letterSpacing: 0.5,
+                        borderRadius: 'var(--radius-lg)',
+                        boxShadow: 'var(--shadow-md)',
+                        transition: 'all var(--transition-base)',
                         '&:hover': {
-                          bgcolor: '#1e5f28',
+                          boxShadow: 'var(--shadow-lg)',
+                          transform: 'translateY(-2px)',
                         }
                       }}
                     >

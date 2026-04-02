@@ -25,6 +25,18 @@ export default function SobrePage() {
           background: `linear-gradient(135deg, var(--cv-gradientStart) 0%, var(--cv-gradientMid) 50%, var(--cv-gradientEnd) 100%)`,
           py: { xs: 6, md: 8 },
           px: { xs: 2, sm: 3, md: 4 },
+          position: "relative",
+          overflow: "hidden",
+          "&::before": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%230d6b2f' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")",
+            opacity: 0.6,
+          },
         }}
       >
         <Box
@@ -32,6 +44,8 @@ export default function SobrePage() {
             maxWidth: "1200px",
             mx: "auto",
             textAlign: "center",
+            position: "relative",
+            zIndex: 1,
           }}
         >
           <Typography
@@ -49,9 +63,10 @@ export default function SobrePage() {
           <Typography
             level="body-lg"
             sx={{
-              color: "var(--cv-textMuted80)",
+              color: "var(--cv-textSecondary)",
               maxWidth: "600px",
               mx: "auto",
+              lineHeight: "var(--line-height-relaxed)",
             }}
           >
             Celebrando a riqueza da literatura brasileira através de contos que
@@ -129,7 +144,7 @@ export default function SobrePage() {
                     mt: 1,
                     mb: 0.5,
                     letterSpacing: 0.5,
-                    color: "var(--cv-textPrimary)",
+                    color: "var(--cv-textSecondary)",
                   }}
                 >
                   Site desenvolvido para a disciplina de Antropologia do curso
@@ -137,7 +152,7 @@ export default function SobrePage() {
                 </Typography>
                 <Typography
                   level="body-sm"
-                  sx={{ color: "var(--cv-textMuted80)" }}
+                  sx={{ color: "var(--cv-textSecondary)" }}
                 >
                   <strong>Professora:</strong> Renata Oliveira Dos Santos
                 </Typography>
@@ -157,16 +172,9 @@ export default function SobrePage() {
                   <Typography
                     component="li"
                     level="body-sm"
-                    sx={{ color: "var(--cv-textMuted80)" }}
+                    sx={{ color: "var(--cv-textSecondary)" }}
                   >
                     Bruna Stefany de Matos Maranesi — RA: 145728
-                  </Typography>
-                  <Typography
-                    component="li"
-                    level="body-sm"
-                    sx={{ color: "var(--cv-textMuted80)" }}
-                  >
-                    Ana Karla Garcia — RA: 145702
                   </Typography>
                 </Stack>
               </Stack>

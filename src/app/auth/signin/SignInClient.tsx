@@ -23,17 +23,24 @@ export default function SignInDiscordButton() {
       variant="solid"
       loading={loading}
       sx={{
-        bgcolor: "var(--cv-primaryMain)",
+        background: "linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%)",
         width: "100%",
         display: "flex",
         alignItems: "center",
-        
         justifyContent: "center",
         gap: 1.5,
-        py: 1.5,
+        py: 1.2,
         fontWeight: 600,
+        fontSize: "0.95rem",
+        borderRadius: "var(--radius-lg)",
+        boxShadow: "var(--shadow-md)",
+        transition: "all var(--transition-base)",
+        textTransform: "uppercase",
+        letterSpacing: 0.5,
         "&:hover": {
-          bgcolor: "var(--cv-secondaryMain)",
+          background: "linear-gradient(135deg, #6d28d9 0%, #5b21b6 100%)",
+          boxShadow: "var(--shadow-lg)",
+          transform: "translateY(-2px)",
         },
       }}
       startDecorator={

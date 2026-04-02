@@ -156,20 +156,20 @@ export default function NavBar() {
           zIndex: 60,
           bgcolor: "white",
           boxShadow: showNav 
-            ? "0 4px 16px rgba(34,139,34,0.08)" 
+            ? "0 4px 16px rgba(13,107,47,0.08)" 
             : "none",
           borderBottom: showNav 
             ? "2px solid transparent"
-            : "1px solid var(--cv-neutral200)",
+            : "1px solid var(--cv-borderLight)",
           borderImage: showNav 
-            ? "linear-gradient(90deg, var(--cv-brazilGreen), var(--cv-brazilYellow), var(--cv-brazilBlue)) 1"
+            ? "linear-gradient(90deg, var(--cv-primaryMain), var(--cv-brazilYellow), var(--cv-brazilBlue)) 1"
             : "none",
           transform: showNav ? "translateY(0)" : "translateY(-110%)",
           transition:
             "all 350ms cubic-bezier(.2,.8,.2,1)",
           backdropFilter: "blur(10px)",
           background: showNav 
-            ? "linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.95) 100%)"
+            ? "linear-gradient(180deg, rgba(250,250,248,0.98) 0%, rgba(255,255,255,0.95) 100%)"
             : "white",
         }}
       >
@@ -204,12 +204,12 @@ export default function NavBar() {
               onClick={() => setOpen((v) => !v)}
               sx={{
                 display: { xs: "inline-flex", md: "none" },
-                bgcolor: open ? "var(--cv-brazilGreen)15" : "transparent",
-                color: open ? "var(--cv-brazilGreen)" : "var(--cv-textMuted80)",
+                bgcolor: open ? "var(--cv-primaryMain)15" : "transparent",
+                color: open ? "var(--cv-primaryMain)" : "var(--cv-textSecondary)",
                 mr: 2,
                 "&:hover": {
-                  bgcolor: "var(--cv-brazilGreen)10",
-                  color: "var(--cv-brazilGreen)",
+                  bgcolor: "var(--cv-primaryMain)10",
+                  color: "var(--cv-primaryMain)",
                 },
               }}
             >
@@ -227,7 +227,7 @@ export default function NavBar() {
                 <Typography
                   level="body-md"
                   sx={{
-                    color: "var(--cv-textMuted80)",
+                    color: "var(--cv-textSecondary)",
                     fontWeight: 600,
                     fontSize: "0.95rem",
                     px: 2,
@@ -243,13 +243,13 @@ export default function NavBar() {
                       transform: "translateX(-50%) scaleX(0)",
                       width: "80%",
                       height: "3px",
-                      bgcolor: "var(--cv-brazilGreen)",
+                      bgcolor: "var(--cv-primaryMain)",
                       borderRadius: "2px",
                       transition: "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
                     },
                     "&:hover": {
-                      color: "var(--cv-brazilGreen)",
-                      bgcolor: "var(--cv-brazilGreen)08",
+                      color: "var(--cv-primaryMain)",
+                      bgcolor: "var(--cv-primaryMain)08",
                       transform: "translateY(-2px)",
                       "&::after": {
                         transform: "translateX(-50%) scaleX(1)",
@@ -265,7 +265,7 @@ export default function NavBar() {
                 <Typography
                   level="body-md"
                   sx={{
-                    color: "var(--cv-textMuted80)",
+                    color: "var(--cv-textSecondary)",
                     fontWeight: 600,
                     fontSize: "0.95rem",
                     px: 2,
@@ -287,7 +287,7 @@ export default function NavBar() {
                     },
                     "&:hover": {
                       color: "var(--cv-brazilYellow)",
-                      bgcolor: "var(--cv-brazilYellow)15",
+                      bgcolor: "var(--cv-brazilYellow)08",
                       transform: "translateY(-2px)",
                       "&::after": {
                         transform: "translateX(-50%) scaleX(1)",
@@ -303,7 +303,7 @@ export default function NavBar() {
                 <Typography
                   level="body-md"
                   sx={{
-                    color: "var(--cv-textMuted80)",
+                    color: "var(--cv-textSecondary)",
                     fontWeight: 600,
                     fontSize: "0.95rem",
                     px: 2,

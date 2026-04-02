@@ -50,11 +50,11 @@ export default function HomeFooter() {
     <Box
       component="footer"
       sx={{
-        bgcolor: "var(--cv-textPrimary)",
+        bgcolor: "var(--cv-neutral900)",
         color: "white",
         pt: { xs: 4, md: 6 },
         pb: { xs: 2, md: 3 },
-        background: `linear-gradient(135deg, var(--cv-textPrimary) 0%, #2d3748 100%)`,
+        background: `linear-gradient(135deg, var(--cv-neutral800) 0%, var(--cv-neutral900) 100%)`,
         position: "relative",
         "&::before": {
           content: '""',
@@ -64,7 +64,7 @@ export default function HomeFooter() {
           right: 0,
           bottom: 0,
           background:
-            'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffd700" fill-opacity="0.05"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
+            'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23f59e0b" fill-opacity="0.03"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
         },
       }}
     >
@@ -95,7 +95,7 @@ export default function HomeFooter() {
             <Stack direction="row" spacing={2} alignItems="center">
                 <Box
                 sx={{
-                  filter: "invert(1)",
+                  filter: "brightness(2)",
                 }}
                 >
                 <Image

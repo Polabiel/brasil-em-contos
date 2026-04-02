@@ -31,8 +31,8 @@ export const bloggers = [
   },
   {
     id: "blog2",
-    name: "Ana Karla",
-    img: "/image_blogueira.jpg",
+    name: "Gabriel Oliveira",
+    img: "/imagem_blogueira.jpg",
     desc: "Amo histórias que envolvem as relações humanas e o cotidiano. Se um livro me faz rir, chorar, me reconhecer na página, ele já tem meu coração. Sou a responsável por fazer ficar fácil o que parece complexo, sendo a ponte entre o livro e o leitor. Quero mostrar para quem lê que a melhor leitura nacional é aquela que conversa diretamente com nós.",
   },
 ];
@@ -46,7 +46,7 @@ export default function HeroSection() {
         sx={{
           position: "relative",
           minHeight: { xs: "92vh", md: "92vh" },
-          background: `linear-gradient(0deg, rgba(0,0,0,0.07) 0%, rgba(0,0,0,0) 60%), linear-gradient(135deg, var(--cv-gradientStart) 0%, var(--cv-gradientMid) 50%, var(--cv-gradientEnd) 100%)`,
+          background: `linear-gradient(0deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0) 60%), linear-gradient(135deg, var(--cv-gradientStart) 0%, var(--cv-gradientMid) 50%, var(--cv-gradientEnd) 100%)`,
           display: "flex",
           alignItems: "center",
           py: { xs: 4, md: 8 },
@@ -59,8 +59,8 @@ export default function HeroSection() {
             right: 0,
             bottom: 0,
             background:
-              'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23228b22" fill-opacity="0.03"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
-            opacity: 0.4,
+              'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%230d6b2f" fill-opacity="0.02"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
+            opacity: 0.6,
           },
           "&::after": {
             content: '""',
@@ -71,7 +71,7 @@ export default function HeroSection() {
             height: { xs: "120px", md: "180px" },
             pointerEvents: "none",
             background:
-              "linear-gradient(180deg, rgba(255,255,255,0) 0%, #fff 90%)",
+              "linear-gradient(180deg, rgba(250,250,248,0) 0%, var(--cv-backgroundDefault) 90%)",
             zIndex: 2,
           },
         }}
@@ -106,11 +106,11 @@ export default function HeroSection() {
                   height: "auto",
                   maxWidth: 380,
                   animation: "float 6s ease-in-out infinite",
-                  filter: "drop-shadow(0 8px 24px rgba(34,139,34,0.3))",
+                  filter: "drop-shadow(0 8px 24px rgba(13,107,47,0.25))",
                   transition: "all 0.3s ease",
                   "&:hover": {
                     transform: "scale(1.05) rotate(5deg)",
-                    filter: "drop-shadow(0 12px 32px rgba(34,139,34,0.4))",
+                    filter: "drop-shadow(0 12px 32px rgba(13,107,47,0.35))",
                   },
                   "@keyframes float": {
                     "0%, 100%": {
@@ -143,7 +143,7 @@ export default function HeroSection() {
                     fontWeight: 700,
                     color: "var(--cv-textPrimary)",
                     lineHeight: 1.1,
-                    textShadow: "0 2px 8px rgba(0,0,0,0.1)",
+                    textShadow: "0 2px 8px rgba(0,0,0,0.08)",
                   }}
                 >
                   Brasil em{" "}
@@ -151,7 +151,7 @@ export default function HeroSection() {
                     component="span"
                     sx={{
                       background:
-                        "linear-gradient(135deg, var(--cv-brazilGreen) 0%, var(--cv-brazilYellow) 100%)",
+                        "linear-gradient(135deg, var(--cv-primaryMain) 0%, var(--cv-brazilYellow) 100%)",
                       WebkitBackgroundClip: "text",
                       WebkitTextFillColor: "transparent",
                       backgroundClip: "text",
@@ -165,15 +165,15 @@ export default function HeroSection() {
                         right: 0,
                         height: 6,
                         background:
-                          "linear-gradient(90deg, var(--cv-brazilGreen), var(--cv-brazilYellow), var(--cv-brazilBlue))",
+                          "linear-gradient(90deg, var(--cv-primaryMain), var(--cv-brazilYellow), var(--cv-brazilBlue))",
                         borderRadius: 3,
-                        opacity: 0.8,
+                        opacity: 0.7,
                         animation: "shimmer 3s ease-in-out infinite",
                       },
                       "@keyframes shimmer": {
                         "0%, 100%": {
                           transform: "scaleX(1)",
-                          opacity: 0.8,
+                          opacity: 0.7,
                         },
                         "50%": {
                           transform: "scaleX(0.95)",
@@ -192,7 +192,7 @@ export default function HeroSection() {
                   sx={{
                     fontSize: { xs: "1.1rem", md: "1.3rem" },
                     fontWeight: 500,
-                    color: "var(--cv-textMuted80)",
+                    color: "var(--cv-textSecondary)",
                     maxWidth: { xs: "100%", md: "600px" },
                     lineHeight: 1.6,
                   }}
@@ -222,14 +222,14 @@ export default function HeroSection() {
                     }
                   }}
                   sx={{
-                    bgcolor: "var(--cv-brazilGreen)",
+                    bgcolor: "var(--cv-primaryMain)",
                     color: "white",
                     px: session ? 6 : 4,
                     py: 1.5,
                     fontSize: "1.1rem",
                     fontWeight: 600,
                     borderRadius: 8,
-                    boxShadow: "0 4px 14px 0 rgba(34,139,34,0.3)",
+                    boxShadow: "0 4px 14px 0 rgba(13,107,47,0.25)",
                     transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
                     width: { xs: session ? "100%" : "auto", sm: "auto" },
                     justifyContent: "center",

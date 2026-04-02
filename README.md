@@ -49,7 +49,6 @@ Embora nascido no ambiente acadêmico, o projeto evoluiu para um blog literário
 
 - [Bruna Stefany](https://br.linkedin.com/in/bruna-stefany-matos-maranesi-89283032a) — idealização, curadoria literária, criação de conteúdo, resenhas
 - [Gabriel Oliveira](https://br.linkedin.com/in/polabiel) — manutenção técnica / design
-- [Ana Karla](https://br.linkedin.com) - ajudante e colaboradora
 - Convidados / autores colaboradores
 - 
 ---

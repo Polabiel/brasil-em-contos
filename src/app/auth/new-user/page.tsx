@@ -109,13 +109,15 @@ function NewUserContent() {
             variant="outlined"
             sx={{
               width: "100%",
-              boxShadow: "0 8px 32px rgba(0,0,0,0.08)",
-              border: "1px solid var(--cv-neutral200)",
-              borderRadius: 16,
+              boxShadow: "var(--shadow-lg)",
+              border: "2px solid var(--cv-primaryLight)",
+              borderRadius: "var(--radius-2xl)",
               overflow: "hidden",
+              background: "rgba(255,255,255,0.02)",
+              backdropFilter: "blur(10px)",
             }}
           >
-            <CardContent sx={{ p: 4 }}>
+            <CardContent sx={{ p: { xs: 3, md: 4 } }}>
               <Stack spacing={4} alignItems="center">
                 {/* Success Icon and Message */}
                 <Stack spacing={3} alignItems="center" textAlign="center">
@@ -124,11 +126,11 @@ function NewUserContent() {
                       width: 80,
                       height: 80,
                       borderRadius: "50%",
-                      bgcolor: "var(--cv-brazilGreen)15",
+                      background: "linear-gradient(135deg, rgba(13, 107, 47, 0.1) 0%, rgba(245, 158, 11, 0.1) 100%)",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      border: "3px solid var(--cv-brazilGreen)30",
+                      border: "3px solid var(--cv-brazilGreen)",
                     }}
                   >
                     <PersonAddIcon
@@ -139,10 +141,11 @@ function NewUserContent() {
                   <Stack spacing={2} alignItems="center">
                     <Typography
                       level="h3"
+                      className={playfair.className}
                       sx={{
                         fontWeight: 700,
                         color: "var(--cv-textPrimary)",
-                        fontSize: "1.4rem",
+                        fontSize: { xs: "1.2rem", md: "1.4rem" },
                       }}
                     >
                       ✨ Conta Criada com Sucesso!
@@ -151,7 +154,7 @@ function NewUserContent() {
                     <Typography
                       level="body-lg"
                       sx={{
-                        color: "var(--cv-textMuted80)",
+                        color: "var(--cv-textSecondary)",
                         lineHeight: 1.6,
                         maxWidth: 400,
                       }}
@@ -165,11 +168,12 @@ function NewUserContent() {
                       variant="soft"
                       size="lg"
                       sx={{
-                        bgcolor: "var(--cv-brazilYellow)20",
-                        color: "var(--cv-textPrimary)",
+                        background: "linear-gradient(135deg, rgba(13, 107, 47, 0.1) 0%, rgba(245, 158, 11, 0.15) 100%)",
+                        color: "var(--cv-brazilGreen)",
                         fontWeight: 600,
                         px: 3,
                         py: 1,
+                        border: "2px solid rgba(13, 107, 47, 0.2)",
                       }}
                     >
                       🆕 Novo Leitor
@@ -177,7 +181,7 @@ function NewUserContent() {
                   </Stack>
                 </Stack>
 
-                <Divider sx={{ width: "100%", my: 1 }} />
+                <Divider sx={{ width: "100%", my: 1, borderColor: "var(--cv-borderLight)" }} />
 
                 {/* What you can do */}
                 <Stack spacing={3} sx={{ width: "100%" }}>
@@ -270,18 +274,19 @@ function NewUserContent() {
                       size="lg"
                       sx={{
                         width: "100%",
-                        bgcolor: "var(--cv-brazilGreen)",
+                        background: "linear-gradient(135deg, var(--cv-brazilGreen) 0%, #0a5222 100%)",
                         color: "white",
-                        py: 2,
-                        fontSize: "1.1rem",
+                        py: 1.5,
+                        fontSize: "1rem",
                         fontWeight: 600,
-                        borderRadius: 12,
-                        boxShadow: "0 6px 20px rgba(34,139,34,0.3)",
-                        transition: "all 0.2s ease",
+                        textTransform: "uppercase",
+                        letterSpacing: 0.5,
+                        borderRadius: "var(--radius-lg)",
+                        boxShadow: "var(--shadow-lg)",
+                        transition: "all var(--transition-base)",
                         "&:hover": {
-                          bgcolor: "#1e5f28",
-                          boxShadow: "0 8px 24px rgba(34,139,34,0.4)",
-                          transform: "translateY(-2px)",
+                          boxShadow: "0 12px 32px rgba(13, 107, 47, 0.4)",
+                          transform: "translateY(-4px)",
                         },
                       }}
                     >

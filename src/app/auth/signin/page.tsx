@@ -281,10 +281,17 @@ async function SignInContent() {
                 variant="outlined"
                 sx={{
                   width: "100%",
-                  boxShadow: "0 8px 32px rgba(0,0,0,0.08)",
-                  border: "1px solid var(--cv-neutral200)",
-                  borderRadius: 16,
+                  boxShadow: "var(--shadow-lg)",
+                  border: "2px solid var(--cv-primaryLight)",
+                  borderRadius: "var(--radius-2xl)",
                   overflow: "hidden",
+                  background: "rgba(255,255,255,0.02)",
+                  backdropFilter: "blur(10px)",
+                  transition: "all var(--transition-base)",
+                  "&:hover": {
+                    boxShadow: "0 20px 40px rgba(13, 107, 47, 0.15)",
+                    borderColor: "var(--cv-brazilGreen)",
+                  },
                 }}
               >
                 <CardContent sx={{ p: { xs: 3, sm: 4 } }}>
@@ -292,6 +299,7 @@ async function SignInContent() {
                     <Stack spacing={1} textAlign="center">
                       <Typography
                         level="h3"
+                        className={playfair.className}
                         sx={{
                           fontWeight: 700,
                           color: "var(--cv-textPrimary)",
@@ -303,7 +311,7 @@ async function SignInContent() {
                       <Typography
                         level="body-md"
                         sx={{
-                          color: "var(--cv-textMuted70)",
+                          color: "var(--cv-textSecondary)",
                           fontSize: "0.95rem",
                         }}
                       >
@@ -314,12 +322,20 @@ async function SignInContent() {
                     <Stack spacing={3}>
                       <SignInDiscordButton />
 
-                      <Divider>
+                      <Divider
+                        sx={{
+                          borderColor: "var(--cv-borderLight)",
+                          my: 1,
+                        }}
+                      >
                         <Typography
                           level="body-sm"
                           sx={{
                             color: "var(--cv-textMuted60)",
                             fontWeight: 500,
+                            fontSize: "0.85rem",
+                            textTransform: "uppercase",
+                            letterSpacing: 0.5,
                           }}
                         >
                           ou continue com e-mail

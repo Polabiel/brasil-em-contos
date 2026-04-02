@@ -132,7 +132,7 @@ export default function PostsGrid() {
                 fontSize: { xs: "2rem", md: "3rem" },
                 fontWeight: 700,
                 background:
-                  "linear-gradient(135deg, var(--cv-brazilGreen) 0%, var(--cv-brazilYellow) 100%)",
+                  "linear-gradient(135deg, var(--cv-primaryMain) 0%, var(--cv-brazilYellow) 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
@@ -148,7 +148,7 @@ export default function PostsGrid() {
                   width: "80px",
                   height: "4px",
                   background:
-                    "linear-gradient(90deg, var(--cv-brazilGreen), var(--cv-brazilYellow))",
+                    "linear-gradient(90deg, var(--cv-primaryMain), var(--cv-brazilYellow))",
                   borderRadius: "2px",
                 },
               }}
@@ -160,7 +160,7 @@ export default function PostsGrid() {
             <Typography
               level="body-lg"
               sx={{
-                color: "var(--cv-textMuted80)",
+                color: "var(--cv-textSecondary)",
                 maxWidth: 700,
                 mx: "auto",
                 lineHeight: 1.6,
@@ -228,7 +228,7 @@ export default function PostsGrid() {
                         borderRadius: 16,
                         p: 0,
                         boxShadow:
-                          "0 16px 48px rgba(34,139,34,0.2), 0 8px 24px rgba(255,215,0,0.15)",
+                          "0 16px 48px rgba(13,107,47,0.18), 0 8px 24px rgba(245,158,11,0.12)",
                       }}
                     >
                       {session?.user?.role === "ADMIN" && (
@@ -242,9 +242,9 @@ export default function PostsGrid() {
                             top: 16,
                             right: 16,
                             zIndex: 3,
-                            bgcolor: "var(--cv-brazilGreen)",
+                            bgcolor: "var(--cv-primaryMain)",
                             "&:hover": {
-                              bgcolor: "#1e5f28",
+                              bgcolor: "var(--cv-brazilGreen)",
                             },
                           }}
                           onClick={(e) => {
